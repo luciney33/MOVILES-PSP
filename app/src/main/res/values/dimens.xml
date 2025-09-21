@@ -11,5 +11,12 @@
     <dimen name="anchocaja2">200dp</dimen>
     <dimen name="margenBotones">36dp</dimen>
     <dimen name="margenArribaBoto">35dp</dimen>
+    <dimen name="anchobott">94dp</dimen>
+    <dimen name="altobtt">36dp</dimen>
+    <dimen name="anchoAnt">114dp</dimen>
+    <dimen name="altoAnt">39dp</dimen>
+    <dimen name="anchoSig">121dp</dimen>
+    <dimen name="altoSig">38dp</dimen>
+    <dimen name="topbtt">16dp</dimen>
 
 </resources>
