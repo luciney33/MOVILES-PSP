@@ -2,7 +2,7 @@
 <resources>
     <dimen name="anchoCorreo">337dp</dimen>
     <dimen name="anchocaja">150dp</dimen>
-    <dimen name="altocaja">40dp</dimen>
+    <dimen name="altocaja">55dp</dimen>
     <dimen name="margenArriba">16dp</dimen>
     <dimen name="altoCheck">56dp</dimen>
     <dimen name="anchoCheck1">77dp</dimen>
