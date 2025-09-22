@@ -1,7 +1,7 @@
 package Ejercicio2;
 
 
-public class Main {
+public class Main2 {
     public static void main(String[] args) {
         CuentaBankService cb1 = new CuentaBankService(new CuentaBankLock());
         cb1.work(Constantes.CON_LOCK);

@@ -44,7 +44,7 @@ public class CuentaBankService {
                 System.out.println("El hilo ha sido interrumpido");
             }
         }
-        System.out.println("BANCO VIRTUAL (" + version + ")");
+        System.out.println("Banco " + version + " ");
         System.out.printf("Saldo final: %.2f€\n", cb.consultarSaldo());
         System.out.println("Operaciones exitosas: " + exitosas.get());
         System.out.println("Operaciones fallidas: " + fallidas.get());
