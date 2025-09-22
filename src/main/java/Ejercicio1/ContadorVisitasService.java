@@ -2,18 +2,12 @@ package Ejercicio1;
 
 public class ContadorVisitasService  {
     private ContadorServiceInterface cc;
-    public ContadorServiceInterface getCc() {
-        return cc;
-    }
 
-    public void setCc(ContadorServiceInterface cc) {
-        this.cc = cc;
-    }
     public ContadorVisitasService(ContadorServiceInterface cc) {
         this.cc = cc;
     }
 
-    public void work() {
+    public void work(String version) {
             Thread[] hilos = new Thread[1000];
             for (int i = 0; i < 1000; i++) {
                 Thread hilo = new Thread(()->{
@@ -35,19 +29,9 @@ public class ContadorVisitasService  {
                     System.out.println("El hilo ha sido interrumpido");
                 }
             }
-            System.out.println("Contador2: " + cc.getContador());
-        }
+        System.out.println(version);
+            System.out.println("Contador: " + cc.getContador());
 
-
-
-    @Override
-    public void incrementarVisitas() {
-
-    }
-
-    @Override
-    public int getContador() {
-        return 0;
     }
 
 }
