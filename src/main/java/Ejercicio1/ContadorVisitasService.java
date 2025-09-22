@@ -11,7 +11,7 @@ public class ContadorVisitasService  {
             Thread[] hilos = new Thread[1000];
             for (int i = 0; i < 1000; i++) {
                 Thread hilo = new Thread(()->{
-                    // numero aleatorio entre 50 y 150
+                    // numero aleatorio de tiempo entre 50 y 150
                     try {
                         Thread.sleep((int)(Math.random() * 100) + 50);
                     } catch (InterruptedException e) {
