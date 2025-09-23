@@ -7,9 +7,14 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CuentaBankLock implements CuentaBankInterface {
+    private CuentaBank cuentaBank;
     private final Lock lock = new ReentrantLock();
-    private double saldo = 10000;
     private List<String> historial = new ArrayList<>();
+    private double saldo;
+    public CuentaBankLock(CuentaBank cuentaBank) {
+        this.cuentaBank = cuentaBank;
+        saldo = cuentaBank.getSaldo();
+    }
 
     @Override
     public boolean retirar(double cantidad) {
@@ -18,12 +23,12 @@ public class CuentaBankLock implements CuentaBankInterface {
         try {
             if (cantidad <= saldo) {
                 saldo -= cantidad;
-                historial.add(LocalDate.now() + "RETIRO: " + cantidad + "€ | Saldo: " + saldo);
+                historial.add(LocalDate.now() + " RETIRO: " + cantidad + "€ | Saldo: " + saldo);
                 retirado = true;
             } else {
                 retirado = false;
                 historial.add(LocalDate.now() +
-                        "RETIRO FALLIDO: " + cantidad + "€ | Fondos insuficientes | Saldo: " + saldo);
+                        " RETIRO FALLIDO: " + cantidad + "€ | Fondos insuficientes | Saldo: " + saldo);
             }
         } finally {
             lock.unlock();
@@ -37,7 +42,7 @@ public class CuentaBankLock implements CuentaBankInterface {
         try {
             saldo += cantidad;
             historial.add(LocalDate.now() +
-                    "INGRESO: +" + cantidad + "€ | Saldo: " + saldo);
+                    " INGRESO: +" + cantidad + "€ | Saldo: " + saldo);
         } finally {
             lock.unlock();
         }
@@ -48,7 +53,7 @@ public class CuentaBankLock implements CuentaBankInterface {
         lock.lock();
         try {
             historial.add(LocalDate.now() +
-                    "CONSULTA SALDO | Saldo actual: " + saldo);
+                    " CONSULTA SALDO | Saldo actual: " + saldo);
             return saldo;
         } finally {
             lock.unlock();

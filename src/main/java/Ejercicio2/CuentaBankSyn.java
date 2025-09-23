@@ -5,20 +5,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CuentaBankSyn implements CuentaBankInterface{
-    private double saldo = 10000;
+    private CuentaBank cuentaBank;
+    private double saldo;
     private List<String> historial = new ArrayList<>();
+    public CuentaBankSyn(CuentaBank cuentaBank){
+        this.cuentaBank = cuentaBank;
+        saldo = cuentaBank.getSaldo();
+    }
 
     @Override
     public synchronized boolean retirar(double cantidad) {
         boolean retirado = false;
         if (cantidad <= saldo) {
             saldo -= cantidad;
-            historial.add(LocalDate.now()+ "RETIRO: " + cantidad + "€ | Saldo: " + saldo);
+            historial.add(LocalDate.now()+ " RETIRO: " + cantidad + "€ | Saldo: " + saldo);
             retirado = true;
         }else {
             retirado = false;
             historial.add(LocalDate.now()+
-                    "RETIRO FALLIDO: -" + cantidad + "€ | Fondos insuficientes | Saldo: " + saldo);
+                    " RETIRO FALLIDO: -" + cantidad + "€ | Fondos insuficientes | Saldo: " + saldo);
         }
         return retirado;
     }
@@ -26,14 +31,14 @@ public class CuentaBankSyn implements CuentaBankInterface{
     @Override
     public synchronized void ingresar(double cantidad) {
         historial.add(LocalDate.now()+
-                "INGRESO: +" + cantidad + "€ | Saldo: " + saldo);
+                " INGRESO: +" + cantidad + "€ | Saldo: " + saldo);
         saldo += cantidad;
     }
 
     @Override
     public synchronized double consultarSaldo() {
         historial.add(LocalDate.now()+
-                "CONSULTA SALDO | Saldo actual: " + saldo);
+                " CONSULTA SALDO | Saldo actual: " + saldo);
         return saldo;
     }
 
