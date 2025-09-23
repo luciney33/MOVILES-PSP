@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         findViewById<Button>(R.id.button).setOnClickListener{
             Toast.makeText(this,"holiiii",Toast.LENGTH_LONG).show()
         }

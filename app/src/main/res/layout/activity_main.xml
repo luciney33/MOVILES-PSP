@@ -219,7 +219,7 @@
         android:layout_width="@dimen/anchoSig"
         android:layout_height="@dimen/altoSig"
         android:layout_marginTop="@dimen/topbtt"
-        android:text="Sig.-->"
+        android:text="--Sig--"
         app:layout_constraintEnd_toStartOf="@+id/guideline9"
         app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
 
@@ -228,7 +228,7 @@
         android:layout_width="@dimen/anchoAnt"
         android:layout_height="@dimen/altoAnt"
         android:layout_marginTop="@dimen/topbtt"
-        android:text="<--Ant."
+        android:text="--Ant--"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
         app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
 
