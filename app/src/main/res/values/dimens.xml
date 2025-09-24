@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="anchoCorreo">337dp</dimen>
+    <dimen name="anchoCorreo">375dp</dimen>
     <dimen name="anchocaja">150dp</dimen>
     <dimen name="altocaja">55dp</dimen>
     <dimen name="margenArriba">16dp</dimen>
@@ -13,10 +13,11 @@
     <dimen name="margenArribaBoto">35dp</dimen>
     <dimen name="anchobott">94dp</dimen>
     <dimen name="altobtt">36dp</dimen>
-    <dimen name="anchoAnt">114dp</dimen>
-    <dimen name="altoAnt">39dp</dimen>
-    <dimen name="anchoSig">121dp</dimen>
-    <dimen name="altoSig">38dp</dimen>
+    <dimen name="anchoAnt">107dp</dimen>
+    <dimen name="altoAnt">33dp</dimen>
+    <dimen name="anchoSig">107dp</dimen>
+    <dimen name="altoSig">33dp</dimen>
     <dimen name="topbtt">16dp</dimen>
-
+    <dimen name="AncBttInferiores">93dp</dimen>
+    <dimen name="AltBttInferiores">42dp</dimen>
 </resources>

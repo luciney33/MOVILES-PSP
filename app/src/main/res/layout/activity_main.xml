@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -21,91 +21,90 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Nombre"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="@dimen/anchocaja"
         android:layout_height="@dimen/altocaja"
+        android:layout_marginTop="16dp"
         android:hint="Nombre"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:startIconDrawable="@drawable/lapiz"
-        app:layout_constraintEnd_toStartOf="@id/Apellidos"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/NuevoUsuario"
-        android:layout_marginTop="@dimen/margenArriba">
+        app:layout_constraintStart_toStartOf="@+id/Telefono"
+        app:layout_constraintTop_toBottomOf="@+id/NuevoUsuario"
+        app:startIconDrawable="@drawable/lapiz">
+
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="@dimen/anchocaja"
-            android:layout_height="@dimen/altocaja"
-            android:inputType="text"/>
+            android:layout_height="55dp"
+            android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Apellidos"
-        android:layout_width="@dimen/anchocaja"
-        android:layout_height="@dimen/altocaja"
-        android:layout_marginTop="@dimen/margenArriba"
-        android:hint="Apellidos"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:startIconDrawable="@drawable/lapiz"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/Nombre"
-        app:layout_constraintTop_toBottomOf="@id/NuevoUsuario">
-    <com.google.android.material.textfield.TextInputEditText
         android:layout_width="@dimen/anchocaja"
         android:layout_height="@dimen/altocaja"
-        android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_marginTop="4dp"
+        android:hint="Apellidos"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/Nombre"
+        app:layout_constraintTop_toTopOf="@+id/Nombre"
+        app:startIconDrawable="@drawable/lapiz">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="@dimen/anchocaja"
+            android:layout_height="@dimen/altocaja"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Correo"
-        android:layout_width="@dimen/anchoCorreo"
-        android:layout_height="@dimen/altocaja"
-        android:layout_marginTop="@dimen/margenArriba"
-        android:hint="Correo electrónico"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:startIconDrawable="@drawable/outline_alternate_email_24"
-        app:layout_constraintEnd_toStartOf="@+id/guideline9"
-        app:layout_constraintStart_toStartOf="@+id/Nombre"
-        app:layout_constraintTop_toBottomOf="@+id/Nombre" >
-    <com.google.android.material.textfield.TextInputEditText
         android:layout_width="@dimen/anchoCorreo"
         android:layout_height="@dimen/altocaja"
-        android:inputType="textEmailAddress"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        android:hint="Correo electrónico"
+        app:layout_constraintEnd_toEndOf="@+id/FechaNac"
+        app:layout_constraintStart_toStartOf="@+id/Telefono"
+        app:layout_constraintTop_toBottomOf="@+id/Nombre"
+        app:startIconDrawable="@drawable/outline_alternate_email_24">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="@dimen/anchoCorreo"
+            android:layout_height="@dimen/altocaja"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Telefono"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="@dimen/anchocaja"
         android:layout_height="@dimen/altocaja"
         android:layout_marginTop="@dimen/margenArriba"
         android:hint="Teléfono"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:startIconDrawable="@drawable/movil"
         app:layout_constraintStart_toStartOf="@+id/guideline7"
-        app:layout_constraintTop_toBottomOf="@+id/Correo">
+        app:layout_constraintTop_toBottomOf="@+id/Correo"
+        app:startIconDrawable="@drawable/movil">
+
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="@dimen/anchocaja"
             android:layout_height="@dimen/altocaja"
-            android:inputType="phone"/>
+            android:inputType="phone" />
     </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/FechaNac"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="@dimen/anchocaja"
         android:layout_height="@dimen/altocaja"
         android:layout_marginTop="@dimen/margenArriba"
         android:hint="Fecha nacimiento"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:startIconDrawable="@drawable/calendaripo"
-        app:layout_constraintEnd_toEndOf="@+id/Correo"
-        app:layout_constraintTop_toBottomOf="@+id/Correo">
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="@dimen/anchocaja"
-        android:layout_height="@dimen/altocaja"
-        android:inputType="date"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintEnd_toEndOf="@+id/Siguiente"
+        app:layout_constraintTop_toBottomOf="@+id/Correo"
+        app:startIconDrawable="@drawable/calendaripo">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="@dimen/anchocaja"
+            android:layout_height="@dimen/altocaja"
+            android:inputType="date" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/Género"
@@ -115,7 +114,6 @@
         android:text="Género:"
         app:layout_constraintStart_toStartOf="@+id/Telefono"
         app:layout_constraintTop_toBottomOf="@+id/Telefono" />
-
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -143,48 +141,63 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Comentarios"
-        android:layout_width="@dimen/anchoCorreo"
-        android:layout_height="@dimen/anchocaja2"
-        android:layout_marginTop="@dimen/margenArriba"
-        android:hint="Comentarios"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:startIconDrawable="@drawable/outline_add_comment_24"
-        app:layout_constraintEnd_toEndOf="@+id/checkBox3"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/Género"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox2">
-    <com.google.android.material.textfield.TextInputEditText
         android:layout_width="@dimen/anchoCorreo"
         android:layout_height="@dimen/anchocaja2"
-        android:inputType="text"/>
+        android:hint="Comentarios"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox2"
+        app:startIconDrawable="@drawable/outline_add_comment_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="@dimen/anchoCorreo"
+            android:layout_height="@dimen/anchocaja2"
+            android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="84dp"
+        android:layout_width="@dimen/AncBttInferiores"
+        android:layout_height="@dimen/AltBttInferiores"
+        android:layout_marginTop="96dp"
         android:backgroundTint="@color/btnLimColor"
         android:text="Limpiar"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@+id/Comentarios"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintEnd_toStartOf="@+id/button4"
+        app:layout_constraintStart_toStartOf="@+id/Anterior"
         app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
 
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="@dimen/AncBttInferiores"
+        android:layout_height="@dimen/AltBttInferiores"
+        android:backgroundTint="@color/btnActiColor"
+        android:text="Actualizar"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/button"
+        app:layout_constraintTop_toTopOf="@+id/button" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="@dimen/AncBttInferiores"
+        android:layout_height="@dimen/AltBttInferiores"
+        android:backgroundTint="@color/btBorrarColor"
+        android:text="Borrar"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/button4"
+        app:layout_constraintTop_toTopOf="@+id/button4" />
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margenBotones"
-        android:layout_marginTop="84dp"
+        android:layout_width="@dimen/AncBttInferiores"
+        android:layout_height="@dimen/AltBttInferiores"
         android:backgroundTint="@color/btnGuardarColor"
         android:text="Guardar"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/Comentarios"
-        app:layout_constraintHorizontal_bias="0.743"
-        app:layout_constraintStart_toEndOf="@+id/button"
-        app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/button5"
+        app:layout_constraintTop_toTopOf="@+id/button5" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -198,7 +211,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="37dp" />
+        app:layout_constraintGuide_begin="16dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"
@@ -212,7 +225,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="37dp" />
+        app:layout_constraintGuide_end="16dp" />
 
     <Button
         android:id="@+id/Siguiente"
@@ -239,9 +252,7 @@
         android:layout_marginTop="28dp"
         android:text="0/0"
         app:layout_constraintEnd_toStartOf="@+id/Siguiente"
-        app:layout_constraintHorizontal_bias="0.544"
         app:layout_constraintStart_toEndOf="@+id/Anterior"
         app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
