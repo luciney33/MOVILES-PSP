@@ -7,13 +7,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CuentaBankLock implements CuentaBankInterface {
-    private CuentaBank cuentaBank;
     private final Lock lock = new ReentrantLock();
-    private List<String> historial = new ArrayList<>();
-    private double saldo;
+    private CuentaBank cuentaBank;
     public CuentaBankLock(CuentaBank cuentaBank) {
         this.cuentaBank = cuentaBank;
-        saldo = cuentaBank.getSaldo();
     }
 
     @Override
@@ -21,14 +18,14 @@ public class CuentaBankLock implements CuentaBankInterface {
         boolean retirado = false;
         lock.lock();
         try {
-            if (cantidad <= saldo) {
-                saldo -= cantidad;
-                historial.add(LocalDate.now() + " RETIRO: " + cantidad + "€ | Saldo: " + saldo);
+            if (cantidad <= cuentaBank.getSaldo()) {
+                cuentaBank.setSaldo(cuentaBank.getSaldo()-cantidad);
+                cuentaBank.getHistorial().add(LocalDate.now() + " RETIRO: " + String.format("%.2f€", cantidad) + " | SALDO: " + String.format("%.2f€", cuentaBank.getSaldo()));
                 retirado = true;
             } else {
                 retirado = false;
-                historial.add(LocalDate.now() +
-                        " RETIRO FALLIDO: " + cantidad + "€ | Fondos insuficientes | Saldo: " + saldo);
+                cuentaBank.getHistorial().add(LocalDate.now() +
+                        " RETIRO FALLIDO: " + String.format("%.2f€", cantidad) + " | Fondos insuficientes | SALDO: " + String.format("%.2f€", cuentaBank.getSaldo()));
             }
         } finally {
             lock.unlock();
@@ -40,9 +37,9 @@ public class CuentaBankLock implements CuentaBankInterface {
     public void ingresar(double cantidad) {
         lock.lock();
         try {
-            saldo += cantidad;
-            historial.add(LocalDate.now() +
-                    " INGRESO: +" + cantidad + "€ | Saldo: " + saldo);
+            cuentaBank.setSaldo(cuentaBank.getSaldo()+cantidad);
+            cuentaBank.getHistorial().add(LocalDate.now() +
+                    " INGRESO: +" + String.format("%.2f€", cantidad) + " | SALDO: " + String.format("%.2f€", cuentaBank.getSaldo()));
         } finally {
             lock.unlock();
         }
@@ -52,9 +49,9 @@ public class CuentaBankLock implements CuentaBankInterface {
     public double consultarSaldo() {
         lock.lock();
         try {
-            historial.add(LocalDate.now() +
-                    " CONSULTA SALDO | Saldo actual: " + saldo);
-            return saldo;
+            cuentaBank.getHistorial().add(LocalDate.now() +
+                    " CONSULTA SALDO | SALDO ACTUAL: " + String.format("%.2f€", cuentaBank.getSaldo()));
+            return cuentaBank.getSaldo();
         } finally {
             lock.unlock();
         }
@@ -64,7 +61,7 @@ public class CuentaBankLock implements CuentaBankInterface {
     public List<String> obtenerHistorial() {
         lock.lock();
         try {
-            return historial;
+            return cuentaBank.getHistorial();
         } finally {
             lock.unlock();
         }
