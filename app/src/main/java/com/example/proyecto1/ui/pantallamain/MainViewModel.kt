@@ -1,6 +1,5 @@
 package com.example.proyecto1.ui.pantallamain
 
-import android.widget.CheckBox
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,22 +9,24 @@ class MainViewModel : ViewModel() {
     private var _state : MutableLiveData<MainState> = MutableLiveData(MainState())
     val state : LiveData<MainState> get() = _state
 
-    fun nombreEscrito(toString: String) {
+    fun nombreEscrito(nombre: String) {
+        _state.value=state.value?.copy(stateNombre = nombre )
 
     }
-    fun apellidoEscrito(toString: String) {
+    fun apellidoEscrito(apellido: String) {
+        _state.value=state.value?.copy(stateApellido = apellido)
 
     }
-    fun correoEscrito(toString: String) {
+    fun correoEscrito(correo: String) {
 
     }
-    fun comentarioEscrito(toString: String) {
+    fun comentarioEscrito(comentario: String) {
 
     }
-    fun telfEscrito(toInt: Int) {
+    fun telfEscrito(numTelf: Int) {
 
     }
-    fun fechanacEscrito(toDate: Date) {
+    fun fechanacEscrito(fecha: Date) {
 
     }
     fun mujerChecked(checked: Boolean) {

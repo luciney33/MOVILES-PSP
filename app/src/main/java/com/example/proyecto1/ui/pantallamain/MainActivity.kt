@@ -56,9 +56,15 @@ class MainActivity : AppCompatActivity() {
             viewModel.fechanacEscrito(it.toDate)
         }
 
-        binding.boxMujer.isChecked
-        binding.boxHombre.isChecked
-        binding.boxOtro.isChecked
+        binding.boxMujer.setOnClickListener {
+            viewModel.mujerChecked(binding.boxMujer.isChecked)
+        }
+        binding.boxHombre.setOnClickListener {
+            viewModel.hombreChecked(binding.boxHombre.isChecked)
+        }
+        binding.boxOtro.setOnClickListener {
+            viewModel.otroChecked(binding.boxOtro.isChecked)
+        }
 
         binding.Anterior.setOnClickListener {
             viewModel.btnAntClicked()
@@ -87,8 +93,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun observador(){
         viewModel.state.observe(this){state ->
-            binding.textNombre.setText(state.textoNombre)
-            binding.textApellidos.setText(state.textoApellido)
+            binding.textNombre.setText(state.nombre)
+            binding.textApellidos.setText(state.apellido)
+            binding.textCorreo.setText(state.correo)
+            binding.textComentarios.setText(state.comentario)
+
         }
     }
 
