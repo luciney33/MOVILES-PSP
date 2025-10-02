@@ -48,22 +48,20 @@ class MainActivity : AppCompatActivity() {
             viewModel.comentarioEscrito(it.toString())
         }
 
-        binding.phoneTelefono.addTextChangedListener{
-            viewModel.telfEscrito(it.toInt())
-        }
+//        binding.phoneTelefono.addTextChangedListener{
+//            viewModel.telfEscrito(it.toInt())
+//        }
+//
+//        binding.dateFechaNac.setOnClickListener {
+//            viewModel.fechanacEscrito(it.to)
+//        }
 
-        binding.dateFechaNac.setOnClickListener {
-            viewModel.fechanacEscrito(it.toDate)
-        }
-
-        binding.boxMujer.setOnClickListener {
-            viewModel.mujerChecked(binding.boxMujer.isChecked)
-        }
-        binding.boxHombre.setOnClickListener {
-            viewModel.hombreChecked(binding.boxHombre.isChecked)
-        }
-        binding.boxOtro.setOnClickListener {
-            viewModel.otroChecked(binding.boxOtro.isChecked)
+        binding.rGroup.setOnCheckedChangeListener {group, checkedId ->
+            when(checkedId){
+                R.id.Mujer->viewModel.sexoSeleccionado("Mujer")
+                R.id.Hombre->viewModel.sexoSeleccionado("Hombre")
+                R.id.Otro->viewModel.sexoSeleccionado("Otro")
+            }
         }
 
         binding.Anterior.setOnClickListener {
@@ -93,10 +91,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun observador(){
         viewModel.state.observe(this){state ->
-            binding.textNombre.setText(state.nombre)
-            binding.textApellidos.setText(state.apellido)
-            binding.textCorreo.setText(state.correo)
-            binding.textComentarios.setText(state.comentario)
+            binding.textNombre.setText(state.stateNombre)
+            binding.textApellidos.setText(state.stateApellido)
+            binding.textCorreo.setText(state.stateCorreo)
+            binding.textComentarios.setText(state.stateComentario)
+            binding.phoneTelefono.setText(state.stateTelf)
+//            binding.dateFechaNac.
 
         }
     }

@@ -110,31 +110,37 @@
         android:layout_height="wrap_content"
         android:text="Género:"
         app:layout_constraintStart_toStartOf="@+id/Nombre"
-        app:layout_constraintTop_toBottomOf="@+id/Telefono" />
+        app:layout_constraintTop_toBottomOf="@+id/Telefono"/>
 
-    <CheckBox
-        android:id="@+id/boxMujer"
-        android:layout_width="@dimen/anchoCheck1"
-        android:layout_height="@dimen/altoCheck"
-        android:text="Mujer"
-        app:layout_constraintStart_toStartOf="@+id/GuiaIzquierda"
-        app:layout_constraintTop_toBottomOf="@+id/Género" />
+    <RadioGroup
+        android:id="@+id/rGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@+id/Nombre"
+        app:layout_constraintTop_toBottomOf="@+id/Género">
 
-    <CheckBox
-        android:id="@+id/boxHombre"
-        android:layout_width="@dimen/anchoCheck2"
-        android:layout_height="@dimen/altoCheck"
-        android:text="Hombre"
-        app:layout_constraintStart_toEndOf="@+id/boxMujer"
-        app:layout_constraintTop_toBottomOf="@+id/Género" />
+        <RadioButton
+            android:id="@+id/Mujer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mujer"
+            android:layout_marginEnd="8dp" />
 
-    <CheckBox
-        android:id="@+id/boxOtro"
-        android:layout_width="@dimen/anchoCheck3"
-        android:layout_height="@dimen/altoCheck"
-        android:text="Prefiero no decirlo"
-        app:layout_constraintStart_toEndOf="@+id/boxHombre"
-        app:layout_constraintTop_toBottomOf="@+id/Género" />
+        <RadioButton
+            android:id="@+id/Hombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hombre"
+            android:layout_marginEnd="8dp" />
+
+        <RadioButton
+            android:id="@+id/Otro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prefiero no decirlo" />
+
+    </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Comentarios"
@@ -144,7 +150,7 @@
         android:hint="Comentarios"
         app:layout_constraintEnd_toStartOf="@+id/GuiaDerecha"
         app:layout_constraintStart_toStartOf="@+id/Nombre"
-        app:layout_constraintTop_toBottomOf="@+id/boxHombre"
+        app:layout_constraintTop_toBottomOf="@+id/rGroup"
         app:startIconDrawable="@drawable/outline_add_comment_24">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -234,22 +240,24 @@
         app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
 
     <Button
-        android:id="@+id/Anterior"
-        android:layout_width="@dimen/anchoAnt"
-        android:layout_height="@dimen/altoAnt"
-        android:layout_marginTop="@dimen/topbtt"
-        android:text="--Ant--"
-        app:layout_constraintStart_toStartOf="@+id/Nombre"
-        app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
+    android:id="@+id/Anterior"
+    android:layout_width="@dimen/anchoAnt"
+    android:layout_height="@dimen/altoAnt"
+    android:layout_marginTop="@dimen/topbtt"
+    android:text="--Ant--"
+    app:layout_constraintStart_toStartOf="@+id/Nombre"
+    app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
 
     <TextView
-        android:id="@+id/Numpag"
-        android:layout_width="23dp"
-        android:layout_height="17dp"
-        android:layout_marginTop="28dp"
-        android:text="0/0"
-        app:layout_constraintEnd_toStartOf="@+id/Siguiente"
-        app:layout_constraintStart_toEndOf="@+id/Anterior"
-        app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
+    android:id="@+id/Numpag"
+    android:layout_width="23dp"
+    android:layout_height="17dp"
+    android:layout_marginTop="28dp"
+    android:text="0/0"
+    app:layout_constraintEnd_toStartOf="@+id/Siguiente"
+    app:layout_constraintStart_toEndOf="@+id/Anterior"
+    app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

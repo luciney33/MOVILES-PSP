@@ -1,15 +1,14 @@
 package com.example.proyecto1.ui.pantallamain
 
 import java.sql.Date
+import java.time.LocalDate
 
 data class MainState (
-    val stateNombre: String= "" ,
+    val stateNombre: String= "",
     val stateApellido: String = "",
-    val correo: String = "",
-    val comentario: String = "",
-    val numTelf: Int = 0,
-    val fechaNac: Date = "",
-    val mujer: Boolean = false,
-    val hombre: Boolean = false,
-    val otro: Boolean = false,
+    val stateCorreo: String = "",
+    val stateComentario: String = "",
+    val stateTelf: Int = 0,
+    val stateFechaNac: LocalDate? = null,
+    val stateSexo: String= ""
 )

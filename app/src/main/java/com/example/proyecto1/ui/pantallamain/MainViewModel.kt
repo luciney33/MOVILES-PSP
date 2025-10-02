@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.sql.Date
+import java.time.LocalDate
 
 class MainViewModel : ViewModel() {
     private var _state : MutableLiveData<MainState> = MutableLiveData(MainState())
@@ -18,25 +19,19 @@ class MainViewModel : ViewModel() {
 
     }
     fun correoEscrito(correo: String) {
-
+        _state.value=state.value?.copy(stateCorreo = correo)
     }
     fun comentarioEscrito(comentario: String) {
-
+        _state.value=state.value?.copy(stateComentario = comentario)
     }
     fun telfEscrito(numTelf: Int) {
-
+        _state.value=state.value?.copy(stateTelf = numTelf)
     }
-    fun fechanacEscrito(fecha: Date) {
-
+    fun fechanacEscrito(fecha: LocalDate) {
+        _state.value=state.value?.copy(stateFechaNac = fecha)
     }
-    fun mujerChecked(checked: Boolean) {
-
-    }
-    fun hombreChecked(checked: Boolean) {
-
-    }
-    fun otroChecked(checked: Boolean) {
-
+    fun sexoSeleccionado(sexo: String){
+        _state.value=state.value?.copy(stateSexo = sexo )
     }
     fun btnAntClicked() {
 
