@@ -1,4 +1,6 @@
 package com.example.proyecto1.ui.pantallamain
 
-class MainState {
-}
+data class MainState (
+    val textoNombre: String = "",
+    val textoApellido: String = ""
+)

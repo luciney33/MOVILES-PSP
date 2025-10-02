@@ -1,12 +1,11 @@
 package com.example.proyecto1.ui.pantallamain
-import android.widget.Button
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.activity.viewModels
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
 import com.example.proyecto1.R
 import com.example.proyecto1.databinding.ActivityMainBinding
 
@@ -17,11 +16,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory(
-
-        )
-    }
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +27,70 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        eventos()
+        observador()
 
-        findViewById<Button>(R.id.button).setOnClickListener{
-            Toast.makeText(this,"holiiii",Toast.LENGTH_LONG).show()
+    }
+    private fun eventos(){
+        binding.textNombre.addTextChangedListener{
+                viewModel.nombreEscrito(it.toString())
+        }
+
+        binding.textApellidos.addTextChangedListener{
+            viewModel.apellidoEscrito(it.toString())
+        }
+
+        binding.textCorreo.addTextChangedListener{
+            viewModel.correoEscrito(it.toString())
+        }
+
+        binding.textComentarios.addTextChangedListener{
+            viewModel.comentarioEscrito(it.toString())
+        }
+
+        binding.phoneTelefono.addTextChangedListener{
+            viewModel.telfEscrito(it.toInt())
+        }
+
+        binding.dateFechaNac.setOnClickListener {
+            viewModel.fechanacEscrito(it.toDate)
+        }
+
+        binding.boxMujer.isChecked
+        binding.boxHombre.isChecked
+        binding.boxOtro.isChecked
+
+        binding.Anterior.setOnClickListener {
+            viewModel.btnAntClicked()
+        }
+
+        binding.Siguiente.setOnClickListener {
+            viewModel.btnAntClicked()
+        }
+
+        binding.btLimpiar.setOnClickListener {
+            viewModel.btnAntClicked()
+        }
+
+        binding.btAct.setOnClickListener {
+            viewModel.btnAntClicked()
+        }
+
+        binding.btBorrar.setOnClickListener {
+            viewModel.btnAntClicked()
+        }
+
+        binding.btGuardar.setOnClickListener {
+            viewModel.btnAntClicked()
         }
     }
+
+    private fun observador(){
+        viewModel.state.observe(this){state ->
+            binding.textNombre.setText(state.textoNombre)
+            binding.textApellidos.setText(state.textoApellido)
+        }
+    }
+
 }
 
