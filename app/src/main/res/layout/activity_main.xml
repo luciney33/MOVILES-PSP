@@ -21,7 +21,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Nombre"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/nombre"
         app:layout_constraintStart_toStartOf="@+id/GuiaIzquierda"
@@ -30,7 +30,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textNombre"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -55,8 +55,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Correo"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="@dimen/anchoCorreo"
-        android:layout_height="@dimen/altocaja"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:hint="Correo electrónico"
         app:layout_constraintEnd_toEndOf="@+id/Apellidos"
         app:layout_constraintStart_toStartOf="@+id/Nombre"
@@ -65,8 +65,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textCorreo"
-            android:layout_width="@dimen/anchoCorreo"
-            android:layout_height="@dimen/altocaja"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
