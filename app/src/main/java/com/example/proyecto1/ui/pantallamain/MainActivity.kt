@@ -32,60 +32,52 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun eventos(){
-        binding.textNombre.addTextChangedListener{
-                viewModel.nombreEscrito(it.toString())
-        }
-
-        binding.textApellidos.addTextChangedListener{
-            viewModel.apellidoEscrito(it.toString())
-        }
-
-        binding.textCorreo.addTextChangedListener{
-            viewModel.correoEscrito(it.toString())
-        }
-
-        binding.textComentarios.addTextChangedListener{
-            viewModel.comentarioEscrito(it.toString())
-        }
-
-//        binding.phoneTelefono.addTextChangedListener{
-//            viewModel.telfEscrito(it.toInt())
-//        }
-//
-//        binding.dateFechaNac.setOnClickListener {
-//            viewModel.fechanacEscrito(it.to)
-//        }
-
-        binding.rGroup.setOnCheckedChangeListener {group, checkedId ->
-            when(checkedId){
-                R.id.Mujer->viewModel.sexoSeleccionado("Mujer")
-                R.id.Hombre->viewModel.sexoSeleccionado("Hombre")
-                R.id.Otro->viewModel.sexoSeleccionado("Otro")
-            }
-        }
-
         binding.Anterior.setOnClickListener {
             viewModel.btnAntClicked()
         }
 
         binding.Siguiente.setOnClickListener {
-            viewModel.btnAntClicked()
+            viewModel.btnSigClicked()
         }
 
         binding.btLimpiar.setOnClickListener {
-            viewModel.btnAntClicked()
+            binding.textNombre.text
+            binding.textApellidos.text
+            binding.textCorreo.text
+            binding.textComentarios.text
+            binding.dateFechaNac.text
+            binding.phoneTelefono.text
+            viewModel.btnLimpClicked()
         }
 
         binding.btAct.setOnClickListener {
-            viewModel.btnAntClicked()
+            binding.textNombre.text
+            binding.textApellidos.text
+            binding.textCorreo.text
+            binding.textComentarios.text
+            binding.dateFechaNac.text
+            binding.phoneTelefono.text
+            viewModel.btnActClicked()
         }
 
         binding.btBorrar.setOnClickListener {
-            viewModel.btnAntClicked()
+            binding.textNombre.text
+            binding.textApellidos.text
+            binding.textCorreo.text
+            binding.textComentarios.text
+            binding.dateFechaNac.text
+            binding.phoneTelefono.text
+            viewModel.btnBorrarClicked()
         }
 
         binding.btGuardar.setOnClickListener {
-            viewModel.btnAntClicked()
+            binding.textNombre.text
+            binding.textApellidos.text
+            binding.textCorreo.text
+            binding.textComentarios.text
+            binding.dateFechaNac.text
+            binding.phoneTelefono.text
+            viewModel.btnGuardarClicked()
         }
     }
 
@@ -96,7 +88,6 @@ class MainActivity : AppCompatActivity() {
             binding.textCorreo.setText(state.stateCorreo)
             binding.textComentarios.setText(state.stateComentario)
             binding.phoneTelefono.setText(state.stateTelf)
-//            binding.dateFechaNac.
 
         }
     }
