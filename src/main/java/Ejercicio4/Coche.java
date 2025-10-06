@@ -15,8 +15,13 @@ public class Coche implements Runnable{
     private Parking parking;
     private final Logger log = Logger.getLogger(Coche.class.getName());
 
+
     public void run() {
         try {
+            parking.cocheProcesado();
+            long tiempoEntrada = 0;
+            tiempoEntrada = System.currentTimeMillis();
+
             if (!parking.entrar(this)) {
                 log.info(LocalTime.now() + " Coche: " + id + " (" + tipoVehiculo + ") se va, parking lleno");
                 return;
@@ -24,6 +29,9 @@ public class Coche implements Runnable{
 
             int tiempoEstancia = ThreadLocalRandom.current().nextInt(10, 31);
             Thread.sleep(tiempoEstancia * 1000L);
+
+            long duracion = System.currentTimeMillis() - tiempoEntrada;
+            parking.agregarTiempoEstancia(duracion);
 
             parking.salir(this, tiempoEstancia);
         } catch (InterruptedException e) {

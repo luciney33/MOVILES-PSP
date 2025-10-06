@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 public class Main {
         public static void main(String[] args) throws InterruptedException {
-            final Logger log = Logger.getLogger(Main.class.getName());
             int numCoches = 200;
             Parking parking = new Parking(20, 5, 10);
 
@@ -21,7 +20,7 @@ public class Main {
             while (!executor.isTerminated()) {
                 Thread.sleep(500);
             }
+            parking.estadisticas();
 
-            log.info("Ingresos totales: " + parking.getIngresos() + "€");
         }
 }
