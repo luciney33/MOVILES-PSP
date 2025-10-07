@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class Parking {
     private final Semaphore plazasNormales;
     private final Semaphore plazasVIP;
-    private final BlockingQueue<Coche> colaEspera;
+    private final BlockingQueue<Coche> colaEspera = new LinkedBlockingQueue<>(10);
     private final Lock entrada = new ReentrantLock();
     private final Lock salida = new ReentrantLock();
     private double ingresos = 0;
@@ -22,15 +22,14 @@ public class Parking {
     private int vehiculosProcesados = 0;
     private int vehiculosAtendidos = 0;
     private int vehiculosRechazados = 0;
-    private long tiempoTotalEstancia = 0;
-    private int ocupacionMaxima = 0;
+    private long tiempoEstancia = 0;
+    private int ocupacionMax = 0;
     private int cochesTiempo = 0;
 
 
-    public Parking(int plazasNormales, int plazasVIP, int colaMax) {
+    public Parking(int plazasNormales, int plazasVIP) {
         this.plazasNormales = new Semaphore(plazasNormales);
         this.plazasVIP = new Semaphore(plazasVIP);
-        this.colaEspera = new LinkedBlockingQueue<>(colaMax);
     }
 
     public boolean entrar(Coche coche) throws InterruptedException {
@@ -63,7 +62,7 @@ public class Parking {
             } else {
                 vehiculosAtendidos++;
                 int ocupacionActual = 25 - (plazasNormales.availablePermits() + plazasVIP.availablePermits());
-                ocupacionMaxima = Math.max(ocupacionMaxima, ocupacionActual);
+                ocupacionMax = Math.max(ocupacionMax, ocupacionActual);
             }
             return siPuede;
         } finally {
@@ -102,7 +101,7 @@ public class Parking {
     }
 
     public synchronized void agregarTiempoEstancia(long duracionMs) {
-        tiempoTotalEstancia += duracionMs;
+        tiempoEstancia += duracionMs;
         cochesTiempo++;
     }
 
@@ -113,11 +112,11 @@ public class Parking {
                 " (" + String.format("%.1f", (vehiculosAtendidos * 100.0 / vehiculosProcesados)) + "%)");
         System.out.println("Vehículos rechazados: " + vehiculosRechazados);
 
-        double promedio = (cochesTiempo == 0) ? 0 : (tiempoTotalEstancia / (cochesTiempo * 1000.0));
+        double promedio = (cochesTiempo == 0) ? 0 : (tiempoEstancia / (cochesTiempo * 1000.0));
         System.out.println("Tiempo promedio de estancia: " + String.format("%.1f", promedio) + "s");
 
         System.out.println("Ingresos totales: " + String.format("%.2f€", ingresos));
-        System.out.println("Ocupación máxima: " + ocupacionMaxima + "/25 plazas (" +
-                String.format("%.1f", (ocupacionMaxima * 100.0 / 25)) + "%)");
+        System.out.println("Ocupación máxima: " + ocupacionMax + "/25 plazas (" +
+                String.format("%.1f", (ocupacionMax * 100.0 / 25)) + "%)");
     }
 }

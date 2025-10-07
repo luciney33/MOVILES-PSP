@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class Main {
         public static void main(String[] args) throws InterruptedException {
             int numCoches = 200;
-            Parking parking = new Parking(20, 5, 10);
+            Parking parking = new Parking(20, 5);
 
             ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
