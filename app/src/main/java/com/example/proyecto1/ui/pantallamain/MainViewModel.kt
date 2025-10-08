@@ -3,8 +3,8 @@ package com.example.proyecto1.ui.pantallamain
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import java.sql.Date
-import java.time.LocalDate
+import com.example.proyecto1.domain.model.Pedido
+import com.example.proyecto1.domain.usecases.AddPedidoUseCase
 
 class MainViewModel : ViewModel() {
     private var _state : MutableLiveData<MainState> = MutableLiveData(MainState())
@@ -15,16 +15,19 @@ class MainViewModel : ViewModel() {
     fun btnSigClicked() {
 
     }
-    fun btnLimpClicked() {
+    fun btnLimpClicked(pedido: Pedido) {
 
     }
-    fun btnActClicked() {
+    fun btnActClicked(pedido: Pedido) {
 
     }
-    fun btnBorrarClicked() {
+    fun btnBorrarClicked(pedido: Pedido) {
 
     }
-    fun btnGuardarClicked() {
-
+    fun btnGuardarClicked(pedido: Pedido) {
+        val addPedido = AddPedidoUseCase()
+        if (addPedido.invoke(pedido)){
+        _state.value = _state.value?.copy(mensaje= "Pedido añadido", pedido = pedido)
+        }else _state.value = _state.value?.copy(mensaje= "El pedido no se pudo añadir", pedido = pedido)
     }
 }

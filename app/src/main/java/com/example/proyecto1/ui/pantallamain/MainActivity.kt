@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.activity.viewModels
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.addTextChangedListener
 import com.example.proyecto1.R
 import com.example.proyecto1.databinding.ActivityMainBinding
+import com.example.proyecto1.domain.model.Pedido
 
 //enganchar con el viewmodel
 class MainActivity : AppCompatActivity() {
@@ -21,7 +21,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -41,54 +42,92 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btLimpiar.setOnClickListener {
-            binding.textNombre.text
-            binding.textApellidos.text
-            binding.textCorreo.text
-            binding.textComentarios.text
-            binding.dateFechaNac.text
-            binding.phoneTelefono.text
-            viewModel.btnLimpClicked()
+            val tallaSelec = when(binding.rGroup.checkedRadioButtonId){
+                R.id.L -> "L"
+                R.id.M ->"M"
+                R.id.S -> "S"
+                else -> {"L"}
+            }
+           var pedido = Pedido(
+               binding.textNombreApellido.text.toString(),
+               binding.textCorreo.text.toString(),
+            binding.textComentarios.text.toString(),
+            binding.phoneTelefono.text.toString(),
+            binding.textMarca.text.toString(),
+               tallaSelec
+
+           )
+            viewModel.btnLimpClicked(pedido)
         }
 
         binding.btAct.setOnClickListener {
-            binding.textNombre.text
-            binding.textApellidos.text
-            binding.textCorreo.text
-            binding.textComentarios.text
-            binding.dateFechaNac.text
-            binding.phoneTelefono.text
-            viewModel.btnActClicked()
+            val tallaSelec = when(binding.rGroup.checkedRadioButtonId){
+                R.id.L -> "L"
+                R.id.M ->"M"
+                R.id.S -> "S"
+                else -> {"L"}
+            }
+            var pedido = Pedido(
+                binding.textNombreApellido.text.toString(),
+                binding.textCorreo.text.toString(),
+                binding.textComentarios.text.toString(),
+                binding.phoneTelefono.text.toString(),
+                binding.textMarca.text.toString(),
+                tallaSelec
+                )
+            viewModel.btnActClicked(pedido)
         }
 
         binding.btBorrar.setOnClickListener {
-            binding.textNombre.text
-            binding.textApellidos.text
-            binding.textCorreo.text
-            binding.textComentarios.text
-            binding.dateFechaNac.text
-            binding.phoneTelefono.text
-            viewModel.btnBorrarClicked()
+            val tallaSelec = when(binding.rGroup.checkedRadioButtonId){
+                R.id.L -> "L"
+                R.id.M ->"M"
+                R.id.S -> "S"
+                else -> {"L"}
+            }
+            var pedido = Pedido(
+                binding.textNombreApellido.text.toString(),
+                binding.textCorreo.text.toString(),
+                binding.textComentarios.text.toString(),
+                binding.phoneTelefono.text.toString(),
+                binding.textMarca.text.toString(),
+                tallaSelec
+                )
+            viewModel.btnBorrarClicked(pedido)
         }
 
         binding.btGuardar.setOnClickListener {
-            binding.textNombre.text
-            binding.textApellidos.text
-            binding.textCorreo.text
-            binding.textComentarios.text
-            binding.dateFechaNac.text
-            binding.phoneTelefono.text
-            viewModel.btnGuardarClicked()
+            val tallaSelec = when(binding.rGroup.checkedRadioButtonId){
+                R.id.L -> "L"
+                R.id.M ->"M"
+                R.id.S -> "S"
+                else -> {"L"}
+            }
+
+            var pedido = Pedido(
+                binding.textNombreApellido.text.toString(),
+                binding.textCorreo.text.toString(),
+                binding.textComentarios.text.toString(),
+                binding.phoneTelefono.text.toString(),
+                binding.textMarca.text.toString(),
+                tallaSelec
+                )
+            viewModel.btnGuardarClicked(pedido)
         }
     }
 
     private fun observador(){
         viewModel.state.observe(this){state ->
-            binding.textNombre.setText(state.stateNombre)
-            binding.textApellidos.setText(state.stateApellido)
-            binding.textCorreo.setText(state.stateCorreo)
-            binding.textComentarios.setText(state.stateComentario)
-            binding.phoneTelefono.setText(state.stateTelf)
-
+            binding.textNombreApellido.setText(state.pedido.nomape)
+            binding.textCorreo.setText(state.pedido.correo)
+            binding.textComentarios.setText(state.pedido.comentario)
+            binding.phoneTelefono.setText(state.pedido.telf)
+            binding.textMarca.setText(state.pedido.marca)
+            when (state.pedido.talla) {
+                "L" -> binding.rGroup.check(R.id.L)
+                "M" -> binding.rGroup.check(R.id.M)
+                "S" -> binding.rGroup.check(R.id.S)
+            }
         }
     }
 

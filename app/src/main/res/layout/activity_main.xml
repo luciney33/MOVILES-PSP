@@ -8,7 +8,7 @@
     tools:context="ui.pantallamain.MainActivity">
 
     <TextView
-        android:id="@+id/NuevoUsuario"
+        android:id="@+id/PedidoRopa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/titulo"
@@ -19,35 +19,19 @@
         app:layout_constraintTop_toTopOf="@+id/GuiaTop" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/Nombre"
+        android:id="@+id/NombreyApellidos"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/nombre"
-        app:layout_constraintStart_toStartOf="@+id/GuiaIzquierda"
-        app:layout_constraintTop_toBottomOf="@+id/NuevoUsuario"
-        app:startIconDrawable="@drawable/lapiz">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textNombre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/Apellidos"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Apellidos"
         app:layout_constraintEnd_toStartOf="@+id/GuiaDerecha"
-        app:layout_constraintTop_toBottomOf="@+id/NuevoUsuario"
+        app:layout_constraintStart_toStartOf="@+id/GuiaIzquierda"
+        app:layout_constraintTop_toBottomOf="@+id/PedidoRopa"
         app:startIconDrawable="@drawable/lapiz">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textApellidos"
-            android:layout_width="wrap_content"
+            android:id="@+id/textNombreApellido"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -55,17 +39,17 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Correo"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Correo electrónico"
-        app:layout_constraintEnd_toEndOf="@+id/Apellidos"
-        app:layout_constraintStart_toStartOf="@+id/Nombre"
-        app:layout_constraintTop_toBottomOf="@+id/Apellidos"
+        app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
+        app:layout_constraintTop_toBottomOf="@+id/NombreyApellidos"
         app:startIconDrawable="@drawable/outline_alternate_email_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textCorreo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -76,7 +60,7 @@
         android:layout_width="@dimen/anchocaja"
         android:layout_height="@dimen/altocaja"
         android:hint="Teléfono"
-        app:layout_constraintStart_toStartOf="@+id/Nombre"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
         app:layout_constraintTop_toBottomOf="@+id/Correo"
         app:startIconDrawable="@drawable/movil">
 
@@ -87,29 +71,31 @@
             android:inputType="phone" />
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/FechaNac"
+        android:id="@+id/Marca"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="@dimen/anchocaja"
         android:layout_height="@dimen/altocaja"
-        android:hint="Fecha nacimiento"
-        app:layout_constraintEnd_toEndOf="@+id/Apellidos"
+        android:hint="Marca"
+
+        app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
         app:layout_constraintTop_toBottomOf="@+id/Correo"
-        app:startIconDrawable="@drawable/calendaripo">
+        app:startIconDrawable="@drawable/marca">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/dateFechaNac"
+            android:id="@+id/textMarca"
             android:layout_width="@dimen/anchocaja"
             android:layout_height="@dimen/altocaja"
-            android:inputType="date" />
+            android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/Género"
+        android:id="@+id/Talla"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Género:"
-        app:layout_constraintStart_toStartOf="@+id/Nombre"
+        android:text="Talla:"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
         app:layout_constraintTop_toBottomOf="@+id/Telefono"/>
 
     <RadioGroup
@@ -117,28 +103,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@+id/Nombre"
-        app:layout_constraintTop_toBottomOf="@+id/Género">
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
+        app:layout_constraintTop_toBottomOf="@+id/Talla">
 
         <RadioButton
-            android:id="@+id/Mujer"
+            android:id="@+id/L"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mujer"
+            android:text="L"
             android:layout_marginEnd="8dp" />
 
         <RadioButton
-            android:id="@+id/Hombre"
+            android:id="@+id/M"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hombre"
+            android:text="M"
             android:layout_marginEnd="8dp" />
 
         <RadioButton
-            android:id="@+id/Otro"
+            android:id="@+id/S"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Prefiero no decirlo" />
+            android:text="S" />
 
     </RadioGroup>
 
@@ -149,7 +135,7 @@
         android:layout_height="@dimen/anchocaja2"
         android:hint="Comentarios"
         app:layout_constraintEnd_toStartOf="@+id/GuiaDerecha"
-        app:layout_constraintStart_toStartOf="@+id/Nombre"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
         app:layout_constraintTop_toBottomOf="@+id/rGroup"
         app:startIconDrawable="@drawable/outline_add_comment_24">
 
@@ -199,7 +185,7 @@
         android:text="Guardar"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/btLimpiar"
-        app:layout_constraintEnd_toEndOf="@+id/Apellidos"
+        app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
         app:layout_constraintStart_toEndOf="@+id/btBorrar" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -214,7 +200,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
+        app:layout_constraintGuide_begin="16dp"
+        app:layout_constraintGuide_percent="0.05"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/GuiaAbajo"
@@ -236,7 +223,7 @@
         android:layout_height="@dimen/altoSig"
         android:layout_marginTop="@dimen/topbtt"
         android:text="--Sig--"
-        app:layout_constraintEnd_toEndOf="@+id/Apellidos"
+        app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
         app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
 
     <Button
@@ -245,7 +232,7 @@
     android:layout_height="@dimen/altoAnt"
     android:layout_marginTop="@dimen/topbtt"
     android:text="--Ant--"
-    app:layout_constraintStart_toStartOf="@+id/Nombre"
+    app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
     app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
 
     <TextView
