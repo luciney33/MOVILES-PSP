@@ -1,55 +1,45 @@
 package Ejercicio3;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Restaurante {
-    public static void main(String[] args) throws InterruptedException {
-        int numClientes = 100;
-        int numCocineros = 3;
-        final Logger log = Logger.getLogger(Restaurante.class.getName());
+    private final int numClientes = 100;
+    private final int numCocineros = 3;
+    private final BlockingQueue<Pedido> colaCocina = new LinkedBlockingQueue<>(10);
+    private final AtomicInteger clTotales = new AtomicInteger(0);
+    private final AtomicInteger clAtendidos = new AtomicInteger(0);
 
-        log.info("=== RESTAURANTE   ===");
-        log.info("Iniciando servicio con " + numCocineros + " cocineros y " + numClientes + " clientes");
+    public synchronized void registroPedido(Pedido pedido) {
+        clTotales.incrementAndGet();
+    }
 
-        Mesa mesa = new Mesa();
+    public synchronized void registroCocinero(Pedido pedido) {
+        clAtendidos.incrementAndGet();
+    }
 
-        List<Thread> hilosCocineros = new ArrayList<>();
+
+    public void iniciarServicio() throws InterruptedException {
+        System.out.println("RESTAURANTE CONCURRENTE");
+        ExecutorService executor = Executors.newCachedThreadPool();
+
         for (int i = 1; i <= numCocineros; i++) {
-            Cocinero cocinero = new Cocinero(i, mesa);
-            Thread hiloCocinero = new Thread(cocinero);
-            hiloCocinero.start();
-            hilosCocineros.add(hiloCocinero);
+            executor.submit(new Cocinero(i, this, colaCocina));
         }
-
-        List<Thread> hilosClientes = new ArrayList<>();
         for (int i = 1; i <= numClientes; i++) {
-            Cliente cliente = new Cliente(i,mesa);
-            Thread hiloCliente = new Thread(cliente);
-            hiloCliente.start();
-            hilosClientes.add(hiloCliente);
-
-            Thread.sleep(0);
+            executor.submit(new Cliente(i, this, colaCocina)); Thread.sleep(500);
+        }
+        while (!colaCocina.isEmpty()) {
+            Thread.sleep(1000);
         }
 
-        for (int i = 0; i < hilosClientes.size(); i++) {
-            hilosClientes.get(i).join();
-        }
+        executor.shutdown();
+        executor.awaitTermination(10, TimeUnit.SECONDS);
 
-        for (int i = 0; i < numCocineros; i++) {
-            Pedido prueba = new Pedido();
-            prueba.setIdCliente(-1);
-            mesa.ponerPedido(prueba);
-        }
-
-        for (int i = 0; i < hilosCocineros.size(); i++) {
-            hilosCocineros.get(i).join();
-        }
-        int pedidosNormales = mesa.getTotalPedidos().get() - numCocineros;
-
-        log.info("--- ESTADÍSTICAS FINALES ---");
-        log.info("Clientes atendidos: " + pedidosNormales + "/" + numClientes);
-        log.info("Platos servidos: " + pedidosNormales);
-        log.info("Mesa llena (veces): " + mesa.getVecesLlena().get());
+        mostrarEstadisticas();
+    }
+    private void mostrarEstadisticas() {
+        System.out.println("Estadísticas del Restaurante");
+        System.out.println("Clientes totales: " + clTotales.get());
+        System.out.println("Clientes atendidos: " + clAtendidos.get()+ "/" +clTotales.get());
     }
 }

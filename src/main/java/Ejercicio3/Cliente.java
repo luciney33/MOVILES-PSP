@@ -1,27 +1,31 @@
 package Ejercicio3;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.logging.Logger;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Data
-@AllArgsConstructor
 public class Cliente implements Runnable{
-    private int idCliente;
-    private Mesa mesa;
-    private final Logger log = Logger.getLogger(Cliente.class.getName());
+    private final int id;
+    private final Restaurante restaurante;
+    private final BlockingQueue<Pedido> colaCocina;
 
+    public Cliente(int id, Restaurante restaurante, BlockingQueue<Pedido> colaCocina) {
+        this.id = id;
+        this.restaurante = restaurante;
+        this.colaCocina = colaCocina;
+    }
 
-    public void run(){
+    @Override
+    public void run() {
         try {
-            Pedido pedido = new Pedido(idCliente);
-            mesa.ponerPedido(pedido);
-            pedido.getLatch().await();
-        }catch (InterruptedException e){
+            Plato[] platos = Plato.values();
+            Plato platoElegido = platos[ThreadLocalRandom.current().nextInt(platos.length)];
+            Pedido pedido = new Pedido(id, platoElegido);
+            colaCocina.put(pedido);
+            restaurante.registroPedido(pedido);
+            System.out.println("--Cliente-" + id + " pide " + platoElegido.name());
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            log.info(" Cliente " + idCliente + " parado");
         }
-
     }
 }

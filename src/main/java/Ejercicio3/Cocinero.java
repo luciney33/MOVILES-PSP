@@ -1,39 +1,33 @@
 package Ejercicio3;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import java.util.concurrent.BlockingQueue;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 
 @Data
-@AllArgsConstructor
 public class Cocinero implements Runnable {
-    private int idCocinero;
-    private Mesa mesa;
-    private final Logger log = Logger.getLogger(Cocinero.class.getName());
+    private final int id;
+    private final Restaurante restaurante;
+    private final BlockingQueue<Pedido> colaCocina;
 
+    public Cocinero(int id, Restaurante restaurante, BlockingQueue<Pedido> colaCocina) {
+        this.id = id;
+        this.restaurante = restaurante;
+        this.colaCocina = colaCocina;
+    }
+
+    @Override
     public void run() {
-        while (true) {
             try {
-
-                Pedido pedido = mesa.sacarPedido();
-
-                if (pedido.getIdCliente() == -1) {
-                    break;
+                while (!Thread.currentThread().isInterrupted()) {
+                    Pedido pedido = colaCocina.take();
+                    System.out.println("Cocinero " + id + " prepara " + pedido);
+                    Thread.sleep(pedido.getPlato().getTiempoMs());
+                    restaurante.registroCocinero(pedido);
+                    System.out.println("Cocinero " + id + " terminó " + pedido);
                 }
-
-                String tiempo = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-                log.info(tiempo + " Cocinero" + idCocinero + " termina"
-                        + pedido.getPlato() + " para Cliente" + pedido.getIdCliente());
-
-                pedido.getLatch().countDown();
             } catch (InterruptedException e) {
+                System.out.println("Cocinero " + id + " terminó su turno");
                 Thread.currentThread().interrupt();
-                log.info(" Cocinero" + idCocinero + " parado");
             }
-        }
     }
 }
