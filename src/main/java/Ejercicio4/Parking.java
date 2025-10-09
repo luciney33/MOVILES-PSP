@@ -31,8 +31,6 @@ public class Parking {
 
     public void iniciarServicio() throws InterruptedException {
         int numCoches = 200;
-        Parking parking = new Parking(20, 5);
-
         ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
         for (int i = 1; i <= numCoches; i++) {
@@ -42,13 +40,24 @@ public class Parking {
             } else {
                 tipo = TipoVehiculo.NORMAL;
             }
-            executor.submit(new Coche(i, tipo, parking));
+            executor.submit(new Coche(i, tipo, this));
         }
 
         executor.shutdown();
         while (!executor.isTerminated()) {
             Thread.sleep(500);
         }
+        estadisticas();
+
+    }
+
+    public synchronized void cocheProcesado() {
+        vehiculosProcesados++;
+    }
+
+    public synchronized void agregarTiempoEstancia(long duracionMs) {
+        tiempoEstancia += duracionMs;
+        cochesTiempo++;
     }
 
     public boolean entrar(Coche coche) throws InterruptedException {
@@ -58,24 +67,24 @@ public class Parking {
             if (coche.getTipoVehiculo() == TipoVehiculo.VIP) {
                 if (plazasVIP.tryAcquire()) {
                     siPuede = true;
-                    System.out.println(LocalTime.now()+" Coche-" + coche.getId() + " entra en plaza VIP");
+                    System.out.println(LocalTime.now()+" Coche: " + coche.getId() + " ENTRAAA en plaza VIP");
                 } else if (plazasNormales.tryAcquire()) {
                     siPuede = true;
-                    System.out.println(LocalTime.now()+" Coche-" + coche.getId() + " entra en plaza NORMAL");
+                    System.out.println(LocalTime.now()+" Coche: " + coche.getId() + " ENTRAAA en plaza NORMAL");
                 }
             } else {
                 if (plazasNormales.tryAcquire()) {
                     siPuede = true;
-                    System.out.println(LocalTime.now()+" Coche: " + coche.getId() + " entra en plaza NORMAL");
+                    System.out.println(LocalTime.now()+" Coche: " + coche.getId() + " ENTRAAA en plaza NORMAL");
                 }
             }
 
             if (!siPuede) {
                 if (colaEspera.offer(coche)) {
-                    System.out.println(LocalTime.now() + " Coche: " + coche.getId() + " esperando en cola");
+                    System.out.println(LocalTime.now() + " Coche: " + coche.getId() + " ESPERAA en la cola");
                 } else {
                     vehiculosRechazados++;
-                    System.out.println(LocalTime.now() + " Coche: " + coche.getId() + " (" + coche.getTipoVehiculo() + ") se va, parking+cola llenos");
+                    System.out.println(LocalTime.now() + " Coche: " + coche.getId() + " (" + coche.getTipoVehiculo() + ") SE VAA, (parking+cola) llenos");
                 }
             } else {
                 vehiculosAtendidos++;
@@ -103,7 +112,7 @@ public class Parking {
 
             double pago = coche.getTipoVehiculo().getTarifaPorMinuto() * minutos;
             ingresos = ingresos+ pago;
-            System.out.println(LocalTime.now() + " Coche: " + coche.getId() + " sale. Pagó: " + String.format("%.2f€", pago));
+            System.out.println(LocalTime.now() + " Coche: " + coche.getId() + " SALE. Pagó: " + String.format("%.2f€", pago));
 
             Coche siguiente = colaEspera.poll();
             if (siguiente != null) {
@@ -114,14 +123,7 @@ public class Parking {
         }
     }
 
-    public synchronized void cocheProcesado() {
-        vehiculosProcesados++;
-    }
 
-    public synchronized void agregarTiempoEstancia(long duracionMs) {
-        tiempoEstancia += duracionMs;
-        cochesTiempo++;
-    }
 
     public void estadisticas() {
         System.out.println("RESUMEN DEL DÍA");

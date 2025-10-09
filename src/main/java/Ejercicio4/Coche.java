@@ -22,7 +22,7 @@ public class Coche implements Runnable{
             Thread.sleep(2000);
 
             if (!parking.entrar(this)) {
-                System.out.println("[" + LocalTime.now() + "] Coche-" + id + " (" + tipoVehiculo + ") se va, parking lleno");
+                System.out.println(LocalTime.now() + " Coche: " + id + " (" + tipoVehiculo + ") SE VA, parking lleno");
             }
 
             int tiempoEstancia = ThreadLocalRandom.current().nextInt(10, 31);
