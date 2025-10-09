@@ -3,6 +3,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.WindowInsetsCompat
 import com.example.proyecto1.R
@@ -117,16 +118,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observador(){
-        viewModel.state.observe(this){state ->
+        viewModel.state.observe(this) { state ->
             binding.textNombreApellido.setText(state.pedido.nomape)
             binding.textCorreo.setText(state.pedido.correo)
             binding.textComentarios.setText(state.pedido.comentario)
             binding.phoneTelefono.setText(state.pedido.telf)
             binding.textMarca.setText(state.pedido.marca)
+            binding.Siguiente.isEnabled = !state.isDisable
+
             when (state.pedido.talla) {
                 "L" -> binding.rGroup.check(R.id.L)
                 "M" -> binding.rGroup.check(R.id.M)
                 "S" -> binding.rGroup.check(R.id.S)
+            }
+            state.mensaje?.let { mensaje ->
+                Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
+                viewModel.limpMensaje()
             }
         }
     }

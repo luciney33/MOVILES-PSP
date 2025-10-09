@@ -5,29 +5,47 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.proyecto1.domain.model.Pedido
 import com.example.proyecto1.domain.usecases.AddPedidoUseCase
+import com.example.proyecto1.domain.usecases.VerPedidoUseCase
 
 class MainViewModel : ViewModel() {
-    private var _state : MutableLiveData<MainState> = MutableLiveData(MainState())
-    val state : LiveData<MainState> get() = _state
+    private var _state: MutableLiveData<MainState> = MutableLiveData(MainState())
+    val state: LiveData<MainState> get() = _state
     fun btnAntClicked() {
 
     }
+
     fun btnSigClicked() {
+        val indice = _state.value?.idPedido ?: 0
+
+
+        val pedido = VerPedidoUseCase().invoke(indice)
+        _state.value = _state.value?.copy(pedido = pedido, idPedido = indice+1,
+            isDisable = indice+1>0)
 
     }
+
     fun btnLimpClicked(pedido: Pedido) {
 
+
     }
+
     fun btnActClicked(pedido: Pedido) {
 
     }
+
     fun btnBorrarClicked(pedido: Pedido) {
 
     }
+
     fun btnGuardarClicked(pedido: Pedido) {
+
         val addPedido = AddPedidoUseCase()
-        if (addPedido.invoke(pedido)){
-        _state.value = _state.value?.copy(mensaje= "Pedido añadido", pedido = pedido)
-        }else _state.value = _state.value?.copy(mensaje= "El pedido no se pudo añadir", pedido = pedido)
+        if (addPedido.invoke(pedido)) {
+            _state.value = _state.value?.copy(mensaje = "Pedido añadido", pedido = pedido)
+        } else _state.value = _state.value?.copy(mensaje = "El pedido no se pudo añadir")
+    }
+
+    fun limpMensaje() {
+        _state.value = _state.value?.copy(mensaje= null)
     }
 }
