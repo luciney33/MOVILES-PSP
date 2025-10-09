@@ -1,6 +1,5 @@
 package Ejercicio3;
 
-import lombok.Data;
 
 public enum Plato {
     ENSALADA(2000),

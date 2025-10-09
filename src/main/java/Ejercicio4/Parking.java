@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.time.LocalTime;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -16,12 +17,12 @@ public class Parking {
     private final Lock entrada = new ReentrantLock();
     private final Lock salida = new ReentrantLock();
     private double ingresos = 0;
-    private int vehiculosProcesados = 0;
-    private int vehiculosAtendidos = 0;
-    private int vehiculosRechazados = 0;
+    private AtomicInteger vehiculosProcesados = new AtomicInteger();
+    private AtomicInteger vehiculosAtendidos = new AtomicInteger();
+    private AtomicInteger vehiculosRechazados = new AtomicInteger();
     private long tiempoEstancia = 0;
     private int ocupacionMax = 0;
-    private int cochesTiempo = 0;
+    private AtomicInteger cochesTiempo = new AtomicInteger();
 
 
     public Parking(int plazasNormales, int plazasVIP) {
@@ -51,13 +52,13 @@ public class Parking {
 
     }
 
-    public synchronized void cocheProcesado() {
-        vehiculosProcesados++;
+    public void cocheProcesado() {
+        vehiculosProcesados.incrementAndGet();
     }
 
-    public synchronized void agregarTiempoEstancia(long duracionMs) {
+    public void agregarTiempoEstancia(long duracionMs) {
         tiempoEstancia += duracionMs;
-        cochesTiempo++;
+        cochesTiempo.incrementAndGet();
     }
 
     public boolean entrar(Coche coche) throws InterruptedException {
@@ -83,11 +84,11 @@ public class Parking {
                 if (colaEspera.offer(coche)) {
                     System.out.println(LocalTime.now() + " Coche: " + coche.getId() + " ESPERAA en la cola");
                 } else {
-                    vehiculosRechazados++;
+                    vehiculosRechazados.incrementAndGet();
                     System.out.println(LocalTime.now() + " Coche: " + coche.getId() + " (" + coche.getTipoVehiculo() + ") SE VAA, (parking+cola) llenos");
                 }
             } else {
-                vehiculosAtendidos++;
+                vehiculosAtendidos.incrementAndGet();
                 int ocupacionActual = 25 - (plazasNormales.availablePermits() + plazasVIP.availablePermits());
                 ocupacionMax = Math.max(ocupacionMax, ocupacionActual);
             }
@@ -129,15 +130,15 @@ public class Parking {
         System.out.println("RESUMEN DEL DÍA");
         System.out.println("Vehículos procesados: " + vehiculosProcesados);
         System.out.println("Vehículos atendidos: " + vehiculosAtendidos +
-                " (" + String.format("%.1f", (vehiculosAtendidos * 100.0 / vehiculosProcesados)) + "%)");
+                " (" + String.format("%.1f", (vehiculosAtendidos.get() * 100.0 / vehiculosProcesados.get())) + "%)");
         System.out.println("Vehículos rechazados: " + vehiculosRechazados);
 
         double promedio;
-        if (cochesTiempo == 0) {
+        if (cochesTiempo.get() == 0) {
             promedio = 0;
         } else {
             double tiempoTotalSegundos = tiempoEstancia / 1000.0;
-            promedio = tiempoTotalSegundos / cochesTiempo;
+            promedio = tiempoTotalSegundos / cochesTiempo.get();
         }
         System.out.println("Tiempo promedio de estancia: " + String.format("%.1f", promedio) + "s");
 

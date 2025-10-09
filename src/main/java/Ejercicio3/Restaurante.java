@@ -9,11 +9,11 @@ public class Restaurante {
     private final AtomicInteger clTotales = new AtomicInteger(0);
     private final AtomicInteger clAtendidos = new AtomicInteger(0);
 
-    public synchronized void registroPedido(Pedido pedido) {
+    public void registroPedido(Pedido pedido) {
         clTotales.incrementAndGet();
     }
 
-    public synchronized void registroCocinero(Pedido pedido) {
+    public void registroCocinero(Pedido pedido) {
         clAtendidos.incrementAndGet();
     }
 
