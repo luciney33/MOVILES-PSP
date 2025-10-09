@@ -9,4 +9,11 @@ private val pedidos = mutableListOf<Pedido>()
     }
     fun getPedido(id:Int) = pedidos[id]
     fun addPedido(pedido: Pedido) =pedidos.add(pedido)
+
+    fun actPedido(id: Int, pedido: Pedido): Boolean {
+        return if (id in pedidos.indices){
+            pedidos[id] = pedido
+            true
+        }else false
+    }
 }

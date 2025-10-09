@@ -2,5 +2,5 @@
     <string name="app_name">Proyecto1</string>
     <string name="titulo">Pedido Ropa</string>
     <string name="colorTexto">bold</string>
-    <string name="nombre">Nombre</string>
+    <string name="nombre">Nombre y Apellidos</string>
 </resources>
