@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.time.LocalTime;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Logger;
 
 @Data
 @AllArgsConstructor
@@ -13,18 +12,17 @@ public class Coche implements Runnable{
     private int id;
     private TipoVehiculo tipoVehiculo;
     private Parking parking;
-    private final Logger log = Logger.getLogger(Coche.class.getName());
 
 
     public void run() {
         try {
             parking.cocheProcesado();
-            long tiempoEntrada = 0;
-            tiempoEntrada = System.currentTimeMillis();
+            long tiempoEntrada = System.currentTimeMillis();
+
+            Thread.sleep(2000);
 
             if (!parking.entrar(this)) {
-                log.info(LocalTime.now() + " Coche: " + id + " (" + tipoVehiculo + ") se va, parking lleno");
-                return;
+                System.out.println("[" + LocalTime.now() + "] Coche-" + id + " (" + tipoVehiculo + ") se va, parking lleno");
             }
 
             int tiempoEstancia = ThreadLocalRandom.current().nextInt(10, 31);
@@ -32,6 +30,8 @@ public class Coche implements Runnable{
 
             long duracion = System.currentTimeMillis() - tiempoEntrada;
             parking.agregarTiempoEstancia(duracion);
+
+            Thread.sleep(1000);
 
             parking.salir(this, tiempoEstancia);
         } catch (InterruptedException e) {

@@ -2,7 +2,7 @@ package Ejercicio4;
 
 
 public enum TipoVehiculo {
-        NORMAL(1.0),  // 1€/minuto
+        NORMAL(1.0),
         VIP(2.0);
 
         private final double tarifaPorMinuto;
