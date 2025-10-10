@@ -15,9 +15,17 @@ public class Descarga implements Comparable<Descarga> {
     }
     @Override
     public int compareTo(Descarga otra) {
-        if (this.tipoUsuario == otra.tipoUsuario) return 0;
-        if (this.tipoUsuario == TipoUsuario.PREMIUM) return -1;
-        return 1;
+        // Primero prioriza por tipo de usuario (PREMIUM antes que NORMAL)
+        if (this.tipoUsuario != otra.tipoUsuario) {
+            if (this.tipoUsuario == TipoUsuario.PREMIUM) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+
+        // Si tienen el mismo tipo, ordena por ID (menor primero)
+        return Integer.compare(this.idUsuario, otra.idUsuario);
     }
 
 }
