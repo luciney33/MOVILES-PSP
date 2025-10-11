@@ -1,16 +1,16 @@
 package Ejercicio5;
 
 public enum TipoArchivo {
-    DOCUMENTO(10),    // 10MB  -> 1s descarga
-    IMAGEN(50),       // 50MB  -> 5s descarga
-    VIDEO(  500),       // 500MB -> 50s descarga
-    JUEGO(2000);      // 2GB   -> 200s descarga
+    DOCUMENTO(10),
+    IMAGEN(50),
+    VIDEO(  500),
+    JUEGO(2000);
 
     private final int sizeMB;
     TipoArchivo(int sizeMB) {
         this.sizeMB = sizeMB;
     }
     public int getTiempoMs() {
-        return sizeMB * 100; // Simulamos 100ms por MB
+        return sizeMB * 100;
     }
 }

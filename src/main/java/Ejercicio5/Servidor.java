@@ -85,15 +85,13 @@ public class Servidor {
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
         executor.shutdown();
         executor.awaitTermination(1, TimeUnit.MINUTES);
-
         mostrarEstadisticas();
     }
 
     private void mostrarEstadisticas() {
-        System.out.println("\n--- ESTADÍSTICAS DEL SERVIDOR ---");
+        System.out.println("---ESTADÍSTICAS DEL SERVIDOR -----");
         System.out.println("Descargas totales: " + descargasTotales.get());
         System.out.println("Descargas completadas: " + descargasCompletadas.get());
         System.out.println("Descargas fallidas: " + descargasFallidas.get());
-        System.out.println("---------------------------------");
     }
 }

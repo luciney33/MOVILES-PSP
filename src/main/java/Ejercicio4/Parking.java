@@ -127,7 +127,7 @@ public class Parking {
 
 
     public void estadisticas() {
-        System.out.println("RESUMEN DEL DÍA");
+        System.out.println("----RESUMEN DEL DÍA ----------");
         System.out.println("Vehículos procesados: " + vehiculosProcesados);
         System.out.println("Vehículos atendidos: " + vehiculosAtendidos +
                 " (" + String.format("%.1f", (vehiculosAtendidos.get() * 100.0 / vehiculosProcesados.get())) + "%)");

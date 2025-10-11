@@ -16,13 +16,8 @@ public class Usuario implements Runnable {
     public void run(){
             TipoArchivo[] archivos = TipoArchivo.values();
             TipoArchivo archivoElegido = archivos[(int) (Math.random() * archivos.length)];
-
-            // Crear la descarga y solicitar al servidor
             Descarga descarga = new Descarga(id, tipo, archivoElegido);
             servidor.solicitarDescarga(descarga);
-
-            // Solo imprime que inició la descarga
-            System.out.println("Usuario " + id + ": " + tipo + " solicitó descarga de " + archivoElegido);
-
+            System.out.println("Usuario " + id + ": " + tipo + " solicitó descargar " + archivoElegido);
     }
 }
