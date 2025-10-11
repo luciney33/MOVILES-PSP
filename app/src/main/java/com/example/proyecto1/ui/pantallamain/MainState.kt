@@ -6,5 +6,6 @@ data class MainState (
     val pedido: Pedido= Pedido(),
     val mensaje: String? = null,
     val idPedido: Int = 0,
+    val totalPedidos: Int = 0,
     val isDisable: Boolean = false,
 )

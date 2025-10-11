@@ -6,36 +6,54 @@ import androidx.lifecycle.ViewModel
 import com.example.proyecto1.domain.model.Pedido
 import com.example.proyecto1.domain.usecases.ActPedidoUseCase
 import com.example.proyecto1.domain.usecases.AddPedidoUseCase
+import com.example.proyecto1.domain.usecases.BorrarPedidoUseCase
+import com.example.proyecto1.domain.usecases.TotalPedUseCase
 import com.example.proyecto1.domain.usecases.VerPedidoUseCase
 
 class MainViewModel : ViewModel() {
     private var _state: MutableLiveData<MainState> = MutableLiveData(MainState())
     val state: LiveData<MainState> get() = _state
     fun btnAntClicked() {
-
+        val id = _state.value?.idPedido ?: 0
+        val total = TotalPedUseCase().invoke()
+        if (id - 1 >= 0) {
+            val pedido = VerPedidoUseCase().invoke(id - 1)
+            _state.value = _state.value?.copy(
+                pedido = pedido,
+                idPedido = id - 1,
+                totalPedidos = total,
+            )
+        }
     }
+
 
     fun btnSigClicked() {
         val id = _state.value?.idPedido ?: 0
-        val pedido = VerPedidoUseCase().invoke(id)
-        _state.value = _state.value?.copy(pedido = pedido, idPedido = id+1,
-            isDisable = id+1>0)
+        val total = TotalPedUseCase().invoke()
+        if (id + 1 < total) {
+            val pedido = VerPedidoUseCase().invoke(id + 1)
+            _state.value = _state.value?.copy(
+                pedido = pedido,
+                idPedido = id + 1,
+                totalPedidos = total,
+            )
+        }
 
     }
 
     fun btnLimpClicked(pedido: Pedido) {
         _state.value = _state.value?.copy(
             pedido = Pedido(),
-            mensaje = "Formulario limpiado"
+            mensaje = "Pantalla limpia"
         )
 
     }
 
     fun btnActClicked(pedido: Pedido) {
         val id = _state.value?.idPedido ?: return
-        val exito = ActPedidoUseCase().invoke(id,pedido)
+        val act = ActPedidoUseCase().invoke(id,pedido)
 
-        _state.value = if (exito) {
+        _state.value = if (act) {
             _state.value?.copy(pedido = pedido, mensaje = "Pedido actualizado correctamente")
         } else {
             _state.value?.copy(mensaje = "Error al actualizar el pedido")
@@ -43,7 +61,14 @@ class MainViewModel : ViewModel() {
     }
 
     fun btnBorrarClicked(pedido: Pedido) {
+        val id = _state.value?.idPedido ?: return
+        val borrar = BorrarPedidoUseCase().invoke(id)
 
+        _state.value = if (borrar) {
+            _state.value?.copy(pedido = pedido, mensaje = "Pedido borrado correctamente")
+        } else {
+            _state.value?.copy(mensaje = "Error al borrar el pedido")
+        }
     }
 
     fun btnGuardarClicked(pedido: Pedido) {

@@ -236,15 +236,27 @@
     app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
 
     <TextView
-    android:id="@+id/Numpag"
-    android:layout_width="23dp"
-    android:layout_height="17dp"
-    android:layout_marginTop="28dp"
-    android:text="0/0"
-    app:layout_constraintEnd_toStartOf="@+id/Siguiente"
-    app:layout_constraintStart_toEndOf="@+id/Anterior"
-    app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
+        android:id="@+id/PaginaActual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/TotalPaginas"
+        app:layout_constraintStart_toEndOf="@id/Anterior"
+        app:layout_constraintTop_toBottomOf="@id/Comentarios"
+        app:layout_constraintBottom_toBottomOf="@id/Siguiente"
+        app:layout_constraintHorizontal_chainStyle="packed" />
 
+    <TextView
+        android:id="@+id/TotalPaginas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="/1"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/PaginaActual"
+        app:layout_constraintEnd_toStartOf="@id/Siguiente"
+        app:layout_constraintTop_toBottomOf="@id/Comentarios"
+        app:layout_constraintBottom_toBottomOf="@id/Siguiente" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

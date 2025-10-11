@@ -124,7 +124,9 @@ class MainActivity : AppCompatActivity() {
             binding.textComentarios.setText(state.pedido.comentario)
             binding.phoneTelefono.setText(state.pedido.telf)
             binding.textMarca.setText(state.pedido.marca)
-            binding.Siguiente.isEnabled = !state.isDisable
+            binding.PaginaActual.text = (state.idPedido + 1).toString()
+            binding.TotalPaginas.text = "/" +state.totalPedidos
+
 
             when (state.pedido.talla) {
                 "L" -> binding.rGroup.check(R.id.L)
