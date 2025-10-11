@@ -1,6 +1,7 @@
 package Ejercicio2;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -20,11 +21,11 @@ public class CuentaBankLock implements CuentaBankInterface {
         try {
             if (cantidad <= cuentaBank.getSaldo()) {
                 cuentaBank.setSaldo(cuentaBank.getSaldo()-cantidad);
-                cuentaBank.getHistorial().add(LocalDate.now() + " RETIRO: " + String.format("%.2f€", cantidad) + " | SALDO: " + String.format("%.2f€", cuentaBank.getSaldo()));
+                cuentaBank.getHistorial().add(LocalTime.now()+ " RETIRO: " + String.format("%.2f€", cantidad) + " | SALDO: " + String.format("%.2f€", cuentaBank.getSaldo()));
                 retirado = true;
             } else {
                 retirado = false;
-                cuentaBank.getHistorial().add(LocalDate.now() +
+                cuentaBank.getHistorial().add(LocalTime.now() +
                         " RETIRO FALLIDO: " + String.format("%.2f€", cantidad) + " | Fondos insuficientes | SALDO: " + String.format("%.2f€", cuentaBank.getSaldo()));
             }
         } finally {
@@ -38,7 +39,7 @@ public class CuentaBankLock implements CuentaBankInterface {
         lock.lock();
         try {
             cuentaBank.setSaldo(cuentaBank.getSaldo()+cantidad);
-            cuentaBank.getHistorial().add(LocalDate.now() +
+            cuentaBank.getHistorial().add(LocalTime.now() +
                     " INGRESO: +" + String.format("%.2f€", cantidad) + " | SALDO: " + String.format("%.2f€", cuentaBank.getSaldo()));
         } finally {
             lock.unlock();
@@ -49,7 +50,7 @@ public class CuentaBankLock implements CuentaBankInterface {
     public double consultarSaldo() {
         lock.lock();
         try {
-            cuentaBank.getHistorial().add(LocalDate.now() +
+            cuentaBank.getHistorial().add(LocalTime.now() +
                     " CONSULTA SALDO | SALDO ACTUAL: " + String.format("%.2f€", cuentaBank.getSaldo()));
             return cuentaBank.getSaldo();
         } finally {

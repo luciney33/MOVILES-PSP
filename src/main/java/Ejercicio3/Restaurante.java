@@ -3,7 +3,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Restaurante {
-    private final int numClientes = 100;
+    private final int numClientes = 10;
     private final int numCocineros = 3;
     private final BlockingQueue<Pedido> colaCocina = new LinkedBlockingQueue<>(10);
     private final AtomicInteger clTotales = new AtomicInteger(0);
@@ -20,25 +20,32 @@ public class Restaurante {
 
     public void iniciarServicio() throws InterruptedException {
         System.out.println("RESTAURANTE CONCURRENTE");
-        ExecutorService executor = Executors.newCachedThreadPool();
+
+        ExecutorService executorCocineros = Executors.newFixedThreadPool(numCocineros);
 
         for (int i = 1; i <= numCocineros; i++) {
-            executor.submit(new Cocinero(i, this, colaCocina));
+            executorCocineros.submit(new Cocinero(i, this, colaCocina));
         }
+
+        ExecutorService executorClientes = Executors.newVirtualThreadPerTaskExecutor();
         for (int i = 1; i <= numClientes; i++) {
-            executor.submit(new Cliente(i, this, colaCocina)); Thread.sleep(500);
+            executorClientes.submit(new Cliente(i, this, colaCocina));
+            Thread.sleep(500);
         }
+        executorClientes.shutdown();
+        executorClientes.awaitTermination(1, TimeUnit.MINUTES);
+
         while (!colaCocina.isEmpty()) {
             Thread.sleep(1000);
         }
 
-        executor.shutdown();
-        executor.awaitTermination(10, TimeUnit.SECONDS);
+        executorCocineros.shutdown();
+        executorCocineros.awaitTermination(1, TimeUnit.MINUTES);
 
         mostrarEstadisticas();
     }
     private void mostrarEstadisticas() {
-        System.out.println("Estadísticas del Restaurante");
+        System.out.println("--Estadísticas del Restaurante---");
         System.out.println("Clientes totales: " + clTotales.get());
         System.out.println("Clientes atendidos: " + clAtendidos.get()+ "/" +clTotales.get());
     }
