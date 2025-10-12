@@ -1,8 +1,8 @@
 package com.example.proyecto1.ui.pantallamain
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.proyecto1.domain.model.Pedido
 import com.example.proyecto1.domain.usecases.ActPedidoUseCase
 import com.example.proyecto1.domain.usecases.AddPedidoUseCase
@@ -10,17 +10,22 @@ import com.example.proyecto1.domain.usecases.BorrarPedidoUseCase
 import com.example.proyecto1.domain.usecases.TotalPedUseCase
 import com.example.proyecto1.domain.usecases.VerPedidoUseCase
 
-class MainViewModel : ViewModel() {
-    private var _state: MutableLiveData<MainState> = MutableLiveData(MainState())
-    val state: LiveData<MainState> get() = _state
-
+class MainViewModel (
+    private val addPedidoUseCase: AddPedidoUseCase,
+    private val verPedidoUseCase: VerPedidoUseCase,
+    private val actPedidoUseCase: ActPedidoUseCase,
+    private val borrarPedidoUseCase: BorrarPedidoUseCase,
+    private val totalPedUseCase: TotalPedUseCase
+): ViewModel() {
+    var state: MutableLiveData<MainState> = MutableLiveData()
+        private set
     init {
-        val total = TotalPedUseCase().invoke()
+        val total = totalPedUseCase.invoke()
         val pedidoInicial = if (total > 0) {
-            VerPedidoUseCase().invoke(0)
+            verPedidoUseCase.invoke(0)
         }else Pedido()
 
-        _state = MutableLiveData(
+        state = MutableLiveData(
             MainState(
                 pedido = pedidoInicial,
                 idPedido = 0,
@@ -31,11 +36,11 @@ class MainViewModel : ViewModel() {
     }
 
     fun btnAntClicked() {
-        val id = _state.value?.idPedido ?: 0
-        val total = TotalPedUseCase().invoke()
+        val id = state.value?.idPedido ?: 0
+        val total = totalPedUseCase.invoke()
         if (id - 1 >= 0) {
-            val pedido = VerPedidoUseCase().invoke(id - 1)
-            _state.value = _state.value?.copy(
+            val pedido = verPedidoUseCase.invoke(id - 1)
+            state.value = state.value?.copy(
                 pedido = pedido,
                 idPedido = id - 1,
                 totalPedidos = total,
@@ -45,11 +50,11 @@ class MainViewModel : ViewModel() {
 
 
     fun btnSigClicked() {
-        val id = _state.value?.idPedido ?: 0
-        val total = TotalPedUseCase().invoke()
+        val id = state.value?.idPedido ?: 0
+        val total = totalPedUseCase.invoke()
         if (id + 1 < total) {
-            val pedido = VerPedidoUseCase().invoke(id + 1)
-            _state.value = _state.value?.copy(
+            val pedido = verPedidoUseCase.invoke(id + 1)
+            state.value = state.value?.copy(
                 pedido = pedido,
                 idPedido = id + 1,
                 totalPedidos = total,
@@ -59,7 +64,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun btnLimpClicked(pedido: Pedido) {
-        _state.value = _state.value?.copy(
+        state.value = state.value?.copy(
             pedido = Pedido(),
             mensaje = "Pantalla limpia"
         )
@@ -67,27 +72,27 @@ class MainViewModel : ViewModel() {
     }
 
     fun btnActClicked(pedido: Pedido) {
-        val id = _state.value?.idPedido ?: return
-        val act = ActPedidoUseCase().invoke(id,pedido)
+        val id = state.value?.idPedido ?: return
+        val act = actPedidoUseCase.invoke(id,pedido)
 
-        _state.value = if (act) {
-            val total = TotalPedUseCase().invoke()
-            _state.value?.copy(
+        state.value = if (act) {
+            val total = totalPedUseCase.invoke()
+            state.value?.copy(
                 pedido = pedido,
                 mensaje = "Pedido actualizado",
                 totalPedidos = total
             )
         } else {
-            _state.value?.copy(mensaje = "Error al actualizar el pedido")
+            state.value?.copy(mensaje = "Error al actualizar el pedido")
         }
     }
 
     fun btnBorrarClicked(pedido: Pedido) {
-        val id = _state.value?.idPedido ?: return
-        val borrar = BorrarPedidoUseCase().invoke(id)
+        val id = state.value?.idPedido ?: return
+        val borrar = borrarPedidoUseCase.invoke(id)
 
         if (borrar) {
-            val total = TotalPedUseCase().invoke()
+            val total = totalPedUseCase.invoke()
             val nuevoId = if (id > 0) {
                 id - 1
             } else 0
@@ -95,34 +100,57 @@ class MainViewModel : ViewModel() {
                 VerPedidoUseCase().invoke(nuevoId)}
             else Pedido()
 
-            _state.value = _state.value?.copy(
+            state.value = state.value?.copy(
                 pedido = pedidoNuevo,
                 idPedido = nuevoId,
                 totalPedidos = total,
                 mensaje = "Pedido borrado"
             )
         } else {
-            _state.value = _state.value?.copy(mensaje = "Error al borrar el pedido")
+            state.value = state.value?.copy(mensaje = "Error al borrar el pedido")
         }
     }
 
     fun btnGuardarClicked(pedido: Pedido) {
 
-        val addPedido = AddPedidoUseCase()
+        val addPedido = addPedidoUseCase
         if (addPedido.invoke(pedido)) {
-            val total = TotalPedUseCase().invoke()
-            _state.value = _state.value?.copy(
+            val total = totalPedUseCase.invoke()
+            state.value = state.value?.copy(
                 mensaje = "Pedido añadido",
                 pedido = pedido,
                 idPedido = total - 1,
                 totalPedidos = total
             )
         } else {
-            _state.value = _state.value?.copy(mensaje = "El pedido no se pudo añadir")
+            state.value = state.value?.copy(mensaje = "El pedido no se pudo añadir")
         }
     }
 
     fun limpMensaje() {
-        _state.value = _state.value?.copy(mensaje= null)
+        state.value = state.value?.copy(mensaje= null)
+    }
+}
+
+
+class MainViewModelFactory(
+    private val addPedidoUseCase: AddPedidoUseCase = AddPedidoUseCase(),
+    private val verPedidoUseCase: VerPedidoUseCase = VerPedidoUseCase(),
+    private val actPedidoUseCase: ActPedidoUseCase = ActPedidoUseCase(),
+    private val borrarPedidoUseCase: BorrarPedidoUseCase = BorrarPedidoUseCase(),
+    private val totalPedUseCase: TotalPedUseCase = TotalPedUseCase()
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return MainViewModel(
+                addPedidoUseCase,
+                verPedidoUseCase,
+                actPedidoUseCase,
+                borrarPedidoUseCase,
+                totalPedUseCase
+            ) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
