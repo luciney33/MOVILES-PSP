@@ -13,6 +13,23 @@ import com.example.proyecto1.domain.usecases.VerPedidoUseCase
 class MainViewModel : ViewModel() {
     private var _state: MutableLiveData<MainState> = MutableLiveData(MainState())
     val state: LiveData<MainState> get() = _state
+
+    init {
+        val total = TotalPedUseCase().invoke()
+        val pedidoInicial = if (total > 0) {
+            VerPedidoUseCase().invoke(0)
+        }else Pedido()
+
+        _state = MutableLiveData(
+            MainState(
+                pedido = pedidoInicial,
+                idPedido = 0,
+                totalPedidos = total,
+                mensaje = null
+            )
+        )
+    }
+
     fun btnAntClicked() {
         val id = _state.value?.idPedido ?: 0
         val total = TotalPedUseCase().invoke()
@@ -54,7 +71,12 @@ class MainViewModel : ViewModel() {
         val act = ActPedidoUseCase().invoke(id,pedido)
 
         _state.value = if (act) {
-            _state.value?.copy(pedido = pedido, mensaje = "Pedido actualizado correctamente")
+            val total = TotalPedUseCase().invoke()
+            _state.value?.copy(
+                pedido = pedido,
+                mensaje = "Pedido actualizado",
+                totalPedidos = total
+            )
         } else {
             _state.value?.copy(mensaje = "Error al actualizar el pedido")
         }
@@ -64,10 +86,23 @@ class MainViewModel : ViewModel() {
         val id = _state.value?.idPedido ?: return
         val borrar = BorrarPedidoUseCase().invoke(id)
 
-        _state.value = if (borrar) {
-            _state.value?.copy(pedido = pedido, mensaje = "Pedido borrado correctamente")
+        if (borrar) {
+            val total = TotalPedUseCase().invoke()
+            val nuevoId = if (id > 0) {
+                id - 1
+            } else 0
+            val pedidoNuevo = if (total > 0){
+                VerPedidoUseCase().invoke(nuevoId)}
+            else Pedido()
+
+            _state.value = _state.value?.copy(
+                pedido = pedidoNuevo,
+                idPedido = nuevoId,
+                totalPedidos = total,
+                mensaje = "Pedido borrado"
+            )
         } else {
-            _state.value?.copy(mensaje = "Error al borrar el pedido")
+            _state.value = _state.value?.copy(mensaje = "Error al borrar el pedido")
         }
     }
 
@@ -75,8 +110,16 @@ class MainViewModel : ViewModel() {
 
         val addPedido = AddPedidoUseCase()
         if (addPedido.invoke(pedido)) {
-            _state.value = _state.value?.copy(mensaje = "Pedido añadido", pedido = pedido)
-        } else _state.value = _state.value?.copy(mensaje = "El pedido no se pudo añadir")
+            val total = TotalPedUseCase().invoke()
+            _state.value = _state.value?.copy(
+                mensaje = "Pedido añadido",
+                pedido = pedido,
+                idPedido = total - 1,
+                totalPedidos = total
+            )
+        } else {
+            _state.value = _state.value?.copy(mensaje = "El pedido no se pudo añadir")
+        }
     }
 
     fun limpMensaje() {

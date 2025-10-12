@@ -124,8 +124,13 @@ class MainActivity : AppCompatActivity() {
             binding.textComentarios.setText(state.pedido.comentario)
             binding.phoneTelefono.setText(state.pedido.telf)
             binding.textMarca.setText(state.pedido.marca)
+            if (state.totalPedidos > 0) {
             binding.PaginaActual.text = (state.idPedido + 1).toString()
             binding.TotalPaginas.text = "/" +state.totalPedidos
+            } else {
+                binding.PaginaActual.text = "0"
+                binding.TotalPaginas.text = "/0"
+            }
 
 
             when (state.pedido.talla) {

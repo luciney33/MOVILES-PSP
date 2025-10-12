@@ -6,7 +6,7 @@ object Repositorio {
 private val pedidos = mutableListOf<Pedido>()
     init {
         pedidos.add(Pedido("luciapeñafiel","djadjs@ajdk.com","si","4337487","nike","S"))
-        pedidos.add(Pedido("neyklk","siok@ajdk.com","no","4337487","nike","M"))
+        pedidos.add(Pedido("neyklk","siok@ajdk.com","NO QUIERO NA","4337487","nike","M"))
 
     }
     fun getPedido(id:Int) = pedidos[id]
