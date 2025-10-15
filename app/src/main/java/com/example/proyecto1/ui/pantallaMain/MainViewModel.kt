@@ -1,4 +1,4 @@
-package com.example.proyecto1.ui.pantallamain
+package com.example.proyecto1.ui.pantallaMain
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

@@ -1,4 +1,4 @@
-package com.example.proyecto1.ui.pantallamain
+package com.example.proyecto1.ui.pantallaMain
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
