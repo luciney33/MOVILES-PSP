@@ -3,4 +3,8 @@
     <string name="titulo">Pedido Ropa</string>
     <string name="colorTexto">bold</string>
     <string name="nombre">Nombre y Apellidos</string>
+    <string name="tituloBtnListado">Nuevo Pedido</string>
+    <string name="tituloActividadListadoCanciones">Listado de Canciones</string>
+    <string name="txtmarca">Marca</string>
+    <string name="txtalla">Talla</string>
 </resources>

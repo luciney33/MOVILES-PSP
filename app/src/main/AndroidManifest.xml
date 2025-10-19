@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1">
         <activity
-            android:name=".ui.pantallaMain.MainActivity"
+            android:name=".ui.pantallaAddPedido.AddPedidoActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,4 +1,4 @@
-package com.example.proyecto1.ui.pantallaMain
+package com.example.proyecto1.ui.pantallaAddPedido
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,17 +11,19 @@ import com.example.proyecto1.databinding.ActivityMainBinding
 import com.example.proyecto1.domain.model.Pedido
 
 //enganchar con el viewmodel
-class MainActivity : AppCompatActivity() {
+class AddPedidoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: AddPedidoViewModel by viewModels(){
+        AddPedidoViewModelFactory()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.addpedido)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets

@@ -1,4 +1,4 @@
-package com.example.proyecto1.ui.pantallaListado
+package com.example.proyecto1.ui.pantallaListadoPedido
 
 import com.example.proyecto1.domain.model.Pedido
 

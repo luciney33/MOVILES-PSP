@@ -1,4 +1,4 @@
-package com.example.proyecto1.ui.pantallaMain
+package com.example.proyecto1.ui.pantallaAddPedido
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,14 +10,14 @@ import com.example.proyecto1.domain.usecases.BorrarPedidoUseCase
 import com.example.proyecto1.domain.usecases.TotalPedUseCase
 import com.example.proyecto1.domain.usecases.VerPedidoUseCase
 
-class MainViewModel (
+class AddPedidoViewModel (
     private val addPedidoUseCase: AddPedidoUseCase,
     private val verPedidoUseCase: VerPedidoUseCase,
     private val actPedidoUseCase: ActPedidoUseCase,
     private val borrarPedidoUseCase: BorrarPedidoUseCase,
     private val totalPedUseCase: TotalPedUseCase
 ): ViewModel() {
-    var state: MutableLiveData<MainState> = MutableLiveData()
+    var state: MutableLiveData<AddPedidoState> = MutableLiveData()
         private set
     init {
         val total = totalPedUseCase.invoke()
@@ -26,7 +26,7 @@ class MainViewModel (
         }else Pedido()
 
         state = MutableLiveData(
-            MainState(
+            AddPedidoState(
                 pedido = pedidoInicial,
                 idPedido = 0,
                 totalPedidos = total,
@@ -133,7 +133,7 @@ class MainViewModel (
 }
 
 
-class MainViewModelFactory(
+class AddPedidoViewModelFactory(
     private val addPedidoUseCase: AddPedidoUseCase = AddPedidoUseCase(),
     private val verPedidoUseCase: VerPedidoUseCase = VerPedidoUseCase(),
     private val actPedidoUseCase: ActPedidoUseCase = ActPedidoUseCase(),
@@ -141,9 +141,9 @@ class MainViewModelFactory(
     private val totalPedUseCase: TotalPedUseCase = TotalPedUseCase()
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(AddPedidoViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return MainViewModel(
+            return AddPedidoViewModel(
                 addPedidoUseCase,
                 verPedidoUseCase,
                 actPedidoUseCase,
