@@ -5,7 +5,7 @@
     android:id="@+id/addpedido"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ui.pantallaAddPedido.AddPedidoActivity">
+    tools:context=".ui.pantallaAddPedido.AddPedidoActivity">
 
     <TextView
         android:id="@+id/PedidoRopa"

@@ -9,6 +9,7 @@ private val pedidos = mutableListOf<Pedido>()
         pedidos.add(Pedido("neyklk","siok@ajdk.com","NO QUIERO NA","4337487","nike","M"))
 
     }
+    fun getPedidos(): List<Pedido> = pedidos.toList()
     fun getPedido(id:Int) = pedidos[id]
     fun addPedido(pedido: Pedido) =pedidos.add(pedido)
 

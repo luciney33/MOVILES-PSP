@@ -7,13 +7,13 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.WindowInsetsCompat
 import com.example.proyecto1.R
-import com.example.proyecto1.databinding.ActivityMainBinding
+import com.example.proyecto1.databinding.ActivityAddpedidoBinding
 import com.example.proyecto1.domain.model.Pedido
 
 //enganchar con el viewmodel
 class AddPedidoActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityAddpedidoBinding
     private val viewModel: AddPedidoViewModel by viewModels(){
         AddPedidoViewModelFactory()
     }
@@ -21,7 +21,7 @@ class AddPedidoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityAddpedidoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.addpedido)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -145,4 +145,5 @@ class AddPedidoActivity : AppCompatActivity() {
     }
 
 }
+
 
