@@ -113,8 +113,8 @@ class AddPedidoViewModel (
 
     fun btnGuardarClicked(pedido: Pedido) {
 
-        val addPedido = addPedidoUseCase
-        if (addPedido.invoke(pedido)) {
+        val nuevoPedidoId = addPedidoUseCase.invoke(pedido)
+        if (nuevoPedidoId >= 0) {
             val total = totalPedUseCase.invoke()
             state.value = state.value?.copy(
                 mensaje = "Pedido añadido",

@@ -118,11 +118,11 @@ class AddPedidoActivity : AppCompatActivity() {
 
     private fun observador(){
         viewModel.state.observe(this) { state ->
-            binding.textNombreApellido.setText(state.pedido.nomape)
-            binding.textCorreo.setText(state.pedido.correo)
-            binding.textComentarios.setText(state.pedido.comentario)
-            binding.phoneTelefono.setText(state.pedido.telf)
-            binding.textMarca.setText(state.pedido.marca)
+            binding.textNombreApellido.setText(state.pedido?.nomape)
+            binding.textCorreo.setText(state.pedido?.correo)
+            binding.textComentarios.setText(state.pedido?.comentario)
+            binding.phoneTelefono.setText(state.pedido?.telf)
+            binding.textMarca.setText(state.pedido?.marca)
             if (state.totalPedidos > 0) {
             binding.PaginaActual.text = (state.idPedido + 1).toString()
             binding.TotalPaginas.text = "/" +state.totalPedidos
@@ -132,7 +132,7 @@ class AddPedidoActivity : AppCompatActivity() {
             }
 
 
-            when (state.pedido.talla) {
+            when (state.pedido?.talla) {
                 "L" -> binding.rGroup.check(R.id.L)
                 "M" -> binding.rGroup.check(R.id.M)
                 "S" -> binding.rGroup.check(R.id.S)

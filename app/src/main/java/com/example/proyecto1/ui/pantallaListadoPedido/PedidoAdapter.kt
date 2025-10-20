@@ -10,26 +10,24 @@ import com.example.proyecto1.domain.model.Pedido
 
 class PedidoAdapter(
     val actions: PedidosActions,
-    val onClickView: (Pedido) -> Unit,
 ) : ListAdapter<Pedido, PedidoAdapter.PedidoViewHolder>(
     PedidoDiffCallBack()
 ) {
+    interface PedidosActions {
+        fun onItemClick(pedido: Pedido)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PedidoViewHolder {
         val binding = ItemPedidoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PedidoViewHolder(binding, onClickView, actions)
+        return PedidoViewHolder(binding, actions)
     }
 
     override fun onBindViewHolder(holder: PedidoViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    interface PedidosActions {
-        fun onItemClick(pedido: Pedido)
-    }
-
     class PedidoViewHolder(
         private val binding: ItemPedidoBinding,
-        val onClickView: (Pedido) -> Unit,
         val actions: PedidosActions,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(pedido: Pedido) {
@@ -37,7 +35,6 @@ class PedidoAdapter(
             binding.textMarca.text = pedido.marca
             binding.textTalla.text = pedido.talla
             binding.root.setOnClickListener {
-                onClickView(pedido)
                 actions.onItemClick(pedido)
             }
         }
