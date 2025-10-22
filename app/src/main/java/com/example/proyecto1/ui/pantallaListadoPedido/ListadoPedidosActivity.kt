@@ -47,14 +47,12 @@ class ListadoPedidosActivity: ComponentActivity() {
                                 this@ListadoPedidosActivity,
                                 com.example.proyecto1.ui.pantallaAddPedido.AddPedidoActivity::class.java
                             )
-
+                            //dos intents y aplicar el put extra con id
                             "detalle pedido" -> android.content.Intent(
                                 this@ListadoPedidosActivity,
                                 com.example.proyecto1.ui.pantallaDetallePedido.DetallePedidoActivity::class.java
-                            ).apply {
-                                    putExtra("PEDIDO_ID", state.pedidoId)
-                                }
-                            else -> null
+                            )
+
                         }
                     intent?.let {startActivity(it) }
                         viewModel.limpiarMensaje()
