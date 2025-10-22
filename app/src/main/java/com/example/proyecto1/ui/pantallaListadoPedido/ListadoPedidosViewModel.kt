@@ -26,16 +26,5 @@ class ListadoPedidosViewModel (private val getPedidosUseCase : GetPedidosUseCase
         state.value = state.value?.copy(mensaje = null)
     }
 
-    fun clickPedido(pedido: Pedido) {
-        val pedidoId = Repositorio.getPedidos().indexOf(pedido)
-        state.value = state.value?.copy(
-        pedidoId = pedidoId,
-        uiEvent = UiEvent.Navigate("detalle pedido"))
-    }
-
-    fun nuevoPedido() {
-        state.value = state.value?.copy(
-        uiEvent = UiEvent.Navigate("nuevo pedido"))
-    }
 
 }

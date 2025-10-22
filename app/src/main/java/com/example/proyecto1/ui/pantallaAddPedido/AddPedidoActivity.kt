@@ -14,7 +14,7 @@ import com.example.proyecto1.domain.model.Pedido
 class AddPedidoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddpedidoBinding
-    private val viewModel: AddPedidoViewModel by viewModels(){
+    private val viewModel: AddPedidoViewModel by viewModels() {
         AddPedidoViewModelFactory()
     }
 
@@ -23,7 +23,7 @@ class AddPedidoActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityAddpedidoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.addpedido)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -32,110 +32,62 @@ class AddPedidoActivity : AppCompatActivity() {
         observador()
 
     }
-    private fun eventos(){
-        binding.Anterior.setOnClickListener {
-            viewModel.btnAntClicked()
-        }
 
-        binding.Siguiente.setOnClickListener {
-            viewModel.btnSigClicked()
-        }
+    private fun eventos() {
 
-        binding.btLimpiar.setOnClickListener {
-            val tallaSelec = when(binding.rGroup.checkedRadioButtonId){
-                R.id.L -> "L"
-                R.id.M ->"M"
-                R.id.S -> "S"
-                else -> {"L"}
+        with(binding) {
+            Anterior.setOnClickListener {
+                viewModel.btnAntClicked()
             }
-           var pedido = Pedido(
-               binding.textNombreApellido.text.toString(),
-               binding.textCorreo.text.toString(),
-            binding.textComentarios.text.toString(),
-            binding.phoneTelefono.text.toString(),
-            binding.textMarca.text.toString(),
-               tallaSelec
-
-           )
-            viewModel.btnLimpClicked(pedido)
-        }
-
-        binding.btAct.setOnClickListener {
-            val tallaSelec = when(binding.rGroup.checkedRadioButtonId){
-                R.id.L -> "L"
-                R.id.M ->"M"
-                R.id.S -> "S"
-                else -> {"L"}
-            }
-            var pedido = Pedido(
-                binding.textNombreApellido.text.toString(),
-                binding.textCorreo.text.toString(),
-                binding.textComentarios.text.toString(),
-                binding.phoneTelefono.text.toString(),
-                binding.textMarca.text.toString(),
-                tallaSelec
-                )
-            viewModel.btnActClicked(pedido)
-        }
-
-        binding.btBorrar.setOnClickListener {
-            val tallaSelec = when(binding.rGroup.checkedRadioButtonId){
-                R.id.L -> "L"
-                R.id.M ->"M"
-                R.id.S -> "S"
-                else -> {"L"}
-            }
-            var pedido = Pedido(
-                binding.textNombreApellido.text.toString(),
-                binding.textCorreo.text.toString(),
-                binding.textComentarios.text.toString(),
-                binding.phoneTelefono.text.toString(),
-                binding.textMarca.text.toString(),
-                tallaSelec
-                )
-            viewModel.btnBorrarClicked(pedido)
-        }
-
-        binding.btGuardar.setOnClickListener {
-            val tallaSelec = when(binding.rGroup.checkedRadioButtonId){
-                R.id.L -> "L"
-                R.id.M ->"M"
-                R.id.S -> "S"
-                else -> {"L"}
+            Siguiente.setOnClickListener {
+                viewModel.btnSigClicked()
             }
 
-            var pedido = Pedido(
-                binding.textNombreApellido.text.toString(),
-                binding.textCorreo.text.toString(),
-                binding.textComentarios.text.toString(),
-                binding.phoneTelefono.text.toString(),
-                binding.textMarca.text.toString(),
-                tallaSelec
-                )
-            viewModel.btnGuardarClicked(pedido)
+            btLimpiar.setOnClickListener {
+                val id = viewModel.state.value?.pedido?.id ?: 0
+                val pedido = unPedido(id)
+                viewModel.btnLimpClicked(pedido)
+            }
+
+            btAct.setOnClickListener {
+                val id = viewModel.state.value?.pedido?.id ?: 0
+                val pedido = unPedido(id)
+                viewModel.btnActClicked(pedido)
+            }
+
+            btBorrar.setOnClickListener {
+                val id = viewModel.state.value?.pedido?.id ?: 0
+                val pedido = unPedido(id)
+                viewModel.btnBorrarClicked(pedido)
+            }
+
+            btGuardar.setOnClickListener {
+                val pedido = unPedido(0)
+                viewModel.btnGuardarClicked(pedido)
+            }
         }
     }
 
-    private fun observador(){
+    private fun observador() {
         viewModel.state.observe(this) { state ->
-            binding.textNombreApellido.setText(state.pedido?.nomape)
-            binding.textCorreo.setText(state.pedido?.correo)
-            binding.textComentarios.setText(state.pedido?.comentario)
-            binding.phoneTelefono.setText(state.pedido?.telf)
-            binding.textMarca.setText(state.pedido?.marca)
-            if (state.totalPedidos > 0) {
-            binding.PaginaActual.text = (state.idPedido + 1).toString()
-            binding.TotalPaginas.text = "/" +state.totalPedidos
-            } else {
-                binding.PaginaActual.text = "0"
-                binding.TotalPaginas.text = "/0"
-            }
-
-
-            when (state.pedido?.talla) {
-                "L" -> binding.rGroup.check(R.id.L)
-                "M" -> binding.rGroup.check(R.id.M)
-                "S" -> binding.rGroup.check(R.id.S)
+            with(binding) {
+                textNombreApellido.setText(state.pedido?.nomape)
+                textCorreo.setText(state.pedido?.correo)
+                textComentarios.setText(state.pedido?.comentario)
+                phoneTelefono.setText(state.pedido?.telf)
+                textMarca.setText(state.pedido?.marca)
+                if (state.totalPedidos > 0) {
+                    PaginaActual.text = (state.idPedido + 1).toString()
+                    TotalPaginas.text = "/" + state.totalPedidos
+                } else {
+                    PaginaActual.text = "0"
+                    TotalPaginas.text = "/0"
+                }
+                when (state.pedido?.talla) {
+                    "L" -> rGroup.check(R.id.L)
+                    "M" -> rGroup.check(R.id.M)
+                    "S" -> rGroup.check(R.id.S)
+                }
             }
             state.mensaje?.let { mensaje ->
                 Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
@@ -144,6 +96,24 @@ class AddPedidoActivity : AppCompatActivity() {
         }
     }
 
+    private fun selectedTalla(): String =
+        when (binding.rGroup.checkedRadioButtonId) {
+            R.id.L -> "L"
+            R.id.M -> "M"
+            R.id.S -> "S"
+            else -> "L"
+        }
+
+    private fun unPedido(id: Int): Pedido =
+        Pedido(
+            id,
+            binding.textNombreApellido.text.toString(),
+            binding.textCorreo.text.toString(),
+            binding.textComentarios.text.toString(),
+            binding.phoneTelefono.text.toString(),
+            binding.textMarca.text.toString(),
+            selectedTalla()
+        )
 }
 
 

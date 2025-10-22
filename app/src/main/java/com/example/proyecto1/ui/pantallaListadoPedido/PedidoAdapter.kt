@@ -9,6 +9,7 @@ import com.example.proyecto1.databinding.ItemPedidoBinding
 import com.example.proyecto1.domain.model.Pedido
 
 class PedidoAdapter(
+    val ItemClick: (Pedido) -> Unit,
     val actions: PedidosActions,
 ) : ListAdapter<Pedido, PedidoAdapter.PedidoViewHolder>(
     PedidoDiffCallBack()
@@ -23,7 +24,8 @@ class PedidoAdapter(
     }
 
     override fun onBindViewHolder(holder: PedidoViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item = getItem(position)
+        holder.bind(item)
     }
 
     class PedidoViewHolder(

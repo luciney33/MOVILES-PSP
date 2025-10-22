@@ -20,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.pantallaDetallePedido.DetallePedidoActivity"
             android:exported="true">
             <intent-filter>
@@ -27,6 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.pantallaAddPedido.AddPedidoActivity"
             android:exported="true">
             <intent-filter>
@@ -35,6 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

@@ -5,8 +5,8 @@ import com.example.proyecto1.domain.model.Pedido
 object Repositorio {
 private val pedidos = mutableListOf<Pedido>()
     init {
-        pedidos.add(Pedido("luciapeñafiel","djadjs@ajdk.com","si","4337487","nike","S"))
-        pedidos.add(Pedido("neyklk","siok@ajdk.com","NO QUIERO NA","646612","adidas","M"))
+        pedidos.add(Pedido(1,"luciapeñafiel","djadjs@ajdk.com","si","4337487","nike","S"))
+        pedidos.add(Pedido(2,"neyklk","siok@ajdk.com","NO QUIERO NA","646612","adidas","M"))
 
     }
     fun getPedidos(): List<Pedido> = pedidos.toList()

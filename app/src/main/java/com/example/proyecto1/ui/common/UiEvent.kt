@@ -2,7 +2,7 @@ package com.example.proyecto1.ui.common
 
 sealed interface UiEvent {
     object PopBackStack: UiEvent
-    data class Navigate(val route: String): UiEvent
+    data class Navigate(val id: Int): UiEvent
     data class ShowSnackbar(
         val message: String,
         val action: String? = null
