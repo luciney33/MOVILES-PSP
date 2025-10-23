@@ -23,11 +23,7 @@ private val pedidos = mutableListOf<Pedido>()
         }else false
     }
 
-    fun borrarPedido(id: Int): Boolean{
-        return if (id in pedidos.indices){
-            pedidos.removeAt(id)
-            true
-        }else false
-    }
+    fun borrarPedido(pedido: Pedido) = pedidos.remove(pedido)
+
     fun totalPedidos(): Int = pedidos.size
 }

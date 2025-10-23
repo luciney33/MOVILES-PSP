@@ -4,15 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.proyecto1.domain.model.Pedido
 import com.example.proyecto1.domain.usecases.ActPedidoUseCase
 import com.example.proyecto1.domain.usecases.BorrarPedidoUseCase
 import com.example.proyecto1.domain.usecases.GetPedidosUseCase
+import com.example.proyecto1.domain.usecases.VerPedidoUseCase
 import com.example.proyecto1.ui.common.Constantes
+import com.example.proyecto1.ui.common.StringProvider
 import com.example.proyecto1.ui.common.UiEvent
 import kotlin.compareTo
 
 
 class DetallePedidoViewModel(
+    private val stringProvider: StringProvider,
     private val actPedidoUseCase: ActPedidoUseCase,
     private val borrarPedidoUseCase: BorrarPedidoUseCase,
     private val getPedidosUseCase: GetPedidosUseCase
@@ -41,7 +45,23 @@ class DetallePedidoViewModel(
             _uiState.value = _uiState.value?.copy(pedido = pedido) ?: DetallePedidoState(pedido)
 
     }
+    fun errorMostrado() {
+        _uiState.value = _uiState.value?.copy(event = null)
+    }
+
+    fun btnBorrarClicked(pedido: Pedido?) {
+        _uiState.value?.let {
+            if (!borrarPedidoUseCase(it.pedido)) {
+                _uiState.value = _uiState
+                    .value?.copy(event = UiEvent.ShowSnackbar(Constantes.ERROR))
+            } else {
+                _uiState.value = _uiState
+                    .value?.copy(event = UiEvent.PopBackStack)
+            }
+        }
+    }
     class DetallePedidoViewModelFactory(
+        private val stringProvider: StringProvider,
         private val actPedidoUseCase: ActPedidoUseCase = ActPedidoUseCase(),
         private val borrarPedidoUseCase: BorrarPedidoUseCase = BorrarPedidoUseCase(),
         private val getPedidosUseCase: GetPedidosUseCase = GetPedidosUseCase()
@@ -50,6 +70,7 @@ class DetallePedidoViewModel(
             if (modelClass.isAssignableFrom(DetallePedidoViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
                 return DetallePedidoViewModel(
+                    stringProvider,
                     actPedidoUseCase,
                     borrarPedidoUseCase,
                     getPedidosUseCase
