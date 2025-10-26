@@ -186,40 +186,16 @@
         app:layout_constraintEnd_toEndOf="@id/GuiaDerecha" />
 
     <Button
-        android:id="@+id/btLimpiar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/btnLimColor"
-        android:text="Limpiar"
-        app:layout_constraintBottom_toTopOf="@id/GuiaAbajo"
-        app:layout_constraintStart_toStartOf="@id/GuiaIzquierda" />
-
-    <Button
-        android:id="@+id/btAct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/btnActiColor"
-        android:text="Actualizar"
-        app:layout_constraintStart_toEndOf="@id/btLimpiar"
-        app:layout_constraintBottom_toBottomOf="@id/btLimpiar" />
-
-    <Button
-        android:id="@+id/btBorrar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/btBorrarColor"
-        android:text="Borrar"
-        app:layout_constraintStart_toEndOf="@id/btAct"
-        app:layout_constraintBottom_toBottomOf="@id/btAct" />
-
-    <Button
         android:id="@+id/btGuardar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/btnGuardarColor"
         android:text="Guardar"
-        app:layout_constraintStart_toEndOf="@id/btBorrar"
-        app:layout_constraintBottom_toBottomOf="@id/btBorrar" />
+        app:layout_constraintBottom_toTopOf="@+id/GuiaAbajo"
+        app:layout_constraintEnd_toEndOf="@+id/Siguiente"
+        app:layout_constraintStart_toStartOf="@+id/Anterior"
+        app:layout_constraintTop_toBottomOf="@+id/PaginaActual"
+        app:layout_constraintVertical_bias="0.416" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/GuiaTop"

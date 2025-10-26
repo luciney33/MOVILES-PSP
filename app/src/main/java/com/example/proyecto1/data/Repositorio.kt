@@ -1,6 +1,7 @@
 package com.example.proyecto1.data
 
 import com.example.proyecto1.domain.model.Pedido
+import kotlin.text.set
 
 object Repositorio {
 private val pedidos = mutableListOf<Pedido>()
@@ -11,16 +12,16 @@ private val pedidos = mutableListOf<Pedido>()
     }
     fun getPedidos(): List<Pedido> = pedidos.toList()
     fun getPedido(id:Int): Pedido? = pedidos.getOrNull(id)
-    fun addPedido(pedido: Pedido): Int{
-        pedidos.add(pedido)
-        return pedidos.size -1
+    fun addPedido(pedido: Pedido): Boolean {
+        return pedidos.add(pedido)
     }
 
-    fun actPedido(id: Int, pedido: Pedido): Boolean {
-        return if (id in pedidos.indices){
-            pedidos[id] = pedido
+    fun actPedido(pedido: Pedido): Boolean {
+        val index = pedidos.indexOfFirst { it.id == pedido.id }
+        return if (index != -1) {
+            pedidos[index] = pedido
             true
-        }else false
+        } else false
     }
 
     fun borrarPedido(pedido: Pedido) = pedidos.remove(pedido)

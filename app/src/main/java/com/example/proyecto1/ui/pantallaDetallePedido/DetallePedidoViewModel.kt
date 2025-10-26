@@ -4,15 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.proyecto1.R
 import com.example.proyecto1.domain.model.Pedido
 import com.example.proyecto1.domain.usecases.ActPedidoUseCase
 import com.example.proyecto1.domain.usecases.BorrarPedidoUseCase
 import com.example.proyecto1.domain.usecases.GetPedidosUseCase
-import com.example.proyecto1.domain.usecases.VerPedidoUseCase
 import com.example.proyecto1.ui.common.Constantes
 import com.example.proyecto1.ui.common.StringProvider
 import com.example.proyecto1.ui.common.UiEvent
-import kotlin.compareTo
 
 
 class DetallePedidoViewModel(
@@ -49,6 +48,19 @@ class DetallePedidoViewModel(
         _uiState.value = _uiState.value?.copy(event = null)
     }
 
+    fun actPedido(pedido: Pedido) {
+        val actualizado = actPedidoUseCase(pedido)
+        if (actualizado) {
+            _uiState.value = _uiState.value?.copy(
+                pedido = pedido,
+                event = UiEvent.ShowSnackbar(stringProvider.getString(R.string.pedidoAct))
+            )
+        } else {
+            _uiState.value = _uiState.value?.copy(
+                event = UiEvent.ShowSnackbar(stringProvider.getString(R.string.errorpedidoAct))
+            )
+        }
+    }
     fun btnBorrarClicked(pedido: Pedido?) {
         _uiState.value?.let {
             if (!borrarPedidoUseCase(it.pedido)) {
@@ -59,6 +71,10 @@ class DetallePedidoViewModel(
                     .value?.copy(event = UiEvent.PopBackStack)
             }
         }
+    }
+
+    fun volverListado() {
+        _uiState.value = _uiState.value?.copy(event = UiEvent.PopBackStack)
     }
     class DetallePedidoViewModelFactory(
         private val stringProvider: StringProvider,

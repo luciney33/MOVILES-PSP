@@ -9,13 +9,18 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.proyecto1.R
 import com.example.proyecto1.databinding.ActivityAddpedidoBinding
 import com.example.proyecto1.domain.model.Pedido
+import com.example.proyecto1.ui.common.StringProvider
+import com.example.proyecto1.ui.common.UiEvent
 
 //enganchar con el viewmodel
 class AddPedidoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddpedidoBinding
     private val viewModel: AddPedidoViewModel by viewModels() {
-        AddPedidoViewModelFactory()
+        AddPedidoViewModelFactory(
+            StringProvider.instance(this),
+
+            )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,23 +48,6 @@ class AddPedidoActivity : AppCompatActivity() {
                 viewModel.btnSigClicked()
             }
 
-            btLimpiar.setOnClickListener {
-                val id = viewModel.state.value?.pedido?.id ?: 0
-                val pedido = unPedido(id)
-                viewModel.btnLimpClicked(pedido)
-            }
-
-            btAct.setOnClickListener {
-                val id = viewModel.state.value?.pedido?.id ?: 0
-                val pedido = unPedido(id)
-                viewModel.btnActClicked(pedido)
-            }
-
-            btBorrar.setOnClickListener {
-                val id = viewModel.state.value?.pedido?.id ?: 0
-                val pedido = unPedido(id)
-                viewModel.btnBorrarClicked(pedido)
-            }
 
             btGuardar.setOnClickListener {
                 val pedido = unPedido(0)
@@ -92,6 +80,15 @@ class AddPedidoActivity : AppCompatActivity() {
             state.mensaje?.let { mensaje ->
                 Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
                 viewModel.limpMensaje()
+            }
+            state.uiEvent?.let { event ->
+                when (event) {
+                    is UiEvent.PopBackStack -> {
+                        finish()
+                    }
+                    else -> {}
+                }
+                viewModel.limpiarEvento()
             }
         }
     }

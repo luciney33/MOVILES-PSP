@@ -15,4 +15,8 @@
     <string name="btn_borrar">Borrar</string>
     <string name="detalle_pedido">Detalle del Pedido</string>
     <string name="pedido">pedido</string>
+    <string name="pedidoAct">Pedido Actualizado</string>
+    <string name="errorpedidoAct">Error Actualizar</string>
+    <string name="pedido_guardado">Pedido guardado correctamente</string>
+    <string name="error_guardar">Error al guardar el pedido</string>
 </resources>

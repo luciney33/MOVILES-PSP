@@ -11,6 +11,7 @@ import com.example.proyecto1.R
 import com.example.proyecto1.databinding.ActivityListadopedidoBinding
 import com.example.proyecto1.domain.model.Pedido
 import com.example.proyecto1.ui.common.UiEvent
+import com.example.proyecto1.ui.pantallaAddPedido.AddPedidoActivity
 import com.example.proyecto1.ui.pantallaDetallePedido.DetallePedidoActivity
 
 class ListadoPedidosActivity: ComponentActivity() {
@@ -33,7 +34,10 @@ class ListadoPedidosActivity: ComponentActivity() {
         observador()
         eventos()
     }
-
+    override fun onResume() {
+        super.onResume()
+        viewModel.cargarPedidos()
+    }
     private fun recyclerViewConfig() {
         adapter = PedidoAdapter(ItemClick ={ pedido ->
             navigateToDetail(pedido.id)
@@ -71,10 +75,15 @@ class ListadoPedidosActivity: ComponentActivity() {
         startActivity(intent)
 
     }
+    private fun navigateToAdd(){
+        val intent = Intent(this, AddPedidoActivity::class.java)
+        startActivity(intent)
+
+    }
 
     private fun eventos() {
        binding.NuevoPedido.setOnClickListener {
-
+           navigateToAdd()
        }
     }
 }

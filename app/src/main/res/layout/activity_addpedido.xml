@@ -146,36 +146,6 @@
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/btLimpiar"
-        android:layout_width="@dimen/AncBttInferiores"
-        android:layout_height="@dimen/AltBttInferiores"
-        android:backgroundTint="@color/btnLimColor"
-        android:text="Limpiar"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/GuiaAbajo"
-        app:layout_constraintStart_toStartOf="@+id/GuiaIzquierda"
-        app:layout_constraintTop_toBottomOf="@+id/Anterior" />
-
-    <Button
-        android:id="@+id/btAct"
-        android:layout_width="@dimen/AncBttInferiores"
-        android:layout_height="@dimen/AltBttInferiores"
-        android:backgroundTint="@color/btnActiColor"
-        android:text="Actualizar"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/btLimpiar"
-        app:layout_constraintStart_toEndOf="@+id/btLimpiar" />
-
-    <Button
-        android:id="@+id/btBorrar"
-        android:layout_width="@dimen/AncBttInferiores"
-        android:layout_height="@dimen/AltBttInferiores"
-        android:backgroundTint="@color/btBorrarColor"
-        android:text="Borrar"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/btLimpiar"
-        app:layout_constraintStart_toEndOf="@+id/btAct" />
 
     <Button
         android:id="@+id/btGuardar"
@@ -184,9 +154,11 @@
         android:backgroundTint="@color/btnGuardarColor"
         android:text="Guardar"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/btLimpiar"
-        app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
-        app:layout_constraintStart_toEndOf="@+id/btBorrar" />
+        app:layout_constraintBottom_toTopOf="@+id/GuiaAbajo"
+        app:layout_constraintEnd_toStartOf="@+id/GuiaDerecha"
+        app:layout_constraintStart_toStartOf="@+id/GuiaIzquierda"
+        app:layout_constraintTop_toBottomOf="@+id/PaginaActual"
+        app:layout_constraintVertical_bias="0.536" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/GuiaTop"

@@ -5,7 +5,7 @@ import com.example.proyecto1.domain.model.Pedido
 
 class AddPedidoUseCase {
 
-    operator fun invoke(pedido: Pedido): Int{
+    operator fun invoke(pedido: Pedido): Boolean{
         return Repositorio.addPedido(pedido)
     }
 }

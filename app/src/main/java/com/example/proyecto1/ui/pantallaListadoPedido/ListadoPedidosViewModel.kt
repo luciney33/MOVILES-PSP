@@ -14,12 +14,16 @@ class ListadoPedidosViewModel (private val getPedidosUseCase : GetPedidosUseCase
         private set
 
     init {
+        state.value = ListadoPedidosState()
         cargarPedidos()
     }
 
     fun cargarPedidos() {
         val pedidos = getPedidosUseCase()
-        state.value = ListadoPedidosState(pedidos = pedidos)
+        state.value = state.value?.copy(
+            pedidos = pedidos,
+            totalPedidos = pedidos.size
+        )
     }
 
     fun limpiarMensaje() {
