@@ -10,12 +10,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.proyecto1.R
 import com.example.proyecto1.databinding.ActivityListadopedidoBinding
 import com.example.proyecto1.domain.model.Pedido
+import com.example.proyecto1.domain.usecases.GetPedidosUseCase
 import com.example.proyecto1.ui.common.UiEvent
 import com.example.proyecto1.ui.pantallaAddPedido.AddPedidoActivity
 import com.example.proyecto1.ui.pantallaDetallePedido.DetallePedidoActivity
 
 class ListadoPedidosActivity: ComponentActivity() {
-    private val viewModel: ListadoPedidosViewModel by viewModels()
+    private val viewModel: ListadoPedidosViewModel by viewModels {
+        ListadoPedidosViewModelFactory(
+            GetPedidosUseCase()
+        )
+    }
     private lateinit var adapter: PedidoAdapter
     private lateinit var binding: ActivityListadopedidoBinding
 

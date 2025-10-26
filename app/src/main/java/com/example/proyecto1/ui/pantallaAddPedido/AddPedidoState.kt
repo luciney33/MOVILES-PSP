@@ -7,7 +7,5 @@ data class AddPedidoState (
     val pedido: Pedido? = Pedido(),
     val mensaje: String? = null,
     val idPedido: Int = 0,
-    val totalPedidos: Int = 0,
-    val isDisable: Boolean = false,
     val uiEvent: UiEvent? = null
 )

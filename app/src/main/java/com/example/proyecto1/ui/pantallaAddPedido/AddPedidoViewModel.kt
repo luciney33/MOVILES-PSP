@@ -1,13 +1,11 @@
 package com.example.proyecto1.ui.pantallaAddPedido
-
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyecto1.R
 import com.example.proyecto1.domain.model.Pedido
-import com.example.proyecto1.domain.usecases.ActPedidoUseCase
 import com.example.proyecto1.domain.usecases.AddPedidoUseCase
-import com.example.proyecto1.domain.usecases.BorrarPedidoUseCase
 import com.example.proyecto1.domain.usecases.TotalPedUseCase
 import com.example.proyecto1.domain.usecases.VerPedidoUseCase
 import com.example.proyecto1.ui.common.StringProvider
@@ -19,43 +17,14 @@ class AddPedidoViewModel (
     private val verPedidoUseCase: VerPedidoUseCase,
     private val totalPedUseCase: TotalPedUseCase
 ): ViewModel() {
-    var state: MutableLiveData<AddPedidoState> = MutableLiveData()
-        private set
+    private val _state: MutableLiveData<AddPedidoState> = MutableLiveData()
+    val state: LiveData<AddPedidoState> get() = _state
     init {
-        state.value = AddPedidoState(
-            pedido = Pedido(0, "", "", "", "", "", "L"), // Pedido vacío inicial
+        _state.value = AddPedidoState(
+            pedido = Pedido(0, "", "", "", "", "", ""),
             idPedido = 0,
-            totalPedidos = 0,
             mensaje = null
         )
-    }
-
-    fun btnAntClicked() {
-        val id = state.value?.idPedido ?: 0
-        val total = totalPedUseCase.invoke()
-        if (id - 1 >= 0) {
-            val pedido = verPedidoUseCase.invoke(id - 1)
-            state.value = state.value?.copy(
-                pedido = pedido,
-                idPedido = id - 1,
-                totalPedidos = total,
-            )
-        }
-    }
-
-
-    fun btnSigClicked() {
-        val id = state.value?.idPedido ?: 0
-        val total = totalPedUseCase.invoke()
-        if (id + 1 < total) {
-            val pedido = verPedidoUseCase.invoke(id + 1)
-            state.value = state.value?.copy(
-                pedido = pedido,
-                idPedido = id + 1,
-                totalPedidos = total,
-            )
-        }
-
     }
 
 
@@ -63,24 +32,24 @@ class AddPedidoViewModel (
 
         val nuevoPedidoId = addPedidoUseCase.invoke(pedido)
         if (nuevoPedidoId) {
-            state.value = state.value?.copy(
+            _state.value = state.value?.copy(
                 mensaje = stringProvider.getString(R.string.pedido_guardado)
             )
-            state.value = state.value?.copy(
+            _state.value = state.value?.copy(
                 uiEvent = UiEvent.PopBackStack
             )
         } else {
-            state.value = state.value?.copy(
+            _state.value = state.value?.copy(
                 mensaje = stringProvider.getString(R.string.error_guardar)
             )
         }
     }
 
     fun limpMensaje() {
-        state.value = state.value?.copy(mensaje= null)
+        _state.value = state.value?.copy(mensaje= null)
     }
     fun limpiarEvento() {
-        state.value = state.value?.copy(uiEvent = null)
+        _state.value = state.value?.copy(uiEvent = null)
     }
 }
 

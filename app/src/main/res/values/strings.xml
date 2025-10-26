@@ -3,6 +3,7 @@
     <string name="titulo">Pedido Ropa</string>
     <string name="colorTexto">bold</string>
     <string name="nombre">Nombre y Apellidos</string>
+    <string name="correo">Correo</string>
     <string name="tituloBtnListado">Nuevo Pedido</string>
     <string name="tituloActividadListadoCanciones">Listado de Canciones</string>
     <string name="txtmarca">Marca</string>
@@ -19,4 +20,7 @@
     <string name="errorpedidoAct">Error Actualizar</string>
     <string name="pedido_guardado">Pedido guardado correctamente</string>
     <string name="error_guardar">Error al guardar el pedido</string>
+    <string name="errorId">Error no hay pedido con ese id</string>
+    <string name="talla">Talla:</string>
+
 </resources>

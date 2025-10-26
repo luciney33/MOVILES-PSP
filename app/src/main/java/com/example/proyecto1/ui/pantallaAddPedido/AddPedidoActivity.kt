@@ -40,19 +40,9 @@ class AddPedidoActivity : AppCompatActivity() {
 
     private fun eventos() {
 
-        with(binding) {
-            Anterior.setOnClickListener {
-                viewModel.btnAntClicked()
-            }
-            Siguiente.setOnClickListener {
-                viewModel.btnSigClicked()
-            }
-
-
-            btGuardar.setOnClickListener {
+            binding.btGuardar.setOnClickListener {
                 val pedido = unPedido(0)
                 viewModel.btnGuardarClicked(pedido)
-            }
         }
     }
 
@@ -64,13 +54,6 @@ class AddPedidoActivity : AppCompatActivity() {
                 textComentarios.setText(state.pedido?.comentario)
                 phoneTelefono.setText(state.pedido?.telf)
                 textMarca.setText(state.pedido?.marca)
-                if (state.totalPedidos > 0) {
-                    PaginaActual.text = (state.idPedido + 1).toString()
-                    TotalPaginas.text = "/" + state.totalPedidos
-                } else {
-                    PaginaActual.text = "0"
-                    TotalPaginas.text = "/0"
-                }
                 when (state.pedido?.talla) {
                     "L" -> rGroup.check(R.id.L)
                     "M" -> rGroup.check(R.id.M)

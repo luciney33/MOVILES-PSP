@@ -15,12 +15,11 @@ import com.example.proyecto1.domain.usecases.BorrarPedidoUseCase
 import com.example.proyecto1.domain.usecases.GetPedidosUseCase
 import com.example.proyecto1.ui.common.UiEvent
 import kotlin.getValue
-import kotlin.toString
 
 class DetallePedidoActivity: AppCompatActivity() {
     private lateinit var binding: ActivityDetallepedidoBinding
     private val viewModel: DetallePedidoViewModel by viewModels{
-        DetallePedidoViewModel.DetallePedidoViewModelFactory(
+        DetallePedidoViewModelFactory(
             StringProvider.instance(this),
             ActPedidoUseCase(),
             BorrarPedidoUseCase(),
@@ -51,28 +50,33 @@ class DetallePedidoActivity: AppCompatActivity() {
 
     }
     private fun observar(){
-        viewModel.uiState.observe(this@DetallePedidoActivity){ state ->
+        viewModel.state.observe(this@DetallePedidoActivity){ state ->
             state?.let {
-                state.event?.let { event ->
-                    if (event is UiEvent.PopBackStack) {
-                        this@DetallePedidoActivity.finish()
-                    } else if (event is UiEvent.ShowSnackbar) {
-                        Toast.makeText(this@DetallePedidoActivity, event.message, Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                    viewModel.errorMostrado()
+                with(binding) {
+                    txtNombre.setText(state.pedido.nomape)
+                    textEmail.setText(state.pedido.correo)
+                    textTelefono.setText(state.pedido.telf)
+                    textMarca.setText(state.pedido.marca)
+                    textTalla.setText(state.pedido.talla)
+                    textObservaciones.setText(state.pedido.comentario)
                 }
 
+                state.event?.let { event ->
+                    when (event) {
+                        is UiEvent.PopBackStack -> {
+                            viewModel.errorMostrado()
+                            this@DetallePedidoActivity.finish()
+                        }
+                        is UiEvent.ShowSnackbar -> {
+                            Toast.makeText(this@DetallePedidoActivity, event.message, Toast.LENGTH_SHORT
+                            ).show()
+                            viewModel.limpMensaje()
+                            viewModel.errorMostrado()
+                        }
 
-                if (state.event == null)
-                    with(binding) {
-                        txtNombre.setText(state.pedido.nomape)
-                        textEmail.setText(state.pedido.correo)
-                        textTelefono.setText(state.pedido.telf)
-                        textMarca.setText(state.pedido.marca)
-                        textTalla.setText(state.pedido.talla)
-                        textObservaciones.setText(state.pedido.comentario)
+                        is UiEvent.Navigate -> TODO()
                     }
+                }
             }
         }
     }
@@ -80,10 +84,10 @@ class DetallePedidoActivity: AppCompatActivity() {
     private fun eventos(){
         with(binding){
             btnBorrar.setOnClickListener {
-                viewModel.btnBorrarClicked(viewModel.uiState.value?.pedido)
+                viewModel.btnBorrarClicked(viewModel.state.value?.pedido)
             }
             btnActualizar.setOnClickListener {
-                val pedidoActual = viewModel.uiState.value?.pedido
+                val pedidoActual = viewModel.state.value?.pedido
                 pedidoActual?.let { p ->
                     val pedidoActualizado = p.copy(
                         nomape = txtNombre.text.toString(),
@@ -103,3 +107,4 @@ class DetallePedidoActivity: AppCompatActivity() {
         }
     }
 }
+

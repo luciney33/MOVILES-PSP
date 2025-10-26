@@ -41,7 +41,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Correo electrónico"
+        android:hint="@string/correo"
         app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
         app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
         app:layout_constraintTop_toBottomOf="@+id/NombreyApellidos"
@@ -59,7 +59,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="@dimen/anchocaja"
         android:layout_height="@dimen/altocaja"
-        android:hint="Teléfono"
+        android:hint="@string/telefono"
         app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
         app:layout_constraintTop_toBottomOf="@+id/Correo"
         app:startIconDrawable="@drawable/movil">
@@ -77,8 +77,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="@dimen/anchocaja"
         android:layout_height="@dimen/altocaja"
-        android:hint="Marca"
-
+        android:hint="@string/txtmarca"
         app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
         app:layout_constraintTop_toBottomOf="@+id/Correo"
         app:startIconDrawable="@drawable/marca">
@@ -94,7 +93,7 @@
         android:id="@+id/Talla"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Talla:"
+        android:text="@string/talla"
         app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
         app:layout_constraintTop_toBottomOf="@+id/Telefono"/>
 
@@ -154,11 +153,9 @@
         android:backgroundTint="@color/btnGuardarColor"
         android:text="Guardar"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/GuiaAbajo"
-        app:layout_constraintEnd_toStartOf="@+id/GuiaDerecha"
-        app:layout_constraintStart_toStartOf="@+id/GuiaIzquierda"
-        app:layout_constraintTop_toBottomOf="@+id/PaginaActual"
-        app:layout_constraintVertical_bias="0.536" />
+        app:layout_constraintEnd_toEndOf="@+id/Comentarios"
+        app:layout_constraintStart_toStartOf="@+id/Comentarios"
+        app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/GuiaTop"
@@ -189,46 +186,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 
-    <Button
-        android:id="@+id/Siguiente"
-        android:layout_width="@dimen/anchoSig"
-        android:layout_height="@dimen/altoSig"
-        android:layout_marginTop="@dimen/topbtt"
-        android:text="--Sig--"
-        app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
-        app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
-
-    <Button
-    android:id="@+id/Anterior"
-    android:layout_width="@dimen/anchoAnt"
-    android:layout_height="@dimen/altoAnt"
-    android:layout_marginTop="@dimen/topbtt"
-    android:text="--Ant--"
-    app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
-    app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
-
-    <TextView
-        android:id="@+id/PaginaActual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/TotalPaginas"
-        app:layout_constraintStart_toEndOf="@id/Anterior"
-        app:layout_constraintTop_toBottomOf="@id/Comentarios"
-        app:layout_constraintBottom_toBottomOf="@id/Siguiente"
-        app:layout_constraintHorizontal_chainStyle="packed" />
-
-    <TextView
-        android:id="@+id/TotalPaginas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="/1"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/PaginaActual"
-        app:layout_constraintEnd_toStartOf="@id/Siguiente"
-        app:layout_constraintTop_toBottomOf="@id/Comentarios"
-        app:layout_constraintBottom_toBottomOf="@id/Siguiente" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
