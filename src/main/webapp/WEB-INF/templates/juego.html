@@ -68,7 +68,7 @@
     <h1>Juego de Adivinanza</h1>
 
     <div class="info">
-        <p><strong>Usuario:</strong> <span th:text="${usuario}">?</span></p>
+        <p><strong>Usuario:</strong> <span th:text="${usuario}"></span></p>
         <p><strong>Número de intentos:</strong> <span th:text="${intentos}">0</span></p>
         <p class="mensaje-feedback" th:if="${mensaje}" th:text="${mensaje}"></p>
     </div>
