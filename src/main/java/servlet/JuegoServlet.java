@@ -95,7 +95,7 @@ public class JuegoServlet extends HttpServlet {
 
         Estadistica estadistica = Estadistica.cogerCrearEstadistica(usuario);
 
-        int puntuacion = 50 - (intentos * 5);
+        int puntuacion = 55 - (intentos * 5);
         Partida partida = new Partida(puntuacion, intentos, tiempoJuego);
         estadistica.agregarPartida(partida);
 
