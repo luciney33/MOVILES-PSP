@@ -13,7 +13,7 @@ public class Coche implements Runnable{
     private TipoVehiculo tipoVehiculo;
     private Parking parking;
 
-
+//NO CONTROLA LOS COCHES QUE SE QUEDAN ESPERANDO FUERA DEL PARKING
     public void run() {
         try {
             parking.cocheProcesado();
