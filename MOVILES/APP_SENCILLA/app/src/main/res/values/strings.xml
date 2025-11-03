@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Proyecto1</string>
+    <string name="titulo">Pedido Ropa</string>
+    <string name="colorTexto">bold</string>
+    <string name="nombre">Nombre y Apellidos</string>
+    <string name="correo">Correo</string>
+    <string name="tituloBtnListado">Nuevo Pedido</string>
+    <string name="tituloActividadListadoCanciones">Listado de Canciones</string>
+    <string name="txtmarca">Marca</string>
+    <string name="txtalla">Talla</string>
+    <string name="email">Email</string>
+    <string name="telefono">Teléfono</string>
+    <string name="observaciones">Observaciones</string>
+    <string name="btn_volver">Volver al Listado</string>
+    <string name="btn_actualizar">Actualizar</string>
+    <string name="btn_borrar">Borrar</string>
+    <string name="detalle_pedido">Detalle del Pedido</string>
+    <string name="pedido">pedido</string>
+    <string name="pedidoAct">Pedido Actualizado</string>
+    <string name="errorpedidoAct">Error Actualizar</string>
+    <string name="pedido_guardado">Pedido guardado correctamente</string>
+    <string name="error_guardar">Error al guardar el pedido</string>
+    <string name="errorId">Error no hay pedido con ese id</string>
+    <string name="talla">Talla:</string>
+
+</resources>

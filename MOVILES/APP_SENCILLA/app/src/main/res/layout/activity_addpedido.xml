@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.pantallaAddPedido.AddPedidoActivity">
+
+    <TextView
+        android:id="@+id/PedidoRopa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/titulo"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/GuiaTop" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/NombreyApellidos"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/nombre"
+        app:layout_constraintEnd_toStartOf="@+id/GuiaDerecha"
+        app:layout_constraintStart_toStartOf="@+id/GuiaIzquierda"
+        app:layout_constraintTop_toBottomOf="@+id/PedidoRopa"
+        app:startIconDrawable="@drawable/lapiz">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textNombreApellido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Correo"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/correo"
+        app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
+        app:layout_constraintTop_toBottomOf="@+id/NombreyApellidos"
+        app:startIconDrawable="@drawable/outline_alternate_email_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Telefono"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="@dimen/anchocaja"
+        android:layout_height="@dimen/altocaja"
+        android:hint="@string/telefono"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
+        app:layout_constraintTop_toBottomOf="@+id/Correo"
+        app:startIconDrawable="@drawable/movil">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phoneTelefono"
+            android:layout_width="@dimen/anchocaja"
+            android:layout_height="@dimen/altocaja"
+            android:inputType="phone" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Marca"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="@dimen/anchocaja"
+        android:layout_height="@dimen/altocaja"
+        android:hint="@string/txtmarca"
+        app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
+        app:layout_constraintTop_toBottomOf="@+id/Correo"
+        app:startIconDrawable="@drawable/marca">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textMarca"
+            android:layout_width="@dimen/anchocaja"
+            android:layout_height="@dimen/altocaja"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/Talla"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/talla"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
+        app:layout_constraintTop_toBottomOf="@+id/Telefono"/>
+
+    <RadioGroup
+        android:id="@+id/rGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
+        app:layout_constraintTop_toBottomOf="@+id/Talla">
+
+        <RadioButton
+            android:id="@+id/L"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="L"
+            android:layout_marginEnd="8dp" />
+
+        <RadioButton
+            android:id="@+id/M"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M"
+            android:layout_marginEnd="8dp" />
+
+        <RadioButton
+            android:id="@+id/S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="S" />
+
+    </RadioGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Comentarios"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="@dimen/anchoCorreo"
+        android:layout_height="@dimen/anchocaja2"
+        android:hint="Comentarios"
+        app:layout_constraintEnd_toStartOf="@+id/GuiaDerecha"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
+        app:layout_constraintTop_toBottomOf="@+id/rGroup"
+        app:startIconDrawable="@drawable/outline_add_comment_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textComentarios"
+            android:layout_width="@dimen/anchoCorreo"
+            android:layout_height="@dimen/anchocaja2"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/btGuardar"
+        android:layout_width="@dimen/AncBttInferiores"
+        android:layout_height="@dimen/AltBttInferiores"
+        android:backgroundTint="@color/btnGuardarColor"
+        android:text="Guardar"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/Comentarios"
+        app:layout_constraintStart_toStartOf="@+id/Comentarios"
+        app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/GuiaTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/GuiaIzquierda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp"
+        app:layout_constraintGuide_percent="0.05"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/GuiaAbajo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/GuiaDerecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

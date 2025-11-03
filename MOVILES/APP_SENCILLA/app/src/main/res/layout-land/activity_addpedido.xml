@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ui.pantallaAddPedido.AddPedidoActivity">
+
+    <TextView
+        android:id="@+id/PedidoRopa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/titulo"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/NombreyApellidos"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/nombre"
+        app:layout_constraintEnd_toStartOf="@+id/GuiaDerecha"
+        app:layout_constraintStart_toStartOf="@+id/GuiaIzquierda"
+        app:layout_constraintTop_toBottomOf="@+id/PedidoRopa"
+        app:startIconDrawable="@drawable/lapiz">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textNombreApellido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Correo"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:hint="@string/correo"
+        app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
+        app:layout_constraintTop_toBottomOf="@+id/NombreyApellidos"
+        app:startIconDrawable="@drawable/outline_alternate_email_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Telefono"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:hint="@string/telefono"
+        app:layout_constraintEnd_toStartOf="@+id/Marca"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
+        app:layout_constraintTop_toBottomOf="@+id/Correo"
+        app:startIconDrawable="@drawable/movil">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phoneTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Marca"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:hint="@string/txtmarca"
+        app:layout_constraintEnd_toEndOf="@+id/NombreyApellidos"
+        app:layout_constraintStart_toEndOf="@+id/Telefono"
+        app:layout_constraintTop_toTopOf="@+id/Telefono"
+        app:startIconDrawable="@drawable/marca">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textMarca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/Talla"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/talla"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/NombreyApellidos"
+        app:layout_constraintTop_toBottomOf="@+id/Telefono" />
+
+    <RadioGroup
+        android:id="@+id/rGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/Talla"
+        app:layout_constraintStart_toEndOf="@id/Talla"
+        app:layout_constraintTop_toTopOf="@id/Talla">
+
+        <RadioButton
+            android:id="@+id/L"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:minHeight="0dp"
+            android:text="L"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/M"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:minHeight="0dp"
+            android:text="M"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/S"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+            android:text="S"
+            android:textSize="14sp" />
+    </RadioGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/Comentarios"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Comentarios"
+        app:layout_constraintEnd_toStartOf="@id/GuiaDerecha"
+        app:layout_constraintStart_toStartOf="@id/GuiaIzquierda"
+        app:layout_constraintTop_toBottomOf="@id/rGroup"
+        app:startIconDrawable="@drawable/outline_add_comment_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textComentarios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/btGuardar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/btnGuardarColor"
+        android:minHeight="40dp"
+        android:text="Guardar"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/Comentarios"
+        app:layout_constraintStart_toStartOf="@+id/Comentarios"
+        app:layout_constraintTop_toBottomOf="@+id/Comentarios" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/GuiaIzquierda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/GuiaDerecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
