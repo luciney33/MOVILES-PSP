@@ -1,1 +1,27 @@
-".idea/" 
+.idea/
+*.iml
+
+/shelf/
+/workspace.xml
+
+# Editor-based HTTP Client requests
+/httpRequests/
+
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+# Copilot & AI-related temp files
+.idea/copilot.*
+copilot.data.migration*.xml
+
+# Build directories (Java, Kotlin, Spring, Android)
+out/
+build/
+target/
+.gradle/
+.mvn/
+
+# OS generated files
+.DS_Store
+Thumbs.db
