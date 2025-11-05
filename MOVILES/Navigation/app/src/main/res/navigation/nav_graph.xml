@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/listaEntrenamientoFragment">
+    <fragment
+        android:id="@+id/listaEntrenamientoFragment"
+        android:name="com.example.navigation.ListaEntrenamientoFragment"
+        android:label="fragment_lista_entrenamiento"
+        tools:layout="@layout/fragment_lista_entrenamiento" />
+    <fragment
+        android:id="@+id/detalleEntrenamientoFragment"
+        android:name="com.example.navigation.DetalleEntrenamientoFragment"
+        android:label="fragment_detalle_entrenamiento"
+        tools:layout="@layout/fragment_detalle_entrenamiento" />
+    <fragment
+        android:id="@+id/sesionEntrenamientoFragment"
+        android:name="com.example.navigation.SesionEntrenamientoFragment"
+        android:label="fragment_sesion_entrenamiento"
+        tools:layout="@layout/fragment_sesion_entrenamiento" />
+</navigation>
