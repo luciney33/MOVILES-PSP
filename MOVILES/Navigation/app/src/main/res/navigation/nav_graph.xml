@@ -6,17 +6,17 @@
     app:startDestination="@id/listaEntrenamientoFragment">
     <fragment
         android:id="@+id/listaEntrenamientoFragment"
-        android:name="com.example.navigation.ListaEntrenamientoFragment"
+        android:name="com.example.navigation.ui.listaFragment.ListaEntrenamientoFragment"
         android:label="fragment_lista_entrenamiento"
         tools:layout="@layout/fragment_lista_entrenamiento" />
     <fragment
         android:id="@+id/detalleEntrenamientoFragment"
-        android:name="com.example.navigation.DetalleEntrenamientoFragment"
+        android:name="com.example.navigation.ui.detalleFragment.DetalleEntrenamientoFragment"
         android:label="fragment_detalle_entrenamiento"
         tools:layout="@layout/fragment_detalle_entrenamiento" />
     <fragment
         android:id="@+id/sesionEntrenamientoFragment"
-        android:name="com.example.navigation.SesionEntrenamientoFragment"
+        android:name="com.example.navigation.ui.sesionFragment.SesionEntrenamientoFragment"
         android:label="fragment_sesion_entrenamiento"
         tools:layout="@layout/fragment_sesion_entrenamiento" />
 </navigation>
