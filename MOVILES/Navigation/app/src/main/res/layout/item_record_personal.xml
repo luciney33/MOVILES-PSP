@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="8dp"
+    app:cardBackgroundColor="?attr/colorSurfaceVariant">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- Icono trofeo -->
+        <ImageView
+            android:id="@+id/ivTrofeo"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/star_big_on"
+            android:contentDescription="Record"
+            app:tint="?attr/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Nombre del ejercicio -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNombreEjercicio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Press Banca"
+            android:textAppearance="?attr/textAppearanceTitleSmall"
+            android:textColor="?attr/colorOnSurface"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toTopOf="@id/ivTrofeo"
+            app:layout_constraintStart_toEndOf="@id/ivTrofeo"
+            app:layout_constraintEnd_toStartOf="@id/tvRecord"
+            tools:text="Press Banca" />
+
+        <!-- Información del record -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvInfoRecord"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Máximo histórico"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintTop_toBottomOf="@id/tvNombreEjercicio"
+            app:layout_constraintBottom_toBottomOf="@id/ivTrofeo"
+            app:layout_constraintStart_toEndOf="@id/ivTrofeo"
+            app:layout_constraintEnd_toStartOf="@id/tvRecord"
+            tools:text="Record histórico" />
+
+        <!-- Valor del record -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="85kg × 8"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="?attr/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="85kg × 8" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

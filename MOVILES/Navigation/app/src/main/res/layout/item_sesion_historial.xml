@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Icono de fecha -->
+        <ImageView
+            android:id="@+id/ivIconoFecha"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_menu_my_calendar"
+            android:contentDescription="Fecha"
+            app:tint="?attr/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Fecha de la sesión -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvFechaSesion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="15 Mayo 2024"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintTop_toTopOf="@id/ivIconoFecha"
+            app:layout_constraintStart_toEndOf="@id/ivIconoFecha"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="15 Mayo 2024" />
+
+        <!-- Nombre del entrenamiento -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNombreEntrenamiento"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:text="Entrenamiento Torso Push"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@id/tvFechaSesion"
+            app:layout_constraintStart_toEndOf="@id/ivIconoFecha"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Torso Push" />
+
+        <!-- Contenedor de información adicional -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ivIconoFecha"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Duración -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvDuracion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="⏱️ 45 min"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorPrimary"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tvEjerciciosCompletados"
+                app:layout_constraintHorizontal_weight="1"
+                tools:text="⏱️ 45 min" />
+
+            <!-- Ejercicios completados -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvEjerciciosCompletados"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="✅ 8/8 ejercicios"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorPrimary"
+                android:textAlignment="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvDuracion"
+                app:layout_constraintEnd_toStartOf="@id/tvVolumen"
+                app:layout_constraintHorizontal_weight="1"
+                tools:text="✅ 8/8" />
+
+            <!-- Volumen -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvVolumen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="💪 2,450 kg"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorPrimary"
+                android:textAlignment="textEnd"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvEjerciciosCompletados"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                tools:text="💪 2,450 kg" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+

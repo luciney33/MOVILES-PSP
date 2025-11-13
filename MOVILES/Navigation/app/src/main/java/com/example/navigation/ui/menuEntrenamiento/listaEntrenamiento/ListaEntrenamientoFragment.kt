@@ -1,24 +1,29 @@
-package com.example.navigation.ui.detalleFragment
+package com.example.navigation.ui.menuEntrenamiento.listaEntrenamiento
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.navigation.databinding.FragmentDetalleEntrenamientoBinding
+import com.example.navigation.databinding.FragmentListaEntrenamientoBinding
 
-class DetalleEntrenamientoFragment : Fragment() {
-    private var _binding: FragmentDetalleEntrenamientoBinding? = null
+class ListaEntrenamientoFragment : Fragment() {
+
+    private var _binding: FragmentListaEntrenamientoBinding? = null
     private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentDetalleEntrenamientoBinding.inflate(inflater, container, false)
+        _binding = FragmentListaEntrenamientoBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+
 }

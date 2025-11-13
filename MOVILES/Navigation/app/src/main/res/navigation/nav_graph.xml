@@ -3,40 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/listaEntrenamientoFragment">
+    app:startDestination="@id/home_fragment">
     <fragment
-        android:id="@+id/listaEntrenamientoFragment"
-        android:name="com.example.navigation.ui.listaFragment.ListaEntrenamientoFragment"
-        android:label="fragment_lista_entrenamiento"
-        tools:layout="@layout/fragment_lista_entrenamiento" >
+        android:id="@+id/ListaEntrenamientoFragment"
+        android:name="com.example.navigation.ui.menuEntrenamiento.listaEntrenamiento.ListaEntrenamientoFragment"
+        android:label="ListaEntrenamientoFragment"
+        tools:layout="@layout/fragment_lista_entrenamiento">
         <action
             android:id="@+id/action_listaEntrenamientoFragment_to_detalleEntrenamientoFragment2"
-            app:destination="@id/detalleEntrenamientoFragment" />
+            app:destination="@id/DetalleEntrenamientoFragment" />
         <action
             android:id="@+id/action_listaEntrenamientoFragment_to_sesionEntrenamientoFragment"
-            app:destination="@id/sesionEntrenamientoFragment" />
+            app:destination="@id/SesionEntrenamientoFragment" />
     </fragment>
     <fragment
-        android:id="@+id/detalleEntrenamientoFragment"
-        android:name="com.example.navigation.ui.detalleFragment.DetalleEntrenamientoFragment"
-        android:label="fragment_detalle_entrenamiento"
-        tools:layout="@layout/fragment_detalle_entrenamiento" >
+        android:id="@+id/DetalleEntrenamientoFragment"
+        android:name="com.example.navigation.ui.menuEntrenamiento.detalleEntrenamiento.DetalleEntrenamientoFragment"
+        android:label="DetalleEntrenamientoFragment"
+        tools:layout="@layout/fragment_detalle_entrenamiento">
         <action
             android:id="@+id/action_detalleEntrenamientoFragment_to_listaEntrenamientoFragment"
-            app:destination="@id/listaEntrenamientoFragment" />
+            app:destination="@id/ListaEntrenamientoFragment" />
     </fragment>
     <fragment
-        android:id="@+id/sesionEntrenamientoFragment"
-        android:name="com.example.navigation.ui.sesionFragment.SesionEntrenamientoFragment"
-        android:label="fragment_sesion_entrenamiento"
-        tools:layout="@layout/fragment_sesion_entrenamiento" >
+        android:id="@+id/SesionEntrenamientoFragment"
+        android:name="com.example.navigation.ui.menuEntrenamiento.sesionEntrenamiento.SesionEntrenamientoFragment"
+        android:label="SesionEntrenamientoFragment"
+        tools:layout="@layout/fragment_sesion_entrenamiento">
         <action
             android:id="@+id/action_sesionEntrenamientoFragment_to_listaEntrenamientoFragment"
-            app:destination="@id/listaEntrenamientoFragment" />
+            app:destination="@id/ListaEntrenamientoFragment" />
     </fragment>
     <fragment
         android:id="@+id/ejercicioProgresoFragment"
-        android:name="com.example.navigation.ejercicioProgresoFragment"
+        android:name="com.example.navigation.ui.menuProgreso.ejercicioProgreso.EjercicioProgresoFragment"
         android:label="fragment_ejercicio_progreso"
         tools:layout="@layout/fragment_ejercicio_progreso" >
         <action
@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/registroProgresoFragment"
-        android:name="com.example.navigation.registroProgresoFragment"
+        android:name="com.example.navigation.ui.menuProgreso.registroProgreso.RegistroProgresoFragment"
         android:label="fragment_registro_progreso"
         tools:layout="@layout/fragment_registro_progreso" >
         <action
@@ -57,12 +57,27 @@
     </fragment>
     <fragment
         android:id="@+id/estadisticaProgresoFragment"
-        android:name="com.example.navigation.estadisticaProgresoFragment"
+        android:name="com.example.navigation.ui.menuProgreso.estadisticaProgreso.EstadisticaProgresoFragment"
         android:label="fragment_estadistica_progreso"
         tools:layout="@layout/fragment_estadistica_progreso" >
         <action
             android:id="@+id/action_estadisticaProgresoFragment_to_ejercicioProgresoFragment"
             app:destination="@id/ejercicioProgresoFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/home_fragment"
+        android:name="com.example.navigation.ui.home.HomeFragment"
+        android:label="home_fragment"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/SeleccionarEntrenamientoFragment"
+        android:name="com.example.navigation.ui.menuEntrenamiento.sesionEntrenamiento.SesionEntrenamientoFragment"
+        android:label="SeleccionarEntrenamientoFragment"
+        tools:layout="@layout/fragment_sesion_entrenamiento" />
+    <fragment
+        android:id="@+id/DetalleSesionFragment"
+        android:name="com.example.navigation.ui.sesion.detalleSesion.DetalleSesionFragment"
+        android:label="DetalleSesionFragment"
+        tools:layout="@layout/fragment_detalle_sesion" />
 
 </navigation>

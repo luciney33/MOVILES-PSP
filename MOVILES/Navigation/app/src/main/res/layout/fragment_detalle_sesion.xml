@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
-    tools:context=".ui.menuEntrenamiento.detalleEntrenamiento.DetalleEntrenamientoFragment">
+    tools:context=".ui.sesion.detalleSesion.DetalleSesionFragment">
 
-    <!-- Card con información de la rutina -->
+    <!-- Card con resumen -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardInfo"
+        android:id="@+id/cardResumen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -19,68 +19,67 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- Contenido del card con ConstraintLayout -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">
 
             <!-- Nombre del entrenamiento -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilNombre"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvNombreEntrenamiento"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Nombre de la rutina"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:text="Torso Push"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintEnd_toEndOf="parent" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etNombre"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Descripción -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilDescripcion"
+            <!-- Fecha -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvFecha"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Descripción (opcional)"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                app:layout_constraintTop_toBottomOf="@id/tilNombre"
+                android:layout_marginTop="8dp"
+                android:text="15 de Mayo, 2025"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintTop_toBottomOf="@id/tvNombreEntrenamiento"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Duración -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvDuracion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Duración: 45 minutos"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                app:layout_constraintTop_toBottomOf="@id/tvFecha"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etDescripcion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:maxLines="3" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Título ejercicios -->
+    <!-- Título ejercicios realizados -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvTituloEjercicios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:text="Ejercicios"
+        android:text="Ejercicios Realizados"
         android:textAppearance="?attr/textAppearanceTitleMedium"
         android:textColor="?attr/colorOnSurface"
-        app:layout_constraintTop_toBottomOf="@id/cardInfo"
+        app:layout_constraintTop_toBottomOf="@id/cardResumen"
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- RecyclerView con ejercicios -->
@@ -90,32 +89,20 @@
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:clipToPadding="false"
-        android:paddingBottom="80dp"
+        android:paddingBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_ejercicio_editable"
+        tools:listitem="@layout/item_ejercicio_detalle_sesion"
         app:layout_constraintTop_toBottomOf="@id/tvTituloEjercicios"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- FAB para agregar ejercicio -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAgregarEjercicio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:contentDescription="Agregar ejercicio"
-        app:srcCompat="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Mensaje vacío -->
+    <!-- Estado vacío (opcional) -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvVacio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No hay ejercicios\nToca + para agregar"
-        android:textAlignment="center"
+        android:text="No hay ejercicios registrados"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:visibility="gone"
@@ -125,3 +112,4 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

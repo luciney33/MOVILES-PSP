@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Icono del entrenamiento -->
+        <ImageView
+            android:id="@+id/ivIconoEntrenamiento"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/fitness_center_24dp_1f1f1f_fill0_wght400_grad0_opsz24"
+            android:contentDescription="Icono"
+            app:tint="?attr/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Nombre del entrenamiento -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNombreEntrenamiento"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Entrenamiento Torso"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textColor="?attr/colorOnSurface"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toTopOf="@id/ivIconoEntrenamiento"
+            app:layout_constraintStart_toEndOf="@id/ivIconoEntrenamiento"
+            app:layout_constraintEnd_toStartOf="@id/ivFlecha"
+            tools:text="Torso Push" />
+
+        <!-- Descripción -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvDescripcionEntrenamiento"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:text="Pecho, Hombros, Tríceps"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@id/tvNombreEntrenamiento"
+            app:layout_constraintStart_toEndOf="@id/ivIconoEntrenamiento"
+            app:layout_constraintEnd_toStartOf="@id/ivFlecha"
+            tools:text="Pecho, Hombros" />
+
+        <!-- Número de ejercicios -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNumeroEjercicios"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:text="8 ejercicios · 45 min aprox"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/tvDescripcionEntrenamiento"
+            app:layout_constraintBottom_toBottomOf="@id/ivIconoEntrenamiento"
+            app:layout_constraintStart_toEndOf="@id/ivIconoEntrenamiento"
+            app:layout_constraintEnd_toStartOf="@id/ivFlecha"
+            tools:text="8 ejercicios" />
+
+        <!-- Flecha indicadora -->
+        <ImageView
+            android:id="@+id/ivFlecha"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_media_play"
+            android:rotation="0"
+            android:contentDescription="Seleccionar"
+            app:tint="?attr/colorOnSurfaceVariant"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+

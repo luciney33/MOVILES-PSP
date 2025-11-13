@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Nombre del ejercicio -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNombreEjercicio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Press Banca"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="?attr/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Press Banca" />
+
+        <!-- Series realizadas (texto simple o RecyclerView si es dinámico) -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvSeries"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Serie 1: 80kg × 10 reps\nSerie 2: 80kg × 9 reps\nSerie 3: 80kg × 8 reps\nSerie 4: 82.5kg × 8 reps"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintTop_toBottomOf="@id/tvNombreEjercicio"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Serie 1: 80kg × 10\nSerie 2: 80kg × 9" />
+
+        <!-- Volumen total del ejercicio -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvVolumenTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Volumen total: 2,850 kg"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorSecondary"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/tvSeries"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="Volumen: 2,850 kg" />
+
+        <!-- Mejora respecto a última vez (opcional) -->
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipMejora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+2.5kg"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            app:chipBackgroundColor="@android:color/holo_green_light"
+            app:chipIcon="@android:drawable/arrow_up_float"
+            style="@style/Widget.Material3.Chip.Assist"
+            app:layout_constraintTop_toTopOf="@id/tvVolumenTotal"
+            app:layout_constraintBottom_toBottomOf="@id/tvVolumenTotal"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="+2.5kg" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

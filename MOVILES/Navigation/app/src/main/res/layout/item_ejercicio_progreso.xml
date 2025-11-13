@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Icono del ejercicio -->
+        <ImageView
+            android:id="@+id/ivIconoEjercicio"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/fitness_center_24dp_1f1f1f_fill0_wght400_grad0_opsz24"
+            android:contentDescription="Ejercicio"
+            app:tint="?attr/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Nombre del ejercicio -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNombreEjercicio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Press Banca"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="?attr/colorOnSurface"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toTopOf="@id/ivIconoEjercicio"
+            app:layout_constraintStart_toEndOf="@id/ivIconoEjercicio"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Press Banca" />
+
+        <!-- Grupo muscular -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvGrupoMuscular"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Pecho"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintTop_toBottomOf="@id/tvNombreEjercicio"
+            app:layout_constraintBottom_toBottomOf="@id/ivIconoEjercicio"
+            app:layout_constraintStart_toEndOf="@id/ivIconoEjercicio"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Pecho" />
+
+        <!-- Último registro -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvUltimo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Último:"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintTop_toBottomOf="@id/ivIconoEjercicio"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvUltimoPeso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="80kg × 10 reps"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/tvUltimo"
+            app:layout_constraintStart_toEndOf="@id/tvUltimo"
+            tools:text="80kg × 10" />
+
+        <!-- Record personal -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvRecordLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="RM:"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintTop_toBottomOf="@id/tvUltimo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="85kg × 8 reps"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorSecondary"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/tvRecordLabel"
+            app:layout_constraintStart_toEndOf="@id/tvRecordLabel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="85kg × 8" />
+
+        <!-- Indicador de tendencia -->
+        <ImageView
+            android:id="@+id/ivTendencia"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/arrow_up_float"
+            android:contentDescription="Tendencia"
+            app:tint="@android:color/holo_green_dark"
+            app:layout_constraintTop_toBottomOf="@id/ivIconoEjercicio"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

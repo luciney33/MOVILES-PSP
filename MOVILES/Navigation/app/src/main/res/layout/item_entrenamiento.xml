@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Icono del entrenamiento -->
+        <ImageView
+            android:id="@+id/ivIconoEntrenamiento"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/fitness_center_24dp_1f1f1f_fill0_wght400_grad0_opsz24"
+            android:contentDescription="Icono"
+            app:tint="?attr/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Nombre del entrenamiento -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNombreEntrenamiento"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Entrenamiento Torso"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="?attr/colorOnSurface"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toTopOf="@id/ivIconoEntrenamiento"
+            app:layout_constraintStart_toEndOf="@id/ivIconoEntrenamiento"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Torso Push" />
+
+        <!-- Descripción -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvDescripcionEntrenamiento"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:text="Pecho, Hombros, Tríceps"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@id/tvNombreEntrenamiento"
+            app:layout_constraintStart_toEndOf="@id/ivIconoEntrenamiento"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Pecho, Hombros" />
+
+        <!-- Número de ejercicios -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNumeroEjercicios"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="8 ejercicios"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorPrimary"
+            android:drawablePadding="4dp"
+            app:drawableStartCompat="@android:drawable/ic_menu_agenda"
+            app:drawableTint="?attr/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/ivIconoEntrenamiento"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="8 ejercicios" />
+
+        <!-- Última vez realizado -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvUltimaVez"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Hace 2 días"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:drawablePadding="4dp"
+            app:drawableStartCompat="@android:drawable/ic_menu_recent_history"
+            app:drawableTint="?attr/colorOnSurfaceVariant"
+            app:layout_constraintTop_toTopOf="@id/tvNumeroEjercicios"
+            app:layout_constraintStart_toEndOf="@id/tvNumeroEjercicios"
+            tools:text="Hace 2 días" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

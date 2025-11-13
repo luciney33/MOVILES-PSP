@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Handle para drag (opcional) -->
+        <ImageView
+            android:id="@+id/ivHandle"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_sort_by_size"
+            android:contentDescription="Reordenar"
+            app:tint="?attr/colorOnSurfaceVariant"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Nombre del ejercicio -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNombreEjercicio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Press Banca"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="?attr/colorOnSurface"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toTopOf="@id/ivHandle"
+            app:layout_constraintBottom_toBottomOf="@id/ivHandle"
+            app:layout_constraintStart_toEndOf="@id/ivHandle"
+            app:layout_constraintEnd_toStartOf="@id/btnEliminar"
+            tools:text="Press Banca" />
+
+        <!-- Botón eliminar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEliminar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:icon="@android:drawable/ic_delete"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            style="@style/Widget.Material3.Button.TextButton"
+            app:iconTint="?attr/colorError"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Series -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSeries"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
+            android:hint="Series"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+            app:layout_constraintTop_toBottomOf="@id/ivHandle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tilRepeticiones"
+            app:layout_constraintHorizontal_weight="1">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSeries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLines="1"
+                tools:text="4" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Repeticiones -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRepeticiones"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="8dp"
+            android:hint="Reps"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+            app:layout_constraintTop_toBottomOf="@id/ivHandle"
+            app:layout_constraintStart_toEndOf="@id/tilSeries"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRepeticiones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                tools:text="8-10" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+

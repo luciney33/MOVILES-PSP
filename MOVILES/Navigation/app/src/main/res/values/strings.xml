@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">Navigation</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="Bienvenida">Bienvenido a la App</string>
+    <string name="txtMenu">Selecciona una opción del menú</string>
+    <string name="tituloMenu1">Entrenamientos</string>
+    <string name="tituloMenu2">Progreso</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="titHome">PowerTrack-Fit</string>
+    <string name="iniciarHome">INICIAR ENTRENAMIENTO</string>
+    <string name="historialHome">Historial de Sesiones</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.navigation.ui.sesionFragment
+package com.example.navigation.ui.menuEntrenamiento.sesionEntrenamiento
 
 import android.os.Bundle
 import android.view.LayoutInflater
