@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.navigation.databinding.FragmentSesionEntrenamientoBinding
 
+
 class SesionEntrenamientoFragment : Fragment() {
     private var _binding: FragmentSesionEntrenamientoBinding? = null
     private val binding get() = _binding!!

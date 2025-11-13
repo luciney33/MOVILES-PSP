@@ -5,16 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.navigation.R
+import com.example.navigation.databinding.FragmentSeleccionarEntrenamientoBinding
 
 class SeleccionarEntrenamientoFragment : Fragment() {
+
+    private var _binding: FragmentSeleccionarEntrenamientoBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_seleccionar_entrenamiento, container, false)
+        _binding = FragmentSeleccionarEntrenamientoBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 }
