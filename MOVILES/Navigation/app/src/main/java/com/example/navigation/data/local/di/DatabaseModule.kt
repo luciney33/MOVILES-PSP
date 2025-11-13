@@ -26,7 +26,13 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideMEhaceisputocasoDao(database: AppDatabase) = database.alumnoDao()
+    fun provideEntrenamiento(database: AppDatabase) = database.entrenamientoDao()
+
+    @Provides
+    fun provideEntrenamientoEjercicio(database: AppDatabase) = database.entrenamientoEjercicioDao()
+
+    @Provides
+    fun provideEjercicio(database: AppDatabase) = database.ejercicioDao()
 
 
 }
