@@ -2,8 +2,11 @@ package org.example.springdemo.data.mapper;
 
 import org.example.springdemo.data.entity.UsuarioEntity;
 import org.example.springdemo.domain.model.Usuario;
+import org.springframework.stereotype.Component;
 
-public class UsuarioMapper {
+@Component
+public class UsuarioMapDomain {
+
     public Usuario toDomain(UsuarioEntity entity) {
         if (entity == null) return null;
         return new Usuario(

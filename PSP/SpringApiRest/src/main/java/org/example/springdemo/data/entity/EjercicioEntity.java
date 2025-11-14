@@ -1,27 +1,14 @@
 package org.example.springdemo.data.entity;
 
-import jakarta.persistence.*;
 
-@Entity
-@Table(name = "ejercicios")
+
 public class EjercicioEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "entrenamiento_id", nullable = false)
     private EntrenamientoEntity entrenamiento;
-
-    @Column(nullable = false)
     private String nombre;
-
-    @Column
     private Integer repeticiones;
-
-    @Column
     private Integer series;
+
 
     public EjercicioEntity() {}
 

@@ -1,4 +1,4 @@
 package org.example.springdemo.data.repository;
 
-public interface EntrenamientoRepository {
+public interface EjercicioRepository {
 }

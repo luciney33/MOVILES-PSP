@@ -2,8 +2,10 @@ package org.example.springdemo.data.mapper;
 
 import org.example.springdemo.data.entity.EntrenamientoEntity;
 import org.example.springdemo.domain.model.Entrenamiento;
+import org.springframework.stereotype.Component;
 
-public class EntrenamientoMapper {
+@Component
+public class EntrenamientoMapDomain {
     public Entrenamiento toDomain(EntrenamientoEntity entity) {
         if (entity == null) return null;
         return new Entrenamiento(

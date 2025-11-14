@@ -1,28 +1,13 @@
 package org.example.springdemo.data.entity;
-
-import jakarta.persistence.*;
-
 import java.util.List;
 
-@Entity
-@Table(name = "entrenamientos")
 public class EntrenamientoEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private Long userId;
-
-    @Column(nullable = false)
     private String nombre;
-
-    @Column
     private String descripcion;
-
-    @OneToMany(mappedBy = "entrenamiento", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<EjercicioEntity> ejercicios;
+
 
     public EntrenamientoEntity() {}
 
