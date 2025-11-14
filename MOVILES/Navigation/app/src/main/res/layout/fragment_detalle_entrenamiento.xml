@@ -98,15 +98,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- FAB para agregar ejercicio -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAgregarEjercicio"
-        android:layout_width="wrap_content"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGuardar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="@string/Actualizar"
+        android:textSize="16sp"
+        android:paddingVertical="16dp"
         android:layout_margin="16dp"
-        android:contentDescription="Agregar ejercicio"
-        app:srcCompat="@android:drawable/ic_input_add"
+        style="@style/Widget.Material3.Button"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Mensaje vacío -->

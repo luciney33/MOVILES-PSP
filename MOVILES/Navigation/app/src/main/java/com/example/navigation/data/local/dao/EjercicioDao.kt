@@ -21,22 +21,22 @@ interface EjercicioDao {
     suspend fun delete(ejercicio: EjercicioEntity)
 
     @Query("SELECT * FROM ejercicios ORDER BY nombre ASC")
-    fun getAllEjerciciosLive(): LiveData<List<EjercicioEntity>>
+    fun getAllEjerciciosLive(): List<EjercicioEntity>
 
     @Query("SELECT * FROM ejercicios ORDER BY nombre ASC")
     suspend fun getAllEjercicios(): List<EjercicioEntity>
 
     @Query("SELECT * FROM EJERCICIOS WHERE id = :id")
-    fun getEjercicioById(id: Int): LiveData<EjercicioEntity>
+    fun getEjercicioById(id: Int): EjercicioEntity
 
 
     @Query("SELECT * FROM ejercicios WHERE grupoMuscular = :grupo ORDER BY nombre ASC")
-    fun getByGrupoMuscularLive(grupo: String): LiveData<List<EjercicioEntity>>
+    fun getByGrupoMuscularLive(grupo: String): List<EjercicioEntity>
 
     @Query("SELECT COUNT(*) FROM ejercicios")
-    fun getTotalEjercicios(): LiveData<Int>
+    fun getTotalEjercicios(): Int
 
     @Query("SELECT grupoMuscular, COUNT(*) as cantidad FROM ejercicios GROUP BY grupoMuscular")
-    fun getEjerciciosPorGrupo(): LiveData<List<GrupoMuscularEstadistica>>
+    fun getEjerciciosPorGrupo(): List<GrupoMuscularEstadistica>
 
 }

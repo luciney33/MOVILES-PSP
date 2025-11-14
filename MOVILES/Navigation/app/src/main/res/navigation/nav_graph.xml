@@ -10,9 +10,6 @@
         android:label="listaEntrenamientoFragment"
         tools:layout="@layout/fragment_lista_entrenamiento">
         <action
-            android:id="@+id/action_listaEntrenamientoFragment_to_detalleEntrenamientoFragment2"
-            app:destination="@id/detalleEntrenamientoFragment" />
-        <action
             android:id="@+id/action_listaEntrenamientoFragment_to_sesionEntrenamientoFragment"
             app:destination="@id/sesionEntrenamientoFragment" />
     </fragment>
@@ -22,8 +19,8 @@
         android:label="detalleEntrenamientoFragment"
         tools:layout="@layout/fragment_detalle_entrenamiento">
         <action
-            android:id="@+id/action_detalleEntrenamientoFragment_to_listaEntrenamientoFragment"
-            app:destination="@id/listaEntrenamientoFragment" />
+            android:id="@+id/action_detalleEntrenamientoFragment_to_sesionEntrenamientoFragment2"
+            app:destination="@id/sesionEntrenamientoFragment" />
     </fragment>
     <fragment
         android:id="@+id/sesionEntrenamientoFragment"
@@ -33,6 +30,9 @@
         <action
             android:id="@+id/action_sesionEntrenamientoFragment_to_listaEntrenamientoFragment"
             app:destination="@id/listaEntrenamientoFragment" />
+        <action
+            android:id="@+id/action_sesionEntrenamientoFragment_to_detalleEntrenamientoFragment2"
+            app:destination="@id/detalleEntrenamientoFragment" />
     </fragment>
     <fragment
         android:id="@+id/ejercicioProgresoFragment"
@@ -69,11 +69,6 @@
         android:name="com.example.navigation.ui.home.HomeFragment"
         android:label="home_fragment"
         tools:layout="@layout/fragment_home" />
-    <fragment
-        android:id="@+id/seleccionarEntrenamientoFragment"
-        android:name="com.example.navigation.ui.menuEntrenamiento.sesionEntrenamiento.SesionEntrenamientoFragment"
-        android:label="seleccionarEntrenamientoFragment"
-        tools:layout="@layout/fragment_sesion_entrenamiento" />
     <fragment
         android:id="@+id/detalleSesionFragment"
         android:name="com.example.navigation.ui.sesion.detalleSesion.DetalleSesionFragment"

@@ -7,7 +7,6 @@
     android:background="?attr/colorSurface"
     tools:context=".ui.home.HomeFragment">
 
-    <!-- Título principal -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvTitulo"
         android:layout_width="wrap_content"
@@ -21,22 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Botón principal: Iniciar Entrenamiento -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnIniciarSesion"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="INICIAR ENTRENAMIENTO"
-        android:textSize="18sp"
-        android:paddingVertical="16dp"
-        android:layout_margin="24dp"
-        app:icon="@drawable/fitness_center_24dp_1f1f1f_fill0_wght400_grad0_opsz24"
-        app:iconGravity="textStart"
-        style="@style/Widget.Material3.Button.ElevatedButton"
-        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <!-- Título del historial -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvHistorialTitulo"
@@ -46,7 +29,7 @@
         android:textAppearance="?attr/textAppearanceTitleLarge"
         android:textColor="?attr/colorOnSurface"
         android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/btnIniciarSesion"
+        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- RecyclerView para historial -->
@@ -64,7 +47,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Mensaje cuando no hay historial -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvHistorialVacio"
         android:layout_width="wrap_content"
@@ -78,6 +60,7 @@
         app:layout_constraintBottom_toBottomOf="@id/rvHistorialSesiones"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

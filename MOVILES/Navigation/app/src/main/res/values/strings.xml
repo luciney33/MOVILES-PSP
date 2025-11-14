@@ -9,4 +9,5 @@
     <string name="titHome">PowerTrack-Fit</string>
     <string name="iniciarHome">INICIAR ENTRENAMIENTO</string>
     <string name="historialHome">Historial de Sesiones</string>
+    <string name="Actualizar">Actualizar Ejercicio</string>
 </resources>

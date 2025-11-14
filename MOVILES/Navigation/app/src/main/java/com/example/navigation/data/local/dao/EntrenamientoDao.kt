@@ -24,24 +24,24 @@ interface EntrenamientoDao {
     suspend fun delete(entrenamiento: EntrenamientoEntity)
     @Transaction
     @Query("SELECT * FROM entrenamientos WHERE id = :id")
-    fun getEntrenamientoConEjercicios(id: Int):  LiveData<EntrenamientoConEjercicios>
+    fun getEntrenamientoConEjercicios(id: Int):  EntrenamientoConEjercicios
 
     @Query("SELECT * FROM entrenamientos")
-    fun getAllLive() : LiveData<List<EntrenamientoEntity>>
+    fun getAllLive() : List<EntrenamientoEntity>
 
     @Query("SELECT * FROM entrenamientos")
     suspend fun getAll() : List<EntrenamientoEntity>
 
     @Query("SELECT * FROM entrenamientos WHERE id = :id")
-    fun getEntrenamientoById(id: Int): LiveData<EntrenamientoEntity>
+    fun getEntrenamientoById(id: Int): EntrenamientoEntity
 
     @Transaction
     @Query("SELECT * FROM entrenamientos ORDER BY ultimaActualizacion DESC")
-    fun getAllConEjercicios(): LiveData<List<EntrenamientoConEjercicios>>
+    fun getAllConEjercicios(): List<EntrenamientoConEjercicios>
 
     @Query("SELECT COUNT(*) FROM entrenamientos")
-    fun getTotalEntrenamientos(): LiveData<Int>
+    fun getTotalEntrenamientos(): Int
 
     @Query("SELECT * FROM entrenamientos ORDER BY ultimaActualizacion DESC LIMIT 5")
-    fun getEntrenamientosRecientes(): LiveData<List<EntrenamientoEntity>>
+    fun getEntrenamientosRecientes(): List<EntrenamientoEntity>
 }

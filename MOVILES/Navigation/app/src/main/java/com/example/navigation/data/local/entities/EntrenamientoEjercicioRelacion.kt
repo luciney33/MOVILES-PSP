@@ -20,8 +20,7 @@ import androidx.room.Index
             childColumns = ["ejercicioId"],
             onDelete = ForeignKey.CASCADE
         )
-    ],
-    indices = [Index("ejercicioId"), Index("entrenamientoId")]
+    ]
 )
 data class EntrenamientoEjercicioRelacion(
     val entrenamientoId: Int,

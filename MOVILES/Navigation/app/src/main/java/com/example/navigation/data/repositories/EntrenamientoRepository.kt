@@ -14,9 +14,4 @@ class EntrenamientoRepository @Inject constructor(
         return entrenamientoDao.getAll().map { it.toEntrenamiento() }
     }
 
-    fun getEntrenamientosLiveData(): LiveData<List<Entrenamiento>> {
-        return entrenamientoDao.getAllLive().map { list ->
-            list.map { it.toEntrenamiento() }
-        }
-    }
 }
