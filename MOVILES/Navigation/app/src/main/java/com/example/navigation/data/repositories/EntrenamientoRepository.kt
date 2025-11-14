@@ -1,10 +1,11 @@
 package com.example.navigation.data.repositories
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
+
 import com.example.navigation.data.local.dao.EntrenamientoDao
-import com.example.navigation.data.local.entities.toEntrenamiento
+import com.example.navigation.data.local.entities.mappers.toDomain
+import com.example.navigation.data.local.entities.mappers.toEntrenamiento
 import com.example.navigation.domain.model.Entrenamiento
+import com.example.navigation.domain.model.EntrenamientoConEjercicios
 import jakarta.inject.Inject
 
 class EntrenamientoRepository @Inject constructor(
@@ -13,5 +14,7 @@ class EntrenamientoRepository @Inject constructor(
     suspend fun getEntrenamientos(): List<Entrenamiento> {
         return entrenamientoDao.getAll().map { it.toEntrenamiento() }
     }
-
+     fun getAllConEjercicios(): List<EntrenamientoConEjercicios>{
+        return entrenamientoDao.getAllConEjercicios().map { it.toDomain() }
+    }
 }

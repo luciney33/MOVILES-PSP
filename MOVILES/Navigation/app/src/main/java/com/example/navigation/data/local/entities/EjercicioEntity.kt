@@ -14,18 +14,3 @@ data class EjercicioEntity(
     val grupoMuscular: String,
 )
 
-fun EjercicioEntity.toEjercicio(): Ejercicio {
-    return Ejercicio(
-        id = this.id,
-        nombre = this.nombre,
-        grupoMuscular = this.grupoMuscular
-    )
-}
-
-fun Ejercicio.toEjercicioEntity(): EjercicioEntity {
-    return EjercicioEntity(
-        id = this.id,
-        nombre = this.nombre,
-        grupoMuscular = this.grupoMuscular
-    )
-}

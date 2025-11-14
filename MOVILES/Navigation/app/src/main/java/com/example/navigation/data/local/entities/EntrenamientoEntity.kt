@@ -14,15 +14,3 @@ data class EntrenamientoEntity(
     val descripcion: String,
     val ultimaActualizacion: Long? = null
 )
-
-fun EntrenamientoEntity.toEntrenamiento() = Entrenamiento(
-    id = this.id,
-    nombre = this.nombre,
-    descripcion = this.descripcion,
-)
-
-fun Entrenamiento.toEntrenamientoEntity() = EntrenamientoEntity(
-    id = this.id,
-    nombre = this.nombre,
-    descripcion = this.descripcion,
-)

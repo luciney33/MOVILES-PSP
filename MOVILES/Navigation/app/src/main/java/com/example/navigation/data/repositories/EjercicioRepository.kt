@@ -8,6 +8,7 @@ import jakarta.inject.Inject
 
 class EjercicioRepository@Inject constructor(
     private val ejercicioDao : EjercicioDao
+
 ) {
     suspend fun getAllEjercicios() : List<Ejercicio>{
         return ejercicioDao.getAllEjercicios().map { it.toEjercicio() }

@@ -1,15 +1,13 @@
 package com.example.navigation.data.local.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.example.navigation.data.local.entities.EntrenamientoConEjercicios
+import com.example.navigation.data.local.entities.EntrenamientoConEjerciciosEntity
 import com.example.navigation.data.local.entities.EntrenamientoEntity
-import com.example.navigation.domain.model.Entrenamiento
 
 @Dao
 interface EntrenamientoDao {
@@ -24,7 +22,7 @@ interface EntrenamientoDao {
     suspend fun delete(entrenamiento: EntrenamientoEntity)
     @Transaction
     @Query("SELECT * FROM entrenamientos WHERE id = :id")
-    fun getEntrenamientoConEjercicios(id: Int):  EntrenamientoConEjercicios
+    fun getEntrenamientoConEjercicios(id: Int):  EntrenamientoConEjerciciosEntity
 
     @Query("SELECT * FROM entrenamientos")
     fun getAllLive() : List<EntrenamientoEntity>
@@ -37,7 +35,7 @@ interface EntrenamientoDao {
 
     @Transaction
     @Query("SELECT * FROM entrenamientos ORDER BY ultimaActualizacion DESC")
-    fun getAllConEjercicios(): List<EntrenamientoConEjercicios>
+    fun getAllConEjercicios(): List<EntrenamientoConEjerciciosEntity>
 
     @Query("SELECT COUNT(*) FROM entrenamientos")
     fun getTotalEntrenamientos(): Int

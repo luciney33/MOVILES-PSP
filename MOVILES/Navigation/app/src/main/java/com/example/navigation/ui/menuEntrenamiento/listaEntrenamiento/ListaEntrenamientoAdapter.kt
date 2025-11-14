@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.navigation.databinding.ItemEntrenamientoBinding
 import com.example.navigation.domain.model.Entrenamiento
+import com.example.navigation.domain.model.EntrenamientoConEjercicios
 
 class ListaEntrenamientoAdapter : RecyclerView.Adapter<ListaEntrenamientoAdapter.ListaEntrenamientoHolder>() {
 
@@ -31,10 +32,11 @@ class ListaEntrenamientoAdapter : RecyclerView.Adapter<ListaEntrenamientoAdapter
     class ListaEntrenamientoHolder(private val binding: ItemEntrenamientoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(entrenamiento: Entrenamiento) {
+        fun bind(entrenamiento: Entrenamiento, entrenamientoConEjercicios: EntrenamientoConEjercicios) {
             binding.tvNombreEntrenamiento.text = "${entrenamiento.nombre}"
             binding.tvDescripcionEntrenamiento.text = "${entrenamiento.descripcion}"
-
+            binding.tvNumeroEjercicios.text = "${entrenamientoConEjercicios.ejercicios.size}"
+            binding.tvUltimaVez.text
         }
     }
 }
