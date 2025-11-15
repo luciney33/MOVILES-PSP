@@ -1,8 +1,8 @@
 package org.example.springdemo.domain.model;
 
 public record Ejercicio(
-        Long id,
-        Long entrenamientoId,
+        int id,
+        int entrenamientoId,
         String nombre,
         Integer repeticiones,
         Integer series

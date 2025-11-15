@@ -1,7 +1,7 @@
 package org.example.springdemo.ui.dto;
 
 public record UsuarioDTO(
-        Long id,
+        int id,
         String username,
         String email,
         String nombre,

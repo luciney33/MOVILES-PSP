@@ -12,21 +12,21 @@ public class EjercicioMapDomain {
         if (entity == null) return null;
         return new Ejercicio(
                 entity.getId(),
-                entity.getEntrenamiento().getId(),
+                entity.getEntrenamientoId(),
                 entity.getNombre(),
                 entity.getRepeticiones(),
                 entity.getSeries()
         );
     }
 
-    public EjercicioEntity toEntity(Ejercicio domain, EntrenamientoEntity entrenamientoEntity) {
+    public EjercicioEntity toEntity(Ejercicio domain) {
         if (domain == null) return null;
         EjercicioEntity entity = new EjercicioEntity();
         entity.setId(domain.id());
+        entity.setEntrenamientoId(domain.entrenamientoId());
         entity.setNombre(domain.nombre());
         entity.setRepeticiones(domain.repeticiones());
         entity.setSeries(domain.series());
-        entity.setEntrenamiento(entrenamientoEntity);
         return entity;
     }
 }

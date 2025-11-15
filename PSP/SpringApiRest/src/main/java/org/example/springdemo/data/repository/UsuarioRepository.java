@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface UsuarioRepository {
     List<UsuarioEntity> getAll();
-    UsuarioEntity getById(Long id);
+    UsuarioEntity getById(int id);
     UsuarioEntity getByUsername(String username);
-    Long save(UsuarioEntity usuario);
+    int save(UsuarioEntity usuario);
     void update(UsuarioEntity usuario);
-    boolean delete(Long id);
+    boolean delete(int id);
 }

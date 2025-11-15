@@ -1,12 +1,14 @@
 package org.example.springdemo.ui.dto;
 
+import org.example.springdemo.domain.model.Ejercicio;
+
 import java.util.List;
 
 public record EntrenamientoDTO(
-        Long id,
-        Long userId,
+        int id,
+        int usuarioId,
         String nombre,
         String descripcion,
-        List<EjercicioDTO> ejercicios
+        List<Ejercicio> ejercicios
 ) {
 }

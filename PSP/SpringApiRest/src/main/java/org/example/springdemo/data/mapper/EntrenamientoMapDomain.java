@@ -10,7 +10,7 @@ public class EntrenamientoMapDomain {
         if (entity == null) return null;
         return new Entrenamiento(
                 entity.getId(),
-                entity.getUserId(),
+                entity.getUsuarioId(),
                 entity.getNombre(),
                 entity.getDescripcion()
         );
@@ -20,7 +20,7 @@ public class EntrenamientoMapDomain {
         if (domain == null) return null;
         EntrenamientoEntity entity = new EntrenamientoEntity();
         entity.setId(domain.id());
-        entity.setUserId(domain.userId());
+        entity.setUsuarioId(domain.usuarioId());
         entity.setNombre(domain.nombre());
         entity.setDescripcion(domain.descripcion());
         return entity;

@@ -1,8 +1,8 @@
 package org.example.springdemo.domain.model;
 
 public record Entrenamiento(
-        Long id,
-        Long userId,
+        int id,
+        int usuarioId,
         String nombre,
         String descripcion) {
 }

@@ -9,8 +9,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,13 +18,34 @@ import java.util.Objects;
 @Repository
 public class SpringUsuarioRepository implements UsuarioRepository {
     private final UsuarioRowMap usuarioRowMap;
+    private final PasswordEncoder passwordEncoder;
+    private final JdbcClient jdbcClient;
 
-    public SpringUsuarioRepository(UsuarioRowMap usuarioRowMap) {
+
+
+    public SpringUsuarioRepository(UsuarioRowMap usuarioRowMap, PasswordEncoder passwordEncoder, JdbcClient jdbcClient) {
         this.usuarioRowMap = usuarioRowMap;
+        this.passwordEncoder = passwordEncoder;
+        this.jdbcClient = jdbcClient;
+
+        saveWithPlainPassword("admin", "admin123", "admin@gmail.com", "Admin", "ADMIN");
+        saveWithPlainPassword("user", "user123", "user@gmail.com", "Usuario Normal", "USER");
     }
 
-    @Autowired
-    private JdbcClient jdbcClient;
+    private void saveWithPlainPassword(String username, String plainPassword, String email, String nombre, String rol) {
+        String hashedPassword = passwordEncoder.encode(plainPassword);
+
+        UsuarioEntity entity = new UsuarioEntity();
+        entity.setUsername(username);
+        entity.setPassword(hashedPassword);
+        entity.setEmail(email);
+        entity.setNombre(nombre);
+        entity.setRol(rol);
+
+        save(entity);
+    }
+
+
 
 
     @Override
@@ -36,7 +57,7 @@ public class SpringUsuarioRepository implements UsuarioRepository {
     }
 
     @Override
-    public UsuarioEntity getById(Long id) {
+    public UsuarioEntity getById(int id) {
         String sql = "SELECT * FROM usuario WHERE id = ?";
         return jdbcClient.sql(sql)
                 .param(1, id)
@@ -56,8 +77,7 @@ public class SpringUsuarioRepository implements UsuarioRepository {
     }
 
     @Override
-    @Transactional
-    public Long save(UsuarioEntity usuario) {
+    public int save(UsuarioEntity usuario) {
         String sql = "INSERT INTO usuario(username,password,email,nombre,rol) VALUES(?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcClient.sql(sql)
@@ -67,7 +87,7 @@ public class SpringUsuarioRepository implements UsuarioRepository {
                 .param(4, usuario.getNombre())
                 .param(5, usuario.getRol())
                 .update(keyHolder);
-        return Objects.requireNonNull(keyHolder.getKey(), "Key was not generated").longValue();
+        return Objects.requireNonNull(keyHolder.getKey(), "Key was not generated").intValue();
     }
 
     @Override
@@ -79,23 +99,13 @@ public class SpringUsuarioRepository implements UsuarioRepository {
                 .param(3, usuario.getEmail())
                 .param(4, usuario.getNombre())
                 .param(5, usuario.getRol())
+                .param(6, usuario.getId())
                 .update();
     }
 
     @Override
-    @Transactional
-    public boolean delete(Long id) {
+    public boolean delete(int id) {
         try {
-            // Primero eliminar objetos asociados
-            jdbcClient.sql("DELETE FROM ejercicio WHERE entrenamiento_id IN (SELECT id FROM entrenamiento WHERE user_id = ?)")
-                    .param(1, id)
-                    .update();
-
-            jdbcClient.sql("DELETE FROM entrenamiento WHERE user_id = ?")
-                    .param(1, id)
-                    .update();
-
-            // Finalmente eliminar el usuario
             int result = jdbcClient.sql("DELETE FROM usuario WHERE id=?")
                     .param(1, id)
                     .update();

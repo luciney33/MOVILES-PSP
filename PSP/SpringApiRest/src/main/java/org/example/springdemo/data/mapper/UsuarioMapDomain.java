@@ -23,7 +23,6 @@ public class UsuarioMapDomain {
         UsuarioEntity entity = new UsuarioEntity();
         entity.setId(domain.id());
         entity.setUsername(domain.username());
-        // NOTA: Password no se pasa desde domain → se gestiona en DTO / Service
         entity.setEmail(domain.email());
         entity.setNombre(domain.nombre());
         entity.setRol(domain.rol());
