@@ -1,11 +1,13 @@
 package org.example.springdemo.ui.service;
 
 import jakarta.servlet.http.HttpSession;
+import org.example.springdemo.common.constantes;
 import org.example.springdemo.data.entity.EjercicioEntity;
 import org.example.springdemo.data.entity.EntrenamientoEntity;
 import org.example.springdemo.data.mapper.EjercicioMapDomain;
 import org.example.springdemo.data.repository.EjercicioRepository;
 import org.example.springdemo.data.repository.EntrenamientoRepository;
+import org.example.springdemo.data.utilities.Queries;
 import org.example.springdemo.domain.model.Ejercicio;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,14 @@ public class EjercicioService {
         this.ejercicioMapper = ejercicioMapper;
         this.usuarioService = usuarioService;
     }
+    public boolean isAuthenticated(HttpSession session) {
+        return usuarioService.isAuthenticated(session);
+    }
+
+    public boolean isAdmin(HttpSession session) {
+        return usuarioService.isAdmin(session);
+    }
+
 
     public List<Ejercicio> getAll(HttpSession session) {
         if (usuarioService.isAdmin(session)) {
@@ -38,8 +48,7 @@ public class EjercicioService {
                     .map(ejercicioMapper::toDomain)
                     .collect(Collectors.toList());
         } else {
-            int usuarioId = (int) session.getAttribute("usuarioId");
-            // Solo ejercicios de los entrenamientos del usuario
+                int usuarioId = (int) session.getAttribute(constantes.SESSION_USUARIO_ID);
             return entrenamientoRepository.getByUsuarioId(usuarioId).stream()
                     .flatMap(ent -> ejercicioRepository.getByEntrenamientoId(ent.getId()).stream())
                     .map(ejercicioMapper::toDomain)
@@ -55,7 +64,7 @@ public class EjercicioService {
             return Optional.of(ejercicioMapper.toDomain(entity));
         }
 
-        int usuarioId = (int) session.getAttribute("usuarioId");
+        int usuarioId = (int) session.getAttribute(constantes.SESSION_USUARIO_ID);
         EntrenamientoEntity entrenamiento = entrenamientoRepository.getById(entity.getEntrenamientoId());
         if (entrenamiento != null && entrenamiento.getUsuarioId() == usuarioId) {
             return Optional.of(ejercicioMapper.toDomain(entity));
@@ -67,7 +76,7 @@ public class EjercicioService {
     @Transactional
     public Ejercicio save(Ejercicio ejercicio, HttpSession session) {
         if (!usuarioService.isAdmin(session)) {
-            throw new RuntimeException("No tiene permisos para crear ejercicio");
+            throw new RuntimeException(constantes.MSG_NO_PERM_CREAR_EJERCICIO);
         }
         EjercicioEntity entity = ejercicioMapper.toEntity(ejercicio);
         int id = ejercicioRepository.save(entity);
@@ -78,7 +87,7 @@ public class EjercicioService {
     @Transactional
     public void update(Ejercicio ejercicio, HttpSession session) {
         if (!usuarioService.isAdmin(session)) {
-            throw new RuntimeException("No tiene permisos para actualizar ejercicio");
+            throw new RuntimeException(constantes.MSG_NO_PERM_ACTUALIZAR_EJERCICIO);
         }
         ejercicioRepository.update(ejercicioMapper.toEntity(ejercicio));
     }
@@ -92,7 +101,7 @@ public class EjercicioService {
             return ejercicioRepository.delete(id);
         }
 
-        int usuarioId = (int) session.getAttribute("usuarioId");
+        int usuarioId = (int) session.getAttribute(constantes.SESSION_USUARIO_ID);
         EntrenamientoEntity entrenamiento = entrenamientoRepository.getById(entity.getEntrenamientoId());
         if (entrenamiento != null && entrenamiento.getUsuarioId() == usuarioId) {
             return ejercicioRepository.delete(id);

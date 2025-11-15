@@ -1,6 +1,7 @@
 package org.example.springdemo.ui.service;
 
 import jakarta.servlet.http.HttpSession;
+import org.example.springdemo.common.constantes;
 import org.example.springdemo.data.entity.EntrenamientoEntity;
 import org.example.springdemo.data.mapper.EntrenamientoMapDomain;
 import org.example.springdemo.data.repository.EjercicioRepository;
@@ -30,6 +31,14 @@ public class EntrenamientoService {
         this.usuarioService = usuarioService;
     }
 
+    public boolean isAuthenticated(HttpSession session) {
+        return usuarioService.isAuthenticated(session);
+    }
+
+    public boolean isAdmin(HttpSession session) {
+        return usuarioService.isAdmin(session);
+    }
+
     public List<Entrenamiento> getAll(HttpSession session) {
         if (usuarioService.isAdmin(session)) {
             return entrenamientoRepository.getAll()
@@ -37,7 +46,7 @@ public class EntrenamientoService {
                     .map(entrenamientoMapper::toDomain)
                     .collect(Collectors.toList());
         } else {
-            int usuarioId = (int) session.getAttribute("usuarioId");
+            int usuarioId = (int) session.getAttribute(constantes.SESSION_USUARIO_ID);
             return entrenamientoRepository.getByUsuarioId(usuarioId)
                     .stream()
                     .map(entrenamientoMapper::toDomain)
@@ -49,7 +58,7 @@ public class EntrenamientoService {
         EntrenamientoEntity entity = entrenamientoRepository.getById(id);
         if (entity == null) return Optional.empty();
 
-        if (usuarioService.isAdmin(session) || entity.getUsuarioId() == (int) session.getAttribute("usuarioId")) {
+        if (usuarioService.isAdmin(session) || entity.getUsuarioId() == (int) session.getAttribute(constantes.SESSION_USUARIO_ID)) {
             return Optional.of(entrenamientoMapper.toDomain(entity));
         }
 
@@ -59,7 +68,7 @@ public class EntrenamientoService {
     @Transactional
     public Entrenamiento save(Entrenamiento entrenamiento, HttpSession session) {
         if (!usuarioService.isAdmin(session)) {
-            throw new RuntimeException("No tiene permisos para crear entrenamiento");
+            throw new RuntimeException(constantes.MSG_NO_PERM_CREAR_ENTRENAMIENTO);
         }
         EntrenamientoEntity entity = entrenamientoMapper.toEntity(entrenamiento);
         int id = entrenamientoRepository.save(entity);
@@ -70,7 +79,7 @@ public class EntrenamientoService {
     @Transactional
     public void update(Entrenamiento entrenamiento, HttpSession session) {
         if (!usuarioService.isAdmin(session)) {
-            throw new RuntimeException("No tiene permisos para actualizar entrenamiento");
+            throw new RuntimeException(constantes.MSG_NO_PERM_ACTUALIZAR_ENTRENAMIENTO);
         }
         entrenamientoRepository.update(entrenamientoMapper.toEntity(entrenamiento));
     }
@@ -80,7 +89,7 @@ public class EntrenamientoService {
         EntrenamientoEntity entity = entrenamientoRepository.getById(id);
         if (entity == null) return false;
 
-        if (usuarioService.isAdmin(session) || entity.getUsuarioId() == (int) session.getAttribute("usuarioId")) {
+        if (usuarioService.isAdmin(session) || entity.getUsuarioId() == (int) session.getAttribute(constantes.SESSION_USUARIO_ID)) {
             ejercicioRepository.deleteByEntrenamientoId(id);
             return entrenamientoRepository.delete(id);
         }

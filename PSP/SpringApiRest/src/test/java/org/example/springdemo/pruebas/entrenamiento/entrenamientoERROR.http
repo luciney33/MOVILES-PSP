@@ -1,0 +1,36 @@
+# ENTRENAMIENTOS - USER
+### (USER) Intentar crear entrenamiento
+POST http://localhost:8080/api/entrenamientos
+Content-Type: application/json
+
+{
+  "usuarioId": 2,
+  "nombre": "fdhd",
+  "descripcion": "hfhdfh"
+}
+
+### (USER) Intentar actualizar entrenamiento
+PUT http://localhost:8080/api/entrenamientos/2
+Content-Type: application/json
+
+{
+  "id": 2,
+  "usuarioId": 2,
+  "nombre": "hfhfh",
+  "descripcion": "Ndh"
+}
+
+
+
+### (USER) Borrar entrenamiento de OTRO usuario
+DELETE http://localhost:8080/api/entrenamientos/1
+
+
+
+# ENTRENAMIENTOS - SIN LOGIN
+
+### (NO LOGIN) Intentar listar entrenamientos
+GET http://localhost:8080/api/entrenamientos
+
+
+

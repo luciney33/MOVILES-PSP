@@ -16,6 +16,5 @@ public interface EntrenamientoRepository {
 
     void update(EntrenamientoEntity entrenamiento);
 
-    void deleteByUsuarioId(int usuarioId);
     boolean delete(int id);
 }

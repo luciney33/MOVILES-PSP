@@ -1,8 +1,10 @@
 package org.example.springdemo.data.repository.implementacion;
 
+import org.example.springdemo.common.constantes;
 import org.example.springdemo.data.entity.UsuarioEntity;
 import org.example.springdemo.data.mapper.UsuarioRowMap;
 import org.example.springdemo.data.repository.UsuarioRepository;
+import org.example.springdemo.data.utilities.Queries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,14 +24,18 @@ public class SpringUsuarioRepository implements UsuarioRepository {
     private final JdbcClient jdbcClient;
 
 
-
+    @Autowired
     public SpringUsuarioRepository(UsuarioRowMap usuarioRowMap, PasswordEncoder passwordEncoder, JdbcClient jdbcClient) {
         this.usuarioRowMap = usuarioRowMap;
         this.passwordEncoder = passwordEncoder;
         this.jdbcClient = jdbcClient;
 
-        saveWithPlainPassword("admin", "admin123", "admin@gmail.com", "Admin", "ADMIN");
-        saveWithPlainPassword("user", "user123", "user@gmail.com", "Usuario Normal", "USER");
+        if (getByUsername("admin") == null) {
+            saveWithPlainPassword("admin", "admin123", "admin@gmail.com", "Admin", "ADMIN");
+        }
+        if (getByUsername("user") == null) {
+            saveWithPlainPassword("user", "user123", "user@gmail.com", "user@gmail.com", "USER");
+        }
     }
 
     private void saveWithPlainPassword(String username, String plainPassword, String email, String nombre, String rol) {
@@ -47,19 +53,16 @@ public class SpringUsuarioRepository implements UsuarioRepository {
 
 
 
-
     @Override
     public List<UsuarioEntity> getAll() {
-        String sql = "SELECT * FROM usuario";
-        return jdbcClient.sql(sql)
+        return jdbcClient.sql(Queries.SELECT_FROM_USUARIO)
                 .query(usuarioRowMap)
                 .list();
     }
 
     @Override
     public UsuarioEntity getById(int id) {
-        String sql = "SELECT * FROM usuario WHERE id = ?";
-        return jdbcClient.sql(sql)
+        return jdbcClient.sql(Queries.SELECT_USUARIO_BY_ID)
                 .param(1, id)
                 .query(usuarioRowMap)
                 .optional()
@@ -68,8 +71,7 @@ public class SpringUsuarioRepository implements UsuarioRepository {
 
     @Override
     public UsuarioEntity getByUsername(String username) {
-        String sql = "SELECT * FROM usuario WHERE username = ?";
-        return jdbcClient.sql(sql)
+        return jdbcClient.sql(Queries.SELECT_USUARIO_BY_USERNAME)
                 .param(1, username)
                 .query(usuarioRowMap)
                 .optional()
@@ -78,9 +80,8 @@ public class SpringUsuarioRepository implements UsuarioRepository {
 
     @Override
     public int save(UsuarioEntity usuario) {
-        String sql = "INSERT INTO usuario(username,password,email,nombre,rol) VALUES(?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcClient.sql(sql)
+        jdbcClient.sql(Queries.INSERT_USUARIO)
                 .param(1, usuario.getUsername())
                 .param(2, usuario.getPassword())
                 .param(3, usuario.getEmail())
@@ -92,8 +93,7 @@ public class SpringUsuarioRepository implements UsuarioRepository {
 
     @Override
     public void update(UsuarioEntity usuario) {
-        String sql = "UPDATE usuario SET username=?, password=?, email=?, nombre=?, rol=? WHERE id=?";
-        jdbcClient.sql(sql)
+        jdbcClient.sql(Queries.UPDATE_USUARIO)
                 .param(1, usuario.getUsername())
                 .param(2, usuario.getPassword())
                 .param(3, usuario.getEmail())
@@ -106,13 +106,13 @@ public class SpringUsuarioRepository implements UsuarioRepository {
     @Override
     public boolean delete(int id) {
         try {
-            int result = jdbcClient.sql("DELETE FROM usuario WHERE id=?")
+            int result = jdbcClient.sql(Queries.DELETE_USUARIO_BY_ID)
                     .param(1, id)
                     .update();
 
             return result == 1;
         } catch (DataIntegrityViolationException e) {
-            System.out.println("No se puede eliminar el usuario con id " + id + " porque tiene referencias existentes.");
+            System.out.println(String.format(constantes.MSG_CANNOT_DELETE_USER, id));
             return false;
         }
     }

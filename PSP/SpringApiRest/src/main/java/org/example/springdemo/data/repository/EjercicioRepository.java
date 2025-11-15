@@ -1,7 +1,6 @@
 package org.example.springdemo.data.repository;
 
 import org.example.springdemo.data.entity.EjercicioEntity;
-import org.example.springdemo.data.entity.EntrenamientoEntity;
 
 import java.util.List;
 

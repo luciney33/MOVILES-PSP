@@ -3,6 +3,7 @@ package org.example.springdemo.data.repository.implementacion;
 import org.example.springdemo.data.entity.EjercicioEntity;
 import org.example.springdemo.data.mapper.EjercicioRowMap;
 import org.example.springdemo.data.repository.EjercicioRepository;
+import org.example.springdemo.data.utilities.Queries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,27 +16,25 @@ import java.util.Objects;
 @Repository
 public class SpringEjercicioRepositoy implements EjercicioRepository {
     private final EjercicioRowMap rowMapper;
+    private final JdbcClient jdbcClient;
 
     @Autowired
-    private JdbcClient jdbcClient;
-
-    public SpringEjercicioRepositoy(EjercicioRowMap rowMapper) {
+    public SpringEjercicioRepositoy(EjercicioRowMap rowMapper, JdbcClient jdbcClient) {
         this.rowMapper = rowMapper;
+        this.jdbcClient = jdbcClient;
     }
 
 
     @Override
     public List<EjercicioEntity> getAll() {
-        String sql = "SELECT * FROM ejercicio";
-        return jdbcClient.sql(sql)
+        return jdbcClient.sql(Queries.SELECT_FROM_EJERCICIO)
                 .query(rowMapper)
                 .list();
     }
 
     @Override
     public EjercicioEntity getById(int id) {
-        String sql = "SELECT * FROM ejercicio WHERE id = ?";
-        return jdbcClient.sql(sql)
+        return jdbcClient.sql(Queries.SELECT_EJERCICIO_BY_ID)
                 .param(1, id)
                 .query(rowMapper)
                 .optional()
@@ -44,8 +43,7 @@ public class SpringEjercicioRepositoy implements EjercicioRepository {
 
     @Override
     public List<EjercicioEntity> getByEntrenamientoId(int entrenamientoId) {
-        String sql = "SELECT * FROM ejercicio WHERE entrenamientoId = ?";
-        return jdbcClient.sql(sql)
+        return jdbcClient.sql(Queries.SELECT_EJERCICIO_BY_ENTRENAMIENTO_ID)
                 .param(1, entrenamientoId)
                 .query(rowMapper)
                 .list();
@@ -53,11 +51,9 @@ public class SpringEjercicioRepositoy implements EjercicioRepository {
 
     @Override
     public int save(EjercicioEntity ejercicio) {
-        String sql = "INSERT INTO ejercicio(entrenamientoId, nombre, repeticiones, series) VALUES (?,?,?,?)";
-
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcClient.sql(sql)
+        jdbcClient.sql(Queries.INSERT_EJERCICIO)
                 .param(1, ejercicio.getEntrenamientoId())
                 .param(2, ejercicio.getNombre())
                 .param(3, ejercicio.getRepeticiones())
@@ -69,9 +65,7 @@ public class SpringEjercicioRepositoy implements EjercicioRepository {
 
     @Override
     public void update(EjercicioEntity ejercicio) {
-        String sql = "UPDATE ejercicio SET entrenamientoId=?, nombre=?, repeticiones=?, series=? WHERE id=? ";
-
-        jdbcClient.sql(sql)
+        jdbcClient.sql(Queries.UPDATE_EJERCICIO)
                 .param(1, ejercicio.getEntrenamientoId())
                 .param(2, ejercicio.getNombre())
                 .param(3, ejercicio.getRepeticiones())
@@ -82,8 +76,7 @@ public class SpringEjercicioRepositoy implements EjercicioRepository {
 
     @Override
     public void deleteByEntrenamientoId(int entrenamientoId) {
-        String sql = "DELETE FROM ejercicio WHERE entrenamientoId=?";
-        jdbcClient.sql(sql)
+        jdbcClient.sql(Queries.DELETE_EJERCICIO_BY_ENTRENAMIENTO_ID)
                 .param(1, entrenamientoId)
                 .update();
     }
@@ -91,9 +84,7 @@ public class SpringEjercicioRepositoy implements EjercicioRepository {
 
     @Override
     public boolean delete(int id) {
-        String sql = "DELETE FROM ejercicio WHERE id=?";
-
-        int result = jdbcClient.sql(sql)
+        int result = jdbcClient.sql(Queries.DELETE_EJERCICIO_BY_ID)
                 .param(1, id)
                 .update();
 

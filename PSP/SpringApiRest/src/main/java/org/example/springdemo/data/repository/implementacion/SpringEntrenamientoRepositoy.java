@@ -2,8 +2,8 @@ package org.example.springdemo.data.repository.implementacion;
 
 import org.example.springdemo.data.entity.EntrenamientoEntity;
 import org.example.springdemo.data.mapper.EntrenamientoRowMap;
-import org.example.springdemo.data.repository.EjercicioRepository;
 import org.example.springdemo.data.repository.EntrenamientoRepository;
+import org.example.springdemo.data.utilities.Queries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,29 +20,25 @@ import java.util.Objects;
 @Repository
 public class SpringEntrenamientoRepositoy implements EntrenamientoRepository {
     private final EntrenamientoRowMap rowMapper;
-    private final EjercicioRepository ejercicioRepository;
-    public SpringEntrenamientoRepositoy(EntrenamientoRowMap rowMapper, EjercicioRepository ejercicioRepository) {
-        this.rowMapper = rowMapper;
-        this.ejercicioRepository = ejercicioRepository;
-    }
-
+    private final JdbcClient jdbcClient;
     @Autowired
-    private JdbcClient jdbcClient;
+    public SpringEntrenamientoRepositoy(EntrenamientoRowMap rowMapper, JdbcClient jdbcClient) {
+        this.rowMapper = rowMapper;
+        this.jdbcClient = jdbcClient;
+    }
 
 
 
     @Override
     public List<EntrenamientoEntity> getAll() {
-        String sql = "SELECT * FROM entrenamiento";
-        return jdbcClient.sql(sql)
+        return jdbcClient.sql(Queries.SELECT_FROM_ENTRENAMIENTO)
                 .query(rowMapper)
                 .list();
     }
 
     @Override
     public EntrenamientoEntity getById(int id) {
-        String sql = "SELECT * FROM entrenamiento WHERE id = ?";
-        return jdbcClient.sql(sql)
+        return jdbcClient.sql(Queries.SELECT_ENTRENAMIENTO_BY_ID)
                 .param(1, id)
                 .query(rowMapper)
                 .optional()
@@ -52,8 +48,7 @@ public class SpringEntrenamientoRepositoy implements EntrenamientoRepository {
 
     @Override
     public List<EntrenamientoEntity> getByUsuarioId(int usuarioId) {
-        String sql = "SELECT * FROM entrenamiento WHERE usuarioId = ?";
-        return jdbcClient.sql(sql)
+        return jdbcClient.sql(Queries.SELECT_ENTRENAMIENTO_BY_USUARIO_ID)
                 .param(1, usuarioId)
                 .query(rowMapper)
                 .list();
@@ -61,11 +56,9 @@ public class SpringEntrenamientoRepositoy implements EntrenamientoRepository {
 
     @Override
     public int save(EntrenamientoEntity entrenamiento) {
-        String sql = "INSERT INTO entrenamiento (usuarioId, nombre, descripcion) VALUES (?, ?, ?)";
-
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcClient.sql(sql)
+        jdbcClient.sql(Queries.INSERT_ENTRENAMIENTO)
                 .param(1, entrenamiento.getUsuarioId())
                 .param(2, entrenamiento.getNombre())
                 .param(3, entrenamiento.getDescripcion())
@@ -76,9 +69,7 @@ public class SpringEntrenamientoRepositoy implements EntrenamientoRepository {
 
     @Override
     public void update(EntrenamientoEntity entrenamiento) {
-        String sql = "UPDATE entrenamiento SET usuarioId = ?, nombre = ?, descripcion = ? WHERE id = ?";
-
-        jdbcClient.sql(sql)
+        jdbcClient.sql(Queries.UPDATE_ENTRENAMIENTO)
                 .param(1, entrenamiento.getUsuarioId())
                 .param(2, entrenamiento.getNombre())
                 .param(3, entrenamiento.getDescripcion())
@@ -87,19 +78,9 @@ public class SpringEntrenamientoRepositoy implements EntrenamientoRepository {
     }
 
     @Override
-    public void deleteByUsuarioId(int usuarioId) {
-        String sql = "DELETE FROM entrenamiento WHERE usuarioId = ?";
-        jdbcClient.sql(sql)
-                .param(1, usuarioId)
-                .update();
-    }
-
-    @Override
     public boolean delete(int id) {
-        String sql = "DELETE FROM entrenamiento WHERE id = ?";
-
         try {
-            int result = jdbcClient.sql(sql)
+            int result = jdbcClient.sql(Queries.DELETE_ENTRENAMIENTO_BY_ID)
                     .param(1, id)
                     .update();
             return result == 1;
