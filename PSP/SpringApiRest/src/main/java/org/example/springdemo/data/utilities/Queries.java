@@ -16,7 +16,6 @@ public final class Queries {
     public static final String SELECT_ENTRENAMIENTO_BY_USUARIO_ID = "SELECT * FROM entrenamiento WHERE usuarioId = ?";
     public static final String INSERT_ENTRENAMIENTO = "INSERT INTO entrenamiento (usuarioId, nombre, descripcion) VALUES (?, ?, ?)";
     public static final String UPDATE_ENTRENAMIENTO = "UPDATE entrenamiento SET usuarioId = ?, nombre = ?, descripcion = ? WHERE id = ?";
-    public static final String DELETE_ENTRENAMIENTO_BY_USUARIO_ID = "DELETE FROM entrenamiento WHERE usuarioId = ?";
     public static final String DELETE_ENTRENAMIENTO_BY_ID = "DELETE FROM entrenamiento WHERE id = ?";
 
     public static final String SELECT_FROM_USUARIO = "SELECT * FROM usuario";

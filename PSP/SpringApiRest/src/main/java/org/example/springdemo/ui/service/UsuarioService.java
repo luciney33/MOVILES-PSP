@@ -42,14 +42,22 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> getUsuarioFromSession(HttpSession session) {
-        int usuarioId = (int) session.getAttribute(constantes.SESSION_USUARIO_ID);
-        if (usuarioId == 0) return Optional.empty();
+        Integer usuarioIdSessionn = (Integer) session.getAttribute(constantes.SESSION_USUARIO_ID);
+        if (usuarioIdSessionn == null) return Optional.empty();
+
+        int usuarioId = usuarioIdSessionn;
 
         UsuarioEntity entity = usuarioRepository.getById(usuarioId);
-        if (entity == null) return Optional.empty();
+
+        if (entity == null) {
+            session.removeAttribute(constantes.SESSION_USUARIO_ID);
+            return Optional.empty();
+        }
 
         return Optional.of(usuarioMapper.toDomain(entity));
     }
+
+
     public boolean isAdmin(HttpSession session) {
         return getUsuarioFromSession(session)
                 .map(usu -> "ADMIN".equals(usu.rol()))

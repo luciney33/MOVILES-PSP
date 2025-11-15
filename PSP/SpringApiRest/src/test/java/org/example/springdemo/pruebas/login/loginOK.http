@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 
-### Check sesión (con login)
+### Checkear sesión (con login)
 GET http://localhost:8080/api/auth/session
 
 ### Logout
