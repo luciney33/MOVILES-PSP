@@ -3,6 +3,8 @@ package org.example.springdemo.ui.controller;
 import jakarta.servlet.http.HttpSession;
 import org.example.springdemo.common.constantes;
 import org.example.springdemo.domain.model.Ejercicio;
+import org.example.springdemo.ui.dto.EjercicioDTO;
+import org.example.springdemo.ui.mapper.EjercicioDtoMapper;
 import org.example.springdemo.ui.service.EjercicioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,56 +12,67 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(constantes.API_EJERCICIOS)
 public class EjercicioController {
 
     private final EjercicioService ejercicioService;
+    private final EjercicioDtoMapper ejercicioDtoMapper;
 
-    public EjercicioController(EjercicioService ejercicioService) {
+    public EjercicioController(EjercicioService ejercicioService, EjercicioDtoMapper ejercicioDtoMapper) {
         this.ejercicioService = ejercicioService;
+        this.ejercicioDtoMapper = ejercicioDtoMapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<Ejercicio>> listar(HttpSession session) {
+    public ResponseEntity<List<EjercicioDTO>> listar(HttpSession session) {
         if (!ejercicioService.isAuthenticated(session)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.ok(ejercicioService.getAll(session));
+        List<Ejercicio> list = ejercicioService.getAll(session);
+        List<EjercicioDTO> dtoList = list.stream()
+                .map(ejercicioDtoMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtoList);
     }
 
     @GetMapping(constantes.PATH_ID)
-    public ResponseEntity<Ejercicio> getById(@PathVariable int id, HttpSession session) {
+    public ResponseEntity<EjercicioDTO> getById(@PathVariable int id, HttpSession session) {
         if (!ejercicioService.isAuthenticated(session)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Optional<Ejercicio> opt = ejercicioService.getById(id, session);
-        return opt.map(ResponseEntity::ok).orElse(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
+        return opt.map(ejercicioDtoMapper::toDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
     }
 
     @PostMapping
-    public ResponseEntity<Ejercicio> crear(@RequestBody Ejercicio body, HttpSession session) {
+    public ResponseEntity<EjercicioDTO> crear(@RequestBody EjercicioDTO ejercicioDTO, HttpSession session) {
         if (!ejercicioService.isAuthenticated(session)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         try {
-            Ejercicio created = ejercicioService.save(body, session);
-            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+            Ejercicio domain = ejercicioDtoMapper.fromDto(ejercicioDTO);
+            Ejercicio creado = ejercicioService.save(domain, session);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ejercicioDtoMapper.toDto(creado));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
     @PutMapping(constantes.PATH_ID)
-    public ResponseEntity<Void> actualizar(@PathVariable int id, @RequestBody Ejercicio body, HttpSession session) {
+    public ResponseEntity<Void> actualizar(@PathVariable int id, @RequestBody EjercicioDTO ejercicioDTO, HttpSession session) {
         if (!ejercicioService.isAuthenticated(session)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         if (!ejercicioService.isAdmin(session)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        ejercicioService.update(new Ejercicio(id, body.entrenamientoId(), body.nombre(), body.repeticiones(), body.series()), session);
+        Ejercicio toUpdate = new Ejercicio(id, ejercicioDTO.entrenamientoId(), ejercicioDTO.nombre(), ejercicioDTO.repeticiones(), ejercicioDTO.series());
+        ejercicioService.update(toUpdate, session);
         return ResponseEntity.noContent().build();
     }
 
@@ -68,8 +81,8 @@ public class EjercicioController {
         if (!ejercicioService.isAuthenticated(session)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        boolean deleted = ejercicioService.delete(id, session);
-        if (deleted) return ResponseEntity.noContent().build();
+        boolean borrado = ejercicioService.delete(id, session);
+        if (borrado) return ResponseEntity.noContent().build();
         else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }

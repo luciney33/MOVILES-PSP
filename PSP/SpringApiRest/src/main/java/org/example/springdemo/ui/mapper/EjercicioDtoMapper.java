@@ -2,7 +2,9 @@ package org.example.springdemo.ui.mapper;
 
 import org.example.springdemo.domain.model.Ejercicio;
 import org.example.springdemo.ui.dto.EjercicioDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EjercicioDtoMapper {
     public EjercicioDTO toDto(Ejercicio domain) {
         if (domain == null) return null;

@@ -18,14 +18,4 @@ public class UsuarioMapDomain {
         );
     }
 
-    public UsuarioEntity toEntity(Usuario domain) {
-        if (domain == null) return null;
-        UsuarioEntity entity = new UsuarioEntity();
-        entity.setId(domain.id());
-        entity.setUsername(domain.username());
-        entity.setEmail(domain.email());
-        entity.setNombre(domain.nombre());
-        entity.setRol(domain.rol());
-        return entity;
-    }
 }

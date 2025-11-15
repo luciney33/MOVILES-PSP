@@ -3,6 +3,8 @@ package org.example.springdemo.ui.controller;
 import jakarta.servlet.http.HttpSession;
 import org.example.springdemo.common.constantes;
 import org.example.springdemo.domain.model.Entrenamiento;
+import org.example.springdemo.ui.dto.EntrenamientoDTO;
+import org.example.springdemo.ui.mapper.EntrenamientoDtoMapper;
 import org.example.springdemo.ui.service.EntrenamientoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,51 +18,62 @@ import java.util.Optional;
 public class EntrenamientoController {
 
     private final EntrenamientoService entrenamientoService;
+    private final EntrenamientoDtoMapper entrenamientoDtoMapper;
 
-    public EntrenamientoController(EntrenamientoService entrenamientoService) {
+    public EntrenamientoController(EntrenamientoService entrenamientoService, EntrenamientoDtoMapper entrenamientoDtoMapper) {
         this.entrenamientoService = entrenamientoService;
+        this.entrenamientoDtoMapper = entrenamientoDtoMapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<Entrenamiento>> listar(HttpSession session) {
+    public ResponseEntity<List<EntrenamientoDTO>> listar(HttpSession session) {
         if (!entrenamientoService.isAuthenticated(session)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         List<Entrenamiento> list = entrenamientoService.getAll(session);
-        return ResponseEntity.ok(list);
+        List<EntrenamientoDTO> dtoList = entrenamientoDtoMapper.toDtoList(list);
+        return ResponseEntity.ok(dtoList);
     }
 
     @GetMapping(constantes.PATH_ID)
-    public ResponseEntity<Entrenamiento> getById(@PathVariable int id, HttpSession session) {
+    public ResponseEntity<EntrenamientoDTO> getById(@PathVariable int id, HttpSession session) {
         if (!entrenamientoService.isAuthenticated(session)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Optional<Entrenamiento> opt = entrenamientoService.getById(id, session);
-        return opt.map(ResponseEntity::ok).orElse(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
+        return opt
+                .map(entrenamientoDtoMapper::toDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
     }
 
     @PostMapping
-    public ResponseEntity<Entrenamiento> crear(@RequestBody Entrenamiento entrenamiento, HttpSession session) {
+    public ResponseEntity<EntrenamientoDTO> crear(@RequestBody EntrenamientoDTO entrenamientoDTO, HttpSession session) {
         if (!entrenamientoService.isAuthenticated(session)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         try {
-            Entrenamiento createdAdmi = entrenamientoService.save(entrenamiento, session);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdAdmi);
+            Entrenamiento domain = entrenamientoDtoMapper.toDomain(entrenamientoDTO);
+            Entrenamiento creado = entrenamientoService.save(domain, session);
+            EntrenamientoDTO createdDto = entrenamientoDtoMapper.toDto(creado);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdDto);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
+
     @PutMapping(constantes.PATH_ID)
-    public ResponseEntity<Void> actualizar(@PathVariable int id, @RequestBody Entrenamiento entrenamiento, HttpSession session) {
+    public ResponseEntity<Void> actualizar(@PathVariable int id, @RequestBody EntrenamientoDTO entrenamientoDTO, HttpSession session) {
         if (!entrenamientoService.isAuthenticated(session)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         if (!entrenamientoService.isAdmin(session)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        entrenamientoService.update(new Entrenamiento(id, entrenamiento.usuarioId(), entrenamiento.nombre(), entrenamiento.descripcion()), session);
+        Entrenamiento domain = entrenamientoDtoMapper.toDomain(entrenamientoDTO);
+        Entrenamiento toUpdate = new Entrenamiento(id, domain.usuarioId(), domain.nombre(), domain.descripcion());
+        entrenamientoService.update(toUpdate, session);
         return ResponseEntity.noContent().build();
     }
 

@@ -7,7 +7,6 @@ import org.example.springdemo.data.entity.EntrenamientoEntity;
 import org.example.springdemo.data.mapper.EjercicioMapDomain;
 import org.example.springdemo.data.repository.EjercicioRepository;
 import org.example.springdemo.data.repository.EntrenamientoRepository;
-import org.example.springdemo.data.utilities.Queries;
 import org.example.springdemo.domain.model.Ejercicio;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
