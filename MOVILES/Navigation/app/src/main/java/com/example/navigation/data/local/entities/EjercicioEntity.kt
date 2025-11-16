@@ -2,15 +2,15 @@ package com.example.navigation.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.navigation.domain.model.Ejercicio
 
 @Entity(
     tableName = "ejercicios"
 )
 data class EjercicioEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val nombre: String,
-    val grupoMuscular: String,
+    val grupoMuscular: String? = null,
+    val descripcion: String? = null,
+    val iconoResName: String? = null
 )
-

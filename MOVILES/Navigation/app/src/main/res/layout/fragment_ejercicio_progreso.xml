@@ -7,16 +7,6 @@
     android:background="?attr/colorSurface"
     tools:context=".ui.menuProgreso.ejercicioProgreso.EjercicioProgresoFragment">
 
-    <!-- Buscador -->
-    <com.google.android.material.search.SearchBar
-        android:id="@+id/searchBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:hint="Buscar ejercicio"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Chip group para filtros -->
     <com.google.android.material.chip.ChipGroup
@@ -26,7 +16,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         app:singleSelection="true"
-        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 

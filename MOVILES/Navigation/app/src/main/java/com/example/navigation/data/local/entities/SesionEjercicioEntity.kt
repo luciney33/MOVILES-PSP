@@ -3,31 +3,32 @@ package com.example.navigation.data.local.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
+import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "entrenamiento_ejercicio",
-    primaryKeys = ["entrenamientoId", "ejercicioId"],
+    tableName = "sesion_ejercicios",
     foreignKeys = [
         ForeignKey(
-            entity = EntrenamientoEntity::class,
+            entity = SesionEntity::class,
             parentColumns = ["id"],
-            childColumns = ["entrenamientoId"],
+            childColumns = ["sesionId"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = EjercicioEntity::class,
             parentColumns = ["id"],
             childColumns = ["ejercicioId"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.SET_NULL
         )
     ],
-    indices = [Index("entrenamientoId"), Index("ejercicioId")]
 )
-data class EntrenamientoEjercicioRelacion(
-    val entrenamientoId: Int,
+data class SesionEjercicioEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val sesionId: Int,
     val ejercicioId: Int,
     val orden: Int = 0,
-    val series: Int = 3,
-    val repeticiones: String = "8",
-    val descansoSeg: Int = 60
+    val volumenKg: Double = 0.0,
+    val notas: String? = null
 )
+

@@ -76,21 +76,6 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:text="8 ejercicios" />
 
-        <!-- Última vez realizado -->
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvUltimaVez"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Hace 2 días"
-            android:textAppearance="?attr/textAppearanceBodySmall"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:drawablePadding="4dp"
-            app:drawableStartCompat="@android:drawable/ic_menu_recent_history"
-            app:drawableTint="?attr/colorOnSurfaceVariant"
-            app:layout_constraintTop_toTopOf="@id/tvNumeroEjercicios"
-            app:layout_constraintStart_toEndOf="@id/tvNumeroEjercicios"
-            tools:text="Hace 2 días" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

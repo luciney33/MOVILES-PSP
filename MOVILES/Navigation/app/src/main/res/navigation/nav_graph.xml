@@ -68,11 +68,19 @@
         android:id="@+id/home_fragment"
         android:name="com.example.navigation.ui.home.HomeFragment"
         android:label="home_fragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_fragment_to_detalleSesionFragment"
+            app:destination="@id/detalleSesionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/detalleSesionFragment"
         android:name="com.example.navigation.ui.sesion.detalleSesion.DetalleSesionFragment"
         android:label="detalleSesionFragment"
-        tools:layout="@layout/fragment_detalle_sesion" />
+        tools:layout="@layout/fragment_detalle_sesion" >
+        <action
+            android:id="@+id/action_detalleSesionFragment_to_home_fragment"
+            app:destination="@id/home_fragment" />
+    </fragment>
 
 </navigation>

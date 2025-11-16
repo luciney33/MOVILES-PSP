@@ -72,88 +72,46 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:layout_marginStart="8dp"
-        app:cardElevation="4dp"
         app:cardCornerRadius="12dp"
-        app:layout_constraintTop_toTopOf="@id/cardTotalSesiones"
-        app:layout_constraintStart_toEndOf="@id/cardTotalSesiones"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardTotalSesiones"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1">
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/cardTotalSesiones"
+        app:layout_constraintTop_toTopOf="@id/cardTotalSesiones">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvTotalTiempo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0h"
-                        android:textAppearance="?attr/textAppearanceHeadlineLarge"
-                        android:textColor="?attr/colorPrimary"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvTotalTiempo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0h"
+                android:textAppearance="?attr/textAppearanceHeadlineLarge"
+                android:textColor="?attr/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Tiempo Total"
-                        android:textAppearance="?attr/textAppearanceBodyMedium"
-                        app:layout_constraintTop_toBottomOf="@id/tvTotalTiempo"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Tiempo Total"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTotalTiempo" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <!-- Card 3: Gráfico peso -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardGraficoPeso"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:layout_margin="16dp"
-        android:layout_marginTop="16dp"
-        app:cardElevation="4dp"
-        app:cardCornerRadius="12dp"
-        app:layout_constraintTop_toBottomOf="@id/cardTotalSesiones"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="16dp">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvTituloPeso"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Evolución de Peso"
-                        android:textAppearance="?attr/textAppearanceTitleMedium"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <!-- Aquí irá el gráfico -->
-                    <View
-                        android:id="@+id/viewGraficoPeso"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="8dp"
-                        android:background="?attr/colorSurfaceVariant"
-                        app:layout_constraintTop_toBottomOf="@id/tvTituloPeso"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-    <!-- Card 4: Récords personales -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardRecords"
         android:layout_width="0dp"
@@ -162,7 +120,7 @@
         android:layout_marginTop="16dp"
         app:cardElevation="4dp"
         app:cardCornerRadius="12dp"
-        app:layout_constraintTop_toBottomOf="@id/cardGraficoPeso"
+        app:layout_constraintTop_toBottomOf="@id/cardTotalSesiones"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
