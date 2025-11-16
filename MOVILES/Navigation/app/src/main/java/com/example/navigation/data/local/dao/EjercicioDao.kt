@@ -1,13 +1,11 @@
 package com.example.navigation.data.local.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.navigation.data.local.entities.EjercicioEntity
-import com.example.navigation.domain.model.GrupoMuscularEstadistica
+import com.example.navigation.data.local.entity.EjercicioEntity
 
 @Dao
 interface EjercicioDao {
@@ -36,7 +34,5 @@ interface EjercicioDao {
     @Query("SELECT COUNT(*) FROM ejercicios")
     fun getTotalEjercicios(): Int
 
-    @Query("SELECT grupoMuscular, COUNT(*) as cantidad FROM ejercicios GROUP BY grupoMuscular")
-    fun getEjerciciosPorGrupo(): List<GrupoMuscularEstadistica>
 
 }

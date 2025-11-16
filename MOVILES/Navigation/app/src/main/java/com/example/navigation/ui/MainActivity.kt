@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.ListaEntrenamientoFragment, R.id.ejercicioProgresoFragment)
+            setOf(R.id.listaEntrenamientoFragment, R.id.ejercicioProgresoFragment)
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)

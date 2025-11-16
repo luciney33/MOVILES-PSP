@@ -24,12 +24,12 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <!-- Nombre del entrenamiento -->
+            <!-- Nombre del entrenamiento / ejercicio -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilNombre"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Nombre de la rutina"
+                android:hint="@string/nombre_hint"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,19 +40,41 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
+                    android:maxLines="1"
+                    android:enabled="false" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Volumen (kg) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilVolumen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="@string/volumen_hint"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                app:layout_constraintTop_toBottomOf="@id/tilNombre"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etVolumen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Descripción -->
+            <!-- Descripción / Notas -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilDescripcion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Descripción (opcional)"
+                android:hint="@string/notas_hint"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                app:layout_constraintTop_toBottomOf="@id/tilNombre"
+                app:layout_constraintTop_toBottomOf="@id/tilVolumen"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
@@ -77,13 +99,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:text="Ejercicios"
+        android:text="@string/ejercicios_titulo"
         android:textAppearance="?attr/textAppearanceTitleMedium"
         android:textColor="?attr/colorOnSurface"
         app:layout_constraintTop_toBottomOf="@id/cardInfo"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- RecyclerView con ejercicios -->
+    <!-- RecyclerView con ejercicios (opcional si quieres mostrar la lista editable) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvEjercicios"
         android:layout_width="0dp"
@@ -94,7 +116,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_ejercicio_editable"
         app:layout_constraintTop_toBottomOf="@id/tvTituloEjercicios"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnGuardar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -116,7 +138,7 @@
         android:id="@+id/tvVacio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No hay ejercicios\nToca + para agregar"
+        android:text="@string/vacio_ejercicios"
         android:textAlignment="center"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         android:textColor="?attr/colorOnSurfaceVariant"

@@ -3,7 +3,7 @@ package com.example.navigation.data.local.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.navigation.data.local.entities.EntrenamientoEjercicioRelacion
+import com.example.navigation.data.local.entity.EntrenamientoEjercicioRelacion
 
 @Dao
 interface EntrenamientoEjercicioDao {
@@ -12,4 +12,7 @@ interface EntrenamientoEjercicioDao {
 
     @Query("DELETE FROM entrenamiento_ejercicio WHERE entrenamientoId = :entrenamientoId AND ejercicioId = :ejercicioId")
     suspend fun quitarEjercicioDeEntrenamiento(entrenamientoId: Int, ejercicioId: Int)
+
+    @Query("UPDATE entrenamiento_ejercicio SET series = :series, repeticiones = :repeticiones WHERE entrenamientoId = :entrenamientoId AND ejercicioId = :ejercicioId")
+    suspend fun updateRelation(entrenamientoId: Int, ejercicioId: Int, series: Int, repeticiones: Int): Int
 }

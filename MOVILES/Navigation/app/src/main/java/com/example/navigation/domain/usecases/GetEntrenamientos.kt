@@ -1,6 +1,6 @@
 package com.example.navigation.domain.usecases
 
-import com.example.navigation.data.repositories.EntrenamientoRepository
+import com.example.navigation.data.repository.EntrenamientoRepository
 import com.example.navigation.domain.model.Entrenamiento
 import jakarta.inject.Inject
 

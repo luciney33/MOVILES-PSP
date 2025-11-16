@@ -6,8 +6,8 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.example.navigation.data.local.entities.EntrenamientoConEjerciciosEntity
-import com.example.navigation.data.local.entities.EntrenamientoEntity
+import com.example.navigation.data.local.entity.EntrenamientoConEjerciciosEntity
+import com.example.navigation.data.local.entity.EntrenamientoEntity
 
 @Dao
 interface EntrenamientoDao {
@@ -20,26 +20,24 @@ interface EntrenamientoDao {
 
     @Delete
     suspend fun delete(entrenamiento: EntrenamientoEntity)
+
     @Transaction
     @Query("SELECT * FROM entrenamientos WHERE id = :id")
-    fun getEntrenamientoConEjercicios(id: Int):  EntrenamientoConEjerciciosEntity
-
-    @Query("SELECT * FROM entrenamientos")
-    fun getAllLive() : List<EntrenamientoEntity>
+    suspend fun getEntrenamientoConEjercicios(id: Int):  EntrenamientoConEjerciciosEntity
 
     @Query("SELECT * FROM entrenamientos")
     suspend fun getAll() : List<EntrenamientoEntity>
 
     @Query("SELECT * FROM entrenamientos WHERE id = :id")
-    fun getEntrenamientoById(id: Int): EntrenamientoEntity
+    suspend fun getEntrenamientoById(id: Int): EntrenamientoEntity
 
     @Transaction
-    @Query("SELECT * FROM entrenamientos ORDER BY ultimaActualizacion DESC")
-    fun getAllConEjercicios(): List<EntrenamientoConEjerciciosEntity>
+    @Query("SELECT * FROM entrenamientos")
+    suspend fun getAllConEjercicios(): List<EntrenamientoConEjerciciosEntity>
 
-    @Query("SELECT COUNT(*) FROM entrenamientos")
+    @Query("SELECT COUNT(*) FROM entrenamientos order by duracionMin")
     fun getTotalEntrenamientos(): Int
 
-    @Query("SELECT * FROM entrenamientos ORDER BY ultimaActualizacion DESC LIMIT 5")
+    @Query("SELECT * FROM entrenamientos order by duracionMin DESC LIMIT 5")
     fun getEntrenamientosRecientes(): List<EntrenamientoEntity>
 }

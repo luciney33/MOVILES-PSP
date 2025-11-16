@@ -10,4 +10,38 @@
     <string name="iniciarHome">INICIAR ENTRENAMIENTO</string>
     <string name="historialHome">Historial de Sesiones</string>
     <string name="Actualizar">Actualizar Ejercicio</string>
+
+    <!-- Placeholders -->
+    <string name="volumen_placeholder">Volumen: %1$.1f kg</string>
+    <string name="ejercicios_count">%1$d ejercicios</string>
+
+    <!-- Detalle entrenamiento -->
+    <string name="nombre_hint">Nombre</string>
+    <string name="volumen_hint">Volumen (kg)</string>
+    <string name="notas_hint">Notas (opcional)</string>
+    <string name="ejercicios_titulo">Ejercicios</string>
+    <string name="vacio_ejercicios">No hay ejercicios\nToca + para agregar</string>
+
+    <!-- Progreso UI strings -->
+    <string name="progreso_grupo_desconocido">-</string>
+    <string name="progreso_sin_registros">Sin registros</string>
+    <string name="progreso_sin_rm">Sin RM</string>
+    <string name="progreso_ultimo_registro_cd">Último registro: %1$s</string>
+
+    <!-- Item labels -->
+    <string name="item_label_ultimo">Último:</string>
+    <string name="item_label_rm">RM:</string>
+
+    <!-- Fragment mensajes -->
+    <string name="ejercicio_progreso_vacio">No hay ejercicios registrados</string>
+
+    <!-- Detalle mensajes (usados en ViewModel/state) -->
+    <string name="mensaje_guardado">Guardado</string>
+    <string name="mensaje_error_guardado">Error guardando</string>
+    <string name="mensaje_error_carga_ejercicio">No se pudo cargar el ejercicio: %1$s</string>
+    <string name="mensaje_relacion_actualizada">Relación actualizada</string>
+    <string name="mensaje_error_relacion">Error actualizando relación: %1$s</string>
+
+    <!-- Placeholders / accessibility -->
+    <string name="progreso_ultimo_default">Sin registros</string>
 </resources>

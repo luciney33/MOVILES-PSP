@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
-    tools:context=".ui.sesion.detalleSesion.DetalleSesionFragment">
+    tools:context=".ui.sesion.DetalleSesion.DetalleSesionFragment">
 
     <!-- Card con resumen -->
     <com.google.android.material.card.MaterialCardView

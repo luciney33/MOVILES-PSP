@@ -13,6 +13,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
+    private const val DATABASE_NAME = "entrenamientosdb.db" // Define el nombre correcto aquí
+
 
     @Provides
     @Singleton
@@ -20,8 +22,10 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "app_database"
+    DATABASE_NAME
         )
+            .createFromAsset(DATABASE_NAME)
+            .fallbackToDestructiveMigration() // Opcional para desarrollo
             .build()
     }
 
@@ -34,5 +38,13 @@ object DatabaseModule {
     @Provides
     fun provideEjercicio(database: AppDatabase) = database.ejercicioDao()
 
+    @Provides
+    fun provideSesionDao(database: AppDatabase) = database.sesionDao()
+
+    @Provides
+    fun provideSesionEjercicioDao(database: AppDatabase) = database.sesionEjercicioDao()
+
+    @Provides
+    fun provideProgresoDao(database: AppDatabase) = database.progresoDao()
 
 }
