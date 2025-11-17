@@ -7,7 +7,6 @@
     android:background="?attr/colorSurface"
     tools:context=".ui.sesion.DetalleSesion.DetalleSesionFragment">
 
-    <!-- Card con resumen -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardResumen"
         android:layout_width="0dp"
@@ -19,18 +18,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Contenido del card con ConstraintLayout -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <!-- Nombre del entrenamiento -->
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvNombreEntrenamiento"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Torso Push"
+                android:text="@string/torso_push"
                 android:textAppearance="?attr/textAppearanceTitleLarge"
                 android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
@@ -38,26 +35,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Fecha -->
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvFecha"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="15 de Mayo, 2025"
+                android:text="@string/fecha_sample_detalle"
                 android:textAppearance="?attr/textAppearanceBodyLarge"
                 android:textColor="?attr/colorOnSurface"
                 app:layout_constraintTop_toBottomOf="@id/tvNombreEntrenamiento"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Duración -->
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvDuracion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Duración: 45 minutos"
+                android:text="@string/duracion_sample"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 app:layout_constraintTop_toBottomOf="@id/tvFecha"
@@ -69,20 +64,18 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Título ejercicios realizados -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvTituloEjercicios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:text="Ejercicios Realizados"
+        android:text="@string/ejercicios_realizados"
         android:textAppearance="?attr/textAppearanceTitleMedium"
         android:textColor="?attr/colorOnSurface"
         app:layout_constraintTop_toBottomOf="@id/cardResumen"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- RecyclerView con ejercicios -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvEjercicios"
         android:layout_width="0dp"
@@ -97,19 +90,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Estado vacío (opcional) -->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvVacio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No hay ejercicios registrados"
-        android:textAppearance="?attr/textAppearanceBodyLarge"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="@id/rvEjercicios"
-        app:layout_constraintBottom_toBottomOf="@id/rvEjercicios"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

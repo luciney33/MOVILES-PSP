@@ -9,11 +9,8 @@ import com.example.navigation.data.local.entity.ProgresoEntity
 @Dao
 interface ProgresoDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insert(progreso: ProgresoEntity): Long
-
-    @Query("SELECT * FROM progresos ORDER BY fecha DESC")
-    suspend fun getAll(): List<ProgresoEntity>
 
 }
 

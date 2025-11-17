@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:paddingVertical="8dp">
 
-    <!-- Checkbox para marcar serie completada -->
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/checkboxCompletada"
         android:layout_width="wrap_content"
@@ -15,29 +14,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Número de serie -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvNumeroSerie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="1"
+        android:text="@string/serie_num"
         android:textAppearance="?attr/textAppearanceTitleMedium"
         android:textColor="?attr/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/checkboxCompletada"
-        tools:text="1" />
+        />
 
-    <!-- Input peso -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilPeso"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
-        android:hint="Peso (kg)"
+        android:hint="@string/volumen_hint"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
         app:suffixText="kg"
         app:layout_constraintTop_toTopOf="parent"
@@ -56,13 +53,12 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Input reps -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilReps"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:hint="Reps"
+        android:hint="@string/reps_label"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -81,4 +77,3 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

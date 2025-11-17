@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_listaEntrenamientoFragment_to_sesionEntrenamientoFragment"
             app:destination="@id/sesionEntrenamientoFragment" />
+        <action
+            android:id="@+id/action_listaEntrenamientoFragment_to_home_fragment"
+            app:destination="@id/home_fragment" />
     </fragment>
     <fragment
         android:id="@+id/detalleEntrenamientoFragment"
@@ -49,6 +52,9 @@
         <action
             android:id="@+id/action_ejercicioProgresoFragment_to_registroProgresoFragment"
             app:destination="@id/registroProgresoFragment" />
+        <action
+            android:id="@+id/action_ejercicioProgresoFragment_to_home_fragment"
+            app:destination="@id/home_fragment" />
     </fragment>
     <fragment
         android:id="@+id/registroProgresoFragment"
@@ -79,6 +85,9 @@
         <action
             android:id="@+id/action_detalleSesionFragment_to_home_fragment"
             app:destination="@id/home_fragment" />
+        <action
+            android:id="@+id/action_detalleSesionFragment_to_detalleEntrenamientoFragment"
+            app:destination="@id/detalleEntrenamientoFragment" />
     </fragment>
 
 </navigation>

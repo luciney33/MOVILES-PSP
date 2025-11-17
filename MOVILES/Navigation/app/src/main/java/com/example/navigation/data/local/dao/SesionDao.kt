@@ -9,7 +9,7 @@ import com.example.navigation.data.local.entity.SesionEntity
 @Dao
 interface SesionDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insert(sesion: SesionEntity): Long
 
     @Query("SELECT * FROM sesiones WHERE id = :id")

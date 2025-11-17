@@ -1,7 +1,6 @@
 package com.example.navigation.ui.menuEntrenamiento.listaEntrenamiento
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +31,6 @@ class ListaEntrenamientoFragment : Fragment(), ListaEntrenamientoAdapter.Entrena
         )
         findNavController().navigate(action)
 
-        Log.d("FragmentClick", "Clicked on ${entrenamiento.nombre}")
 
     }
 
@@ -60,8 +58,6 @@ class ListaEntrenamientoFragment : Fragment(), ListaEntrenamientoAdapter.Entrena
     private fun observeViewModel() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             listaEntrenamientoAdapter.submitList(state.entrenamientos)
-
-            // Aquí puedes manejar también el state.mensaje si lo añades a tu State (ej. mostrar ProgressBar o Error)
         }
     }
 

@@ -1,6 +1,6 @@
 package com.example.navigation.data.repository
 
-import android.util.Log
+import com.example.navigation.data.constants.Constantes
 import com.example.navigation.data.local.dao.EjercicioDao
 import com.example.navigation.data.local.dao.SesionEjercicioDao
 import com.example.navigation.domain.model.Ejercicio
@@ -10,102 +10,75 @@ import javax.inject.Inject
 class ProgresoRepositoryImpl @Inject constructor(
     private val ejercicioDao: EjercicioDao,
     private val sesionEjercicioDao: SesionEjercicioDao
-)  {
+) {
 
-     suspend fun getAllEjercicios(): List<Ejercicio> {
-        return try {
-            val list = ejercicioDao.getAllEjercicios().map { e -> Ejercicio(e.id, e.nombre, e.grupoMuscular, e.descripcion, e.iconoResName) }
-            list
-        } catch (e: Exception) {
-            Log.w("ProgresoRepo", "Error getAllEjercicios", e)
-            emptyList()
+    suspend fun getAllEjercicios(): List<Ejercicio> {
+        return ejercicioDao.getAllEjercicios().map { e ->
+            Ejercicio(e.id, e.nombre, e.grupoMuscular, e.descripcion, e.iconoResName)
         }
     }
 
-     suspend fun getProgresoSummaryForEjercicio(ejercicioId: Int): Progreso? {
-        return try {
-            val last = sesionEjercicioDao.getLastByEjercicioIdConName(ejercicioId)
-            if (last == null) {
-                return null
-            }
+    suspend fun getProgresoSummaryForEjercicio(ejercicioId: Int): Progreso? {
+        val ultimo = sesionEjercicioDao.getLastByEjercicioIdConName(ejercicioId) ?: return null
+        val maxVolumen = sesionEjercicioDao.getMaxVolumenByEjercicioId(ejercicioId)
+        val top2 = sesionEjercicioDao.getTop2ByEjercicioIdConName(ejercicioId)
 
-            val max = sesionEjercicioDao.getMaxVolumenByEjercicioId(ejercicioId)
+        val tendenciaUp = top2.size >= 2 && top2[0].volumenKg > top2[1].volumenKg
 
-            // obtener top2 para tendencia
-            val top2 = sesionEjercicioDao.getTop2ByEjercicioIdConName(ejercicioId)
-            val tendenciaUp = if (top2.size >= 2) {
-                val a = top2[0].volumenKg
-                val b = top2[1].volumenKg
-                a > b
-            } else {
-                false
-            }
+        val ultimoPeso: String
+        val ultimoDetalle: String
 
-            // Formateo de último registro: si volumenKg > 0 -> mostrar peso; si es 0 -> intentar usar notas o series/repeticiones
-            val ultimoPesoStr: String
-            val ultimoDetalle: String
-
-            if (last.volumenKg > 0.0) {
-                ultimoPesoStr = "${last.volumenKg} kg"
-                ultimoDetalle = if (last.notas.isNotEmpty()) last.notas else ultimoPesoStr
-            } else {
-                // volumen 0 (bodyweight o solo reps) -> priorizar notas si contienen texto significativo
-                val notas = last.notas.trim()
-                if (notas.isNotEmpty()) {
-                    ultimoDetalle = notas
-                    ultimoPesoStr = if (notas.matches(Regex("^\\d+$"))) "${notas} reps" else notas
-                } else if (last.series > 0 && last.repeticiones > 0) {
-                    ultimoPesoStr = "${last.series} x ${last.repeticiones}"
-                    ultimoDetalle = ultimoPesoStr
+        if (ultimo.volumenKg > 0.0) {
+            ultimoPeso = "${ultimo.volumenKg}${Constantes.KG_SUFFIX}"
+            ultimoDetalle = if (ultimo.notas.isNotBlank()) ultimo.notas else ultimoPeso
+        } else {
+            val notasTrim = ultimo.notas.trim()
+            if (notasTrim.isNotEmpty()) {
+                if (notasTrim.matches(Constantes.NUMERIC_REGEX)) {
+                    ultimoPeso = "$notasTrim${Constantes.REPS_SUFFIX}"
+                    ultimoDetalle = notasTrim
                 } else {
-                    ultimoPesoStr = "-"
-                    ultimoDetalle = "-"
+                    ultimoPeso = notasTrim
+                    ultimoDetalle = notasTrim
                 }
+            } else if (ultimo.series > 0 && ultimo.repeticiones > 0) {
+                ultimoPeso = "${ultimo.series} x ${ultimo.repeticiones}"
+                ultimoDetalle = ultimoPeso
+            } else {
+                ultimoPeso = Constantes.NO_DATA
+                ultimoDetalle = Constantes.NO_DATA
             }
+        }
 
-            // Formateo record: si max es null o 0.0 -> mostrar '-'
-            val recordStr = if (max == null || max == 0.0) "-" else "${max} kg"
+        val recordStr = if (maxVolumen == null || maxVolumen == 0.0) Constantes.NO_DATA else "$maxVolumen${Constantes.KG_SUFFIX}"
 
-            return Progreso(
-                ejercicioId = last.ejercicioId,
-                nombre = last.nombreEjercicio,
-                grupoMuscular = "", // se completará en getAllProgresoSummaries cuando se conozca
-                ultimoPeso = ultimoPesoStr,
-                ultimoDetalle = ultimoDetalle,
-                record = recordStr,
-                tendenciaUp = tendenciaUp
-            )
-        } catch (e: Exception) {
-            Log.w("ProgresoRepo", "Error getProgresoSummaryForEjercicio", e)
-            null
+        return Progreso(
+            ejercicioId = ultimo.ejercicioId,
+            nombre = ultimo.nombreEjercicio,
+            grupoMuscular = "",
+            ultimoPeso = ultimoPeso,
+            ultimoDetalle = ultimoDetalle,
+            record = recordStr,
+            tendenciaUp = tendenciaUp
+        )
+    }
+
+    suspend fun getAllProgresoSummaries(): List<Progreso> {
+        val ejercicios = getAllEjercicios()
+        return ejercicios.map { ej ->
+            val summary = getProgresoSummaryForEjercicio(ej.id)
+            summary?.copy(grupoMuscular = ej.grupoMuscular) ?: emptyProgresoFor(ej)
         }
     }
 
-     suspend fun getAllProgresoSummaries(): List<Progreso> {
-        return try {
-            val ejercicios = getAllEjercicios()
-            val result = ejercicios.map { ej ->
-                val summary = getProgresoSummaryForEjercicio(ej.id)
-                if (summary != null) {
-                    summary.copy(grupoMuscular = ej.grupoMuscular)
-                } else {
-                    // crear placeholder si no hay historial
-                    Progreso(
-                        ejercicioId = ej.id,
-                        nombre = ej.nombre,
-                        grupoMuscular = ej.grupoMuscular,
-                        ultimoPeso = "-",
-                        ultimoDetalle = "-",
-                        record = "-",
-                        tendenciaUp = false
-                    )
-                }
-            }
-            result
-        } catch (e: Exception) {
-            Log.w("ProgresoRepo", "Error getAllProgresoSummaries", e)
-            emptyList()
-        }
-    }
+    private fun emptyProgresoFor(ej: Ejercicio) = Progreso(
+        ejercicioId = ej.id,
+        nombre = ej.nombre,
+        grupoMuscular = ej.grupoMuscular,
+        ultimoPeso = Constantes.NO_DATA,
+        ultimoDetalle = Constantes.NO_DATA,
+        record = Constantes.NO_DATA,
+        tendenciaUp = false
+    )
 
 }

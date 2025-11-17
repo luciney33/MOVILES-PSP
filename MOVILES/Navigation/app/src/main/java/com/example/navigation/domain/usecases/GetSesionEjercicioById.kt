@@ -7,10 +7,7 @@ import javax.inject.Inject
 class GetSesionEjercicioById @Inject constructor(
     private val repo: SesionRepositoryImpl
 ) {
-    suspend operator fun invoke(id: Int): SesionEjercicio? = try {
-        repo.getSesionEjercicioById(id)
-    } catch (e: Exception) {
-        null
-    }
+    suspend operator fun invoke(id: Int): SesionEjercicio? = repo.getSesionEjercicioById(id)
+
 }
 

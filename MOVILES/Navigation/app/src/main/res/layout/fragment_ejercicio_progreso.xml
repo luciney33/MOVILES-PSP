@@ -8,7 +8,6 @@
     tools:context=".ui.menuProgreso.ejercicioProgreso.EjercicioProgresoFragment">
 
 
-    <!-- RecyclerView con ejercicios -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvEjercicios"
         android:layout_width="0dp"
@@ -23,7 +22,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Mensaje vacío -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvVacio"
         android:layout_width="wrap_content"

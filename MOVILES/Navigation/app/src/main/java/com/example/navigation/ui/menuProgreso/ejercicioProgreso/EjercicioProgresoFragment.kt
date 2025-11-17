@@ -29,22 +29,30 @@ class EjercicioProgresoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = EjercicioProgresoAdapter { item ->
-            // navegar a registro pasando ejercicioId
-            val bundle = bundleOf("ejercicioId" to item.ejercicioId)
-            findNavController().navigate(com.example.navigation.R.id.action_ejercicioProgresoFragment_to_registroProgresoFragment, bundle)
-        }
-        binding.rvEjercicios.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvEjercicios.adapter = adapter
+       navegar()
+       setupRecyclerView()
+       observeEjercicios()
 
+        viewModel.load()
+    }
+private fun setupRecyclerView() {
+    binding.rvEjercicios.layoutManager = LinearLayoutManager(requireContext())
+    binding.rvEjercicios.adapter = adapter
+
+}
+    private fun observeEjercicios() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.items)
             binding.tvVacio.visibility = if (state.items.isEmpty()) View.VISIBLE else View.GONE
         }
-
-        viewModel.load()
     }
 
+    private fun navegar(){
+        adapter = EjercicioProgresoAdapter { item ->
+            val bundle = bundleOf("ejercicioId" to item.ejercicioId)
+            findNavController().navigate(com.example.navigation.R.id.action_ejercicioProgresoFragment_to_registroProgresoFragment, bundle)
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

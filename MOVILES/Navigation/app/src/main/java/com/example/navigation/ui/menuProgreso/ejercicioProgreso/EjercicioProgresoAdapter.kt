@@ -12,37 +12,33 @@ import com.example.navigation.domain.model.Progreso
 
 class EjercicioProgresoAdapter(
     private val onClick: (Progreso) -> Unit
-) : ListAdapter<Progreso, EjercicioProgresoAdapter.VH>(Diff()) {
+) : ListAdapter<Progreso, EjercicioProgresoAdapter.EjercicioProgresoViewHolder>(Diff()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EjercicioProgresoViewHolder {
         val binding = ItemEjercicioProgresoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return VH(binding)
+        return EjercicioProgresoViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: VH, position: Int) {
+    override fun onBindViewHolder(holder: EjercicioProgresoViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class VH(private val binding: ItemEjercicioProgresoBinding) : RecyclerView.ViewHolder(binding.root) {
+   inner class EjercicioProgresoViewHolder(private val binding: ItemEjercicioProgresoBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Progreso) {
             binding.tvNombreEjercicio.text = item.nombre
-            // Mostrar grupo muscular con fallback (usar literal si no hay valor)
             binding.tvGrupoMuscular.text = if (item.grupoMuscular.isNotBlank()) item.grupoMuscular else binding.root.context.getString(R.string.progreso_grupo_desconocido)
 
-            // Mostrar ultimoPeso con texto amigable
             val ultimo = if (item.ultimoPeso != "-") item.ultimoPeso else binding.root.context.getString(R.string.progreso_sin_registros)
             binding.tvUltimoPeso.text = ultimo
             val detalle = if (item.ultimoDetalle != "-") item.ultimoDetalle else binding.root.context.getString(R.string.progreso_sin_registros)
             binding.tvUltimoPeso.contentDescription = binding.root.context.getString(R.string.progreso_ultimo_registro_cd, detalle)
 
-            // Mostrar record (RM)
             val record = if (item.record != "-") item.record else binding.root.context.getString(R.string.progreso_sin_rm)
             binding.tvRecord.text = record
 
-            // Ajustar color/tint de la tendencia
-            val ctx = binding.root.context
-            val tint = if (item.tendenciaUp) ContextCompat.getColor(ctx, R.color.green_700) else ContextCompat.getColor(ctx, R.color.gray_600)
-            binding.ivTendencia.setColorFilter(tint)
+            val contexto = binding.root.context
+            val color = if (item.tendenciaUp) ContextCompat.getColor(contexto, R.color.green_700) else ContextCompat.getColor(contexto, R.color.gray_600)
+            binding.ivTendencia.setColorFilter(color)
 
             binding.root.setOnClickListener { onClick(item) }
         }

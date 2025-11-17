@@ -6,7 +6,6 @@ import com.example.navigation.data.local.entity.EntrenamientoEntity
 import com.example.navigation.domain.model.Ejercicio
 import com.example.navigation.domain.model.Entrenamiento
 
-// Funciones de extensión de nivel superior para mapear entre entity y domain
 fun EntrenamientoEntity.toEntrenamiento(): Entrenamiento =
     Entrenamiento(
         id = this.id,
@@ -15,13 +14,6 @@ fun EntrenamientoEntity.toEntrenamiento(): Entrenamiento =
         duracionMin = this.duracionMin
     )
 
-fun Entrenamiento.toEntrenamientoEntity(): EntrenamientoEntity =
-    EntrenamientoEntity(
-        id = this.id,
-        nombre = this.nombre,
-        descripcion = this.descripcion,
-        duracionMin = this.duracionMin
-    )
 
 fun EjercicioEntity.toEjercicio(): Ejercicio =
     Ejercicio(
@@ -32,14 +24,6 @@ fun EjercicioEntity.toEjercicio(): Ejercicio =
         iconoResName = this.iconoResName
     )
 
-fun Ejercicio.toEjercicioEntity(): EjercicioEntity =
-    EjercicioEntity(
-        id = this.id,
-        nombre = this.nombre,
-        grupoMuscular = this.grupoMuscular,
-        descripcion = this.descripcion,
-        iconoResName = this.iconoResName
-    )
 
 fun EntrenamientoConEjerciciosEntity.toDomain(): Entrenamiento =
     Entrenamiento(

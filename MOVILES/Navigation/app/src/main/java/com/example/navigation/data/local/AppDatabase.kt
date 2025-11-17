@@ -5,7 +5,6 @@ import androidx.room.RoomDatabase
 import com.example.navigation.data.local.dao.EjercicioDao
 import com.example.navigation.data.local.dao.EntrenamientoDao
 import com.example.navigation.data.local.dao.EntrenamientoEjercicioDao
-import com.example.navigation.data.local.dao.SerieDao
 import com.example.navigation.data.local.dao.SesionDao
 import com.example.navigation.data.local.dao.SesionEjercicioDao
 import com.example.navigation.data.local.dao.ProgresoDao
@@ -37,7 +36,6 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun sesionDao(): SesionDao
     abstract fun sesionEjercicioDao(): SesionEjercicioDao
-    abstract fun serieDao(): SerieDao
     abstract fun progresoDao(): ProgresoDao
 
 

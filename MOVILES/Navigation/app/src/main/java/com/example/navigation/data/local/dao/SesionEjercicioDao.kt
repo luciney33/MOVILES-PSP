@@ -12,7 +12,7 @@ import com.example.navigation.data.local.entity.SesionEjercicioConName
 @Dao
 interface SesionEjercicioDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insert(sesionEjercicio: SesionEjercicioEntity): Long
 
     @Update
@@ -24,7 +24,6 @@ interface SesionEjercicioDao {
     @Query("SELECT * FROM sesion_ejercicios WHERE sesionId = :sesionId ORDER BY orden ASC")
     suspend fun getBySesionId(sesionId: Int): List<SesionEjercicioEntity>
 
-    // JOIN: traer datos de sesion_ejercicios + nombre ejercicio + series/repeticiones desde entrenamiento_ejercicio si existe (por ejercicioId y entrenamientoId)
     @Query("SELECT se.id, se.sesionId, se.ejercicioId, e.nombre as nombreEjercicio, se.orden, se.volumenKg, se.notas, IFNULL(ee.series, 0) as series, IFNULL(ee.repeticiones, 0) as repeticiones FROM sesion_ejercicios se LEFT JOIN ejercicios e ON se.ejercicioId = e.id LEFT JOIN entrenamiento_ejercicio ee ON ee.ejercicioId = se.ejercicioId AND ee.entrenamientoId = :entrenamientoId WHERE se.sesionId = :sesionId ORDER BY se.orden ASC")
     suspend fun getBySesionIdConNameAndRelation(sesionId: Int, entrenamientoId: Int): List<SesionEjercicioConName>
 

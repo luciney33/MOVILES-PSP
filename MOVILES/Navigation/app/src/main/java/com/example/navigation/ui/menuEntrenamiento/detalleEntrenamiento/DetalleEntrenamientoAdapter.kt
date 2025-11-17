@@ -11,7 +11,7 @@ import com.example.navigation.databinding.ItemEjercicioEditableBinding
 import com.example.navigation.domain.model.SesionEjercicio
 
 class DetalleEntrenamientoAdapter(
-    private val actions: DetalleEntrenamientoAdapterActions
+     val actions: DetalleEntrenamientoAdapterActions
 ) : ListAdapter<SesionEjercicio, DetalleEntrenamientoAdapter.DetalleEntrenamientoViewHolder>(Diff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetalleEntrenamientoViewHolder {
@@ -42,23 +42,6 @@ class DetalleEntrenamientoAdapter(
 
             binding.btnEliminar.setOnClickListener {
                 actions.eliminar(item)
-            }
-
-            // Cuando el usuario sale del campo (pierde foco) leemos el valor y notificamos
-            binding.etSeries.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus) {
-                    val text = binding.etSeries.text?.toString()
-                    val series = text?.toIntOrNull() ?: item.series
-                    actions.campoCambiado(item.copy(series = series))
-                }
-            }
-
-            binding.etRepeticiones.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus) {
-                    val text = binding.etRepeticiones.text?.toString()
-                    val reps = text?.toIntOrNull() ?: item.repeticiones
-                    actions.campoCambiado(item.copy(repeticiones = reps))
-                }
             }
 
         }

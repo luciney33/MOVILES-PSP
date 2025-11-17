@@ -11,7 +11,7 @@
                 android:id="@+id/tilFecha"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Fecha"
+                android:hint="@string/Fecha"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
                 app:layout_constraintTop_toTopOf="parent"
@@ -29,13 +29,12 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Peso corporal -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPeso"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Peso corporal (kg)"
+                android:hint="@string/Pesocorporal"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 app:suffixText="kg"
                 app:layout_constraintTop_toBottomOf="@id/tilFecha"
@@ -50,13 +49,12 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Grasa corporal -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilGrasa"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Grasa corporal (%)"
+                android:hint="@string/grasa"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 app:suffixText="%"
                 app:layout_constraintTop_toBottomOf="@id/tilPeso"
@@ -72,12 +70,11 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-    <!-- Botón guardar -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGuardar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="GUARDAR MEDICIÓN"
+        android:text="@string/guardar_medicion"
         android:textSize="16sp"
         android:paddingVertical="16dp"
         android:layout_margin="16dp"

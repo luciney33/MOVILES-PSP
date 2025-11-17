@@ -11,7 +11,7 @@
         android:id="@+id/tvTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gym Tracker"
+        android:text="@string/home_title"
         android:textAppearance="?attr/textAppearanceHeadlineLarge"
         android:textColor="?attr/colorPrimary"
         android:textStyle="bold"
@@ -20,19 +20,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Título del historial -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvHistorialTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Historial de Sesiones"
+        android:text="@string/historial_title"
         android:textAppearance="?attr/textAppearanceTitleLarge"
         android:textColor="?attr/colorOnSurface"
         android:layout_margin="16dp"
         app:layout_constraintTop_toBottomOf="@id/tvTitulo"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- RecyclerView para historial -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistorialSesiones"
         android:layout_width="0dp"
@@ -51,7 +49,7 @@
         android:id="@+id/tvHistorialVacio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No hay entrenamientos registrados\n¡Empieza ahora!"
+        android:text="@string/historial_vacio"
         android:textAlignment="center"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textAppearance="?attr/textAppearanceBodyLarge"
@@ -63,4 +61,3 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

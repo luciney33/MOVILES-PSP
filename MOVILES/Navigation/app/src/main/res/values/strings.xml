@@ -11,37 +11,92 @@
     <string name="historialHome">Historial de Sesiones</string>
     <string name="Actualizar">Actualizar Ejercicio</string>
 
-    <!-- Placeholders -->
     <string name="volumen_placeholder">Volumen: %1$.1f kg</string>
     <string name="ejercicios_count">%1$d ejercicios</string>
 
-    <!-- Detalle entrenamiento -->
     <string name="nombre_hint">Nombre</string>
     <string name="volumen_hint">Volumen (kg)</string>
     <string name="notas_hint">Notas (opcional)</string>
     <string name="ejercicios_titulo">Ejercicios</string>
     <string name="vacio_ejercicios">No hay ejercicios\nToca + para agregar</string>
 
-    <!-- Progreso UI strings -->
     <string name="progreso_grupo_desconocido">-</string>
     <string name="progreso_sin_registros">Sin registros</string>
     <string name="progreso_sin_rm">Sin RM</string>
     <string name="progreso_ultimo_registro_cd">Último registro: %1$s</string>
 
-    <!-- Item labels -->
     <string name="item_label_ultimo">Último:</string>
     <string name="item_label_rm">RM:</string>
 
-    <!-- Fragment mensajes -->
     <string name="ejercicio_progreso_vacio">No hay ejercicios registrados</string>
 
-    <!-- Detalle mensajes (usados en ViewModel/state) -->
     <string name="mensaje_guardado">Guardado</string>
     <string name="mensaje_error_guardado">Error guardando</string>
     <string name="mensaje_error_carga_ejercicio">No se pudo cargar el ejercicio: %1$s</string>
     <string name="mensaje_relacion_actualizada">Relación actualizada</string>
     <string name="mensaje_error_relacion">Error actualizando relación: %1$s</string>
 
-    <!-- Placeholders / accessibility -->
     <string name="progreso_ultimo_default">Sin registros</string>
+
+    <string name="home_title">Gym Tracker</string>
+    <string name="historial_title">Historial de Sesiones</string>
+    <string name="historial_vacio">No hay entrenamientos registrados\n¡Empieza ahora!</string>
+
+    <string name="session_duration">%1$d min</string>
+    <string name="session_ejercicios">%1$d ejercicios</string>
+    <string name="session_volumen"> %1$s kg</string>
+
+    <string name="guardado">Guardado</string>
+
+    <string name="series_format">Series: %1$d x %2$d</string>
+    <string name="reps_format">Reps: %1$d</string>
+    <string name="volumen_total">Volumen total: %1$s kg</string>
+    <string name="duracion_prefix">Duración: %1$d minutos</string>
+
+    <string name="guardar_medicion">GUARDAR MEDICIÓN</string>
+    <string name="torso_push">Torso Push</string>
+    <string name="tiempo_inicial">00:00:00</string>
+    <string name="finalizar_sesion">FINALIZAR SESIÓN</string>
+
+    <string name="press_banca">Press Banca</string>
+    <string name="series_info">4 series × 8–10 reps</string>
+    <string name="actualizar_serie">Actualizar Serie</string>
+
+    <string name="entrenamiento_torso">Entrenamiento Torso</string>
+    <string name="entrenamiento_musculos">Pecho, Hombros, Tríceps</string>
+    <string name="entrenamiento_info">8 ejercicios · 45 min aprox</string>
+
+    <string name="serie_num">1</string>
+
+    <string name="fecha_sample">15 Mayo 2024</string>
+    <string name="volumen_sample">2,450 kg</string>
+
+    <string name="ejercicios_realizados">Ejercicios Realizados</string>
+    <string name="series_multiline">Serie 1: 80kg × 10 reps\nSerie 2: 80kg × 9 reps\nSerie 3: 80kg × 8 reps\nSerie 4: 82.5kg × 8 reps</string>
+    <string name="volumen_total_sample">Volumen total: 2,850 kg</string>
+    <string name="chip_mejora">+2.5kg</string>
+
+    <string name="seleccionar_entrenamiento">Seleccionar Entrenamiento</string>
+    <string name="no_rutinas">No tienes rutinas creadas</string>
+    <string name="crear_primera_rutina">Crear primera rutina</string>
+
+    <string name="reordenar">Reordenar</string>
+    <string name="series_label">Series</string>
+    <string name="reps_label">Reps</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="ejercicio_eliminado_vista">Ejercicio eliminado de la vista</string>
+
+    <string name="fecha_sample_detalle">15 de Mayo, 2025</string>
+    <string name="duracion_sample">Duración: 45 minutos</string>
+
+    <string name="entrenamiento_label">Entrenamiento</string>
+    <string name="introduce_peso">Introduce peso</string>
+    <string name="introduce_grasa">Introduce grasa corporal</string>
+    <string name="peso_invalido">Peso inválido</string>
+    <string name="grasa_invalida">Grasa inválida</string>
+
+    <string name="Fecha">Fecha</string>
+    <string name="Pesocorporal">Peso corporal (kg)</string>
+    <string name="grasa">Grasa corporal (%)</string>
+
 </resources>

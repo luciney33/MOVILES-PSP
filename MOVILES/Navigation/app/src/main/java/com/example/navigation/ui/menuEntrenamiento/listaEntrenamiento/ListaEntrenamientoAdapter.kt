@@ -35,8 +35,6 @@ class ListaEntrenamientoAdapter(
             binding.tvNombreEntrenamiento.text = entrenamiento.nombre
             binding.tvDescripcionEntrenamiento.text = entrenamiento.descripcion
             binding.tvNumeroEjercicios.text = "${entrenamiento.ejercicios.size} ejercicios"
-
-            // Añadido: manejar el click y notificar al Fragment
             binding.root.setOnClickListener {
                 actions.onClickItem(entrenamiento)
             }
@@ -45,7 +43,6 @@ class ListaEntrenamientoAdapter(
 
     class ListaEntreDiffCallback : DiffUtil.ItemCallback<Entrenamiento>() {
         override fun areItemsTheSame(oldItem: Entrenamiento, newItem: Entrenamiento): Boolean{
-            // Solo verifica el ID único
             return oldItem.id == newItem.id
         }
         override fun areContentsTheSame(oldItem: Entrenamiento, newItem: Entrenamiento) : Boolean{

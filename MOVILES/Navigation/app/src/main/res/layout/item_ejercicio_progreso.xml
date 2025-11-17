@@ -16,7 +16,6 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Icono del ejercicio -->
         <ImageView
             android:id="@+id/ivIconoEjercicio"
             android:layout_width="48dp"
@@ -27,7 +26,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- Nombre del ejercicio -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvNombreEjercicio"
             android:layout_width="0dp"
@@ -42,7 +40,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Press Banca" />
 
-        <!-- Grupo muscular -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvGrupoMuscular"
             android:layout_width="0dp"
@@ -53,10 +50,8 @@
             app:layout_constraintTop_toBottomOf="@id/tvNombreEjercicio"
             app:layout_constraintBottom_toBottomOf="@id/ivIconoEjercicio"
             app:layout_constraintStart_toEndOf="@id/ivIconoEjercicio"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Pecho" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Último registro -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvUltimo"
             android:layout_width="wrap_content"
@@ -80,7 +75,6 @@
             app:layout_constraintStart_toEndOf="@id/tvUltimo"
             tools:text="80kg × 10" />
 
-        <!-- Record personal -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvRecordLabel"
             android:layout_width="wrap_content"
@@ -106,7 +100,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="85kg × 8" />
 
-        <!-- Indicador de tendencia -->
         <ImageView
             android:id="@+id/ivTendencia"
             android:layout_width="24dp"

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.navigation.data.constants.Constantes
 import com.example.navigation.data.local.dao.ProgresoDao
 import com.example.navigation.data.local.entity.ProgresoEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,8 +20,7 @@ class RegistroProgresoViewModel @Inject constructor(
     val state: LiveData<RegistroProgresoState> = _state
 
     fun saveProgreso(fechaMs: Long, pesoKg: Double, grasaPercent: Double, notas: String) {
-        // set loading
-        _state.value = RegistroProgresoState(isLoading = true)
+        _state.value = RegistroProgresoState()
         viewModelScope.launch {
             try {
                 val entity = ProgresoEntity(
@@ -31,9 +31,9 @@ class RegistroProgresoViewModel @Inject constructor(
                     notas = notas
                 )
                 progresoDao.insert(entity)
-                _state.postValue(RegistroProgresoState(isLoading = false, success = true, message = "Guardado"))
+                _state.value  = RegistroProgresoState(mensaje = Constantes.MENSAJE_GUARDADO)
             } catch (e: Exception) {
-                _state.postValue(RegistroProgresoState(isLoading = false, success = false, error = e.message ?: "Error"))
+                _state.value  = RegistroProgresoState(mensaje = e.message ?: Constantes.MENSAJE_ERROR_GENERICO)
             }
         }
     }

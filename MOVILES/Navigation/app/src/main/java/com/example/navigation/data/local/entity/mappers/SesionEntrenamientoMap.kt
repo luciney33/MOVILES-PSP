@@ -5,7 +5,7 @@ import com.example.navigation.data.local.entity.SesionEjercicioConName
 import com.example.navigation.data.local.entity.SesionEjercicioEntity
 import com.example.navigation.domain.model.Sesion
 import com.example.navigation.domain.model.SesionEjercicio
-import com.example.navigation.domain.model.SesionConEjercicios
+import com.example.navigation.domain.model.SesionSummary
 
 fun toDomainSesion(entity: SesionEntity?): Sesion? {
     return entity?.let {
@@ -34,14 +34,7 @@ fun toDomainSesionEjercicio(entity: SesionEjercicioConName): SesionEjercicio {
     )
 }
 
-fun toDomainSesionConEjercicios(
-    sesionEntity: SesionEntity?,
-    ejercicios: List<SesionEjercicioConName>?
-): SesionConEjercicios? {
-    val sesion = toDomainSesion(sesionEntity) ?: return null
-    val lista = ejercicios?.map { toDomainSesionEjercicio(it) } ?: emptyList()
-    return SesionConEjercicios(sesion = sesion, ejercicios = lista)
-}
+
 
 fun toEntitySesionEjercicio(domain: SesionEjercicio): SesionEjercicioEntity {
     return SesionEjercicioEntity(
@@ -51,5 +44,22 @@ fun toEntitySesionEjercicio(domain: SesionEjercicio): SesionEjercicioEntity {
         orden = domain.orden,
         volumenKg = domain.volumenKg,
         notas = domain.notas
+    )
+}
+
+fun toDomainSesionSummary(
+    entity: SesionEntity,
+    entrenamientoNombre: String,
+    volumenTotalKg: Double,
+    ejerciciosTotales: Int
+): SesionSummary {
+    return SesionSummary(
+        id = entity.id,
+        entrenamientoNombre = entrenamientoNombre,
+        fechaInicio = entity.fechaInicio,
+        duracionMs = entity.duracionMs,
+        ejerciciosCompletados = entity.ejerciciosCompletados,
+        volumenTotalKg = volumenTotalKg,
+        ejerciciosTotales = ejerciciosTotales
     )
 }

@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
-    private const val DATABASE_NAME = "entrenamientosdb.db" // Define el nombre correcto aquí
+    private const val DATABASE_NAME = "entrenamientosdb.db"
 
 
     @Provides
@@ -25,7 +25,7 @@ object DatabaseModule {
     DATABASE_NAME
         )
             .createFromAsset(DATABASE_NAME)
-            .fallbackToDestructiveMigration() // Opcional para desarrollo
+            .fallbackToDestructiveMigration()
             .build()
     }
 

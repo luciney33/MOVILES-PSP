@@ -13,12 +13,11 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Nombre del ejercicio -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvNombreEjercicio"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Press Banca"
+            android:text="@string/press_banca"
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textColor="?attr/colorPrimary"
             android:textStyle="bold"
@@ -27,20 +26,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Press Banca" />
 
-        <!-- Series recomendadas -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvSeriesRecomendadas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="4 series × 8-10 reps"
+            android:text="@string/series_info"
             android:textAppearance="?attr/textAppearanceBodyMedium"
             android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintTop_toBottomOf="@id/tvNombreEjercicio"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="4 × 8-10" />
 
-        <!-- RecyclerView para series (se puede usar o ConstraintLayout anidado) -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSeries"
             android:layout_width="0dp"
@@ -53,13 +50,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/btnActualizarSerie" />
 
-        <!-- Botón agregar serie -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnActualizarSerie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Actualizar Serie"
+            android:text="@string/actualizar_serie"
             style="@style/Widget.Material3.Button.TextButton"
             app:icon="@android:drawable/ic_input_add"
             app:layout_constraintTop_toBottomOf="@id/rvSeries"

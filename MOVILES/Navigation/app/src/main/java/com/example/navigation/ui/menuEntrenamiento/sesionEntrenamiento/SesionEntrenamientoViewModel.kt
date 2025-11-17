@@ -1,10 +1,10 @@
 package com.example.navigation.ui.menuEntrenamiento.sesionEntrenamiento
 
 import android.os.SystemClock
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.navigation.data.constants.Constantes
 import com.example.navigation.domain.usecases.GetEjerciciosBySesion
 import com.example.navigation.domain.usecases.GetSesionById
 import com.example.navigation.domain.usecases.UpdateSesionDuracion
@@ -25,14 +25,11 @@ class SesionEntrenamientoViewModel @Inject constructor(
 
     var state: MutableLiveData<SesionEntrenamientoState> = MutableLiveData()
         private set
-
-    // Cronómetro
     private var startTime = 0L
     private var elapsedOffset = 0L
     private var tickerJob: Job? = null
     val tiempoFormateado: MutableLiveData<String> = MutableLiveData("00:00:00")
 
-    // Cargar la sesión + ejercicios en un único state (similar a ListaEntrenamientoViewModel)
     fun loadSesion(sesionId: Int) {
         viewModelScope.launch {
             try {
@@ -42,11 +39,9 @@ class SesionEntrenamientoViewModel @Inject constructor(
                     sesion = sesion,
                     ejercicios = ejercicios
                 )
-                // start timer automáticamente cuando la sesión se carga
                 startTimer()
             } catch (e: Exception) {
-                Log.w("SesionVM", "Error al cargar sesión $sesionId", e)
-                state.value = SesionEntrenamientoState(mensaje = "Error al cargar sesión: ${e.message}")
+                state.value = SesionEntrenamientoState(mensaje = e.message ?: Constantes.MENSAJE_ERROR_GENERICO)
             }
         }
     }
@@ -72,23 +67,12 @@ class SesionEntrenamientoViewModel @Inject constructor(
         }
     }
 
-    fun resetTimer() {
-        stopTimer()
-        elapsedOffset = 0L
-        tiempoFormateado.postValue(formatMs(0L))
-    }
 
     fun saveDurationAndStop(sesionId: Int) {
         viewModelScope.launch {
-            try {
-                // stop and compute
                 stopTimer()
                 val dur = elapsedOffset
-                val res = updateSesionDuracion(sesionId, dur)
-                Log.d("SesionVM", "saveDuration result=$res dur=$dur")
-            } catch (e: Exception) {
-                Log.w("SesionVM", "Error saving duration", e)
-            }
+                updateSesionDuracion(sesionId, dur)
         }
     }
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.navigation.data.constants.Constantes
 import com.example.navigation.domain.model.Progreso
 import com.example.navigation.domain.usecases.GetProgresoEjercicios
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,10 +20,15 @@ class EjercicioProgresoViewModel @Inject constructor(
     val state: LiveData<EjercicioProgresoState> = _state
 
     fun load() {
-        viewModelScope.launch {
-            val summaries: List<Progreso> = getProgresoEjercicios()
-            _state.value = EjercicioProgresoState(items = summaries)
+        try {
+            viewModelScope.launch {
+                val summaries: List<Progreso> = getProgresoEjercicios()
+                _state.value = EjercicioProgresoState(items = summaries)
+            }
+        }catch (e: Exception) {
+            _state.value = EjercicioProgresoState(mensaje = e.message ?: Constantes.MENSAJE_ERROR_GENERICO)
         }
+
     }
 
 }

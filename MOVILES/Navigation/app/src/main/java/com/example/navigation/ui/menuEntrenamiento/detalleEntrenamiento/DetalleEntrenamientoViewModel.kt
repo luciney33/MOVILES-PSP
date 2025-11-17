@@ -1,9 +1,9 @@
 package com.example.navigation.ui.menuEntrenamiento.detalleEntrenamiento
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.navigation.data.constants.Constantes
 import com.example.navigation.domain.model.SesionEjercicio
 import com.example.navigation.domain.usecases.GetSesionEjercicioById
 import com.example.navigation.domain.usecases.UpdateRelacionSeries
@@ -23,52 +23,44 @@ class DetalleEntrenamientoViewModel @Inject constructor(
         private set
 
     fun loadEjercicio(id: Int) {
-        viewModelScope.launch {
-            try {
+        try {
+            viewModelScope.launch {
                 val ej = getSesionEjercicioById(id)
                 state.value = DetalleEntrenamientoState(ejercicio = ej)
-            } catch (e: Exception) {
-                Log.w("DetalleVM","Error cargando ejercicio id=$id", e)
-                state.value = DetalleEntrenamientoState(mensaje = "No se pudo cargar el ejercicio: ${e.message}")
             }
+        }catch (e: Exception) {
+            state.value = DetalleEntrenamientoState(mensaje = e.message ?:Constantes.MENSAJE_ERROR_GENERICO)
         }
+
     }
 
     fun actualizarEjercicio(actualizado: SesionEjercicio) {
+
         viewModelScope.launch {
-            try {
+
                 val res = updateSesionEjercicio(actualizado)
                 if (res >= 0) {
-                    state.value = DetalleEntrenamientoState(ejercicio = actualizado, guardado = true, mensaje = "Guardado")
+                    state.value = DetalleEntrenamientoState(ejercicio = actualizado, guardado = true, mensaje = Constantes.MENSAJE_GUARDADO)
                 } else {
-                    state.value = DetalleEntrenamientoState(ejercicio = actualizado, guardado = false, mensaje = "Error guardando")
+                    state.value = DetalleEntrenamientoState(ejercicio = actualizado, guardado = false, mensaje = Constantes.MENSAJE_ERROR_GUARDADO)
                 }
-            } catch (e: Exception) {
-                Log.w("DetalleVM","Error actualizando ejercicio id=${actualizado.id}", e)
-                state.value = DetalleEntrenamientoState(ejercicio = actualizado, guardado = false, mensaje = "Error: ${e.message}")
-            }
         }
     }
 
     fun actualizar(sesionId: Int, ejercicioId: Int, series: Int, repeticiones: Int) {
         viewModelScope.launch {
-            try {
                 val res = updateRelacionSeries(sesionId, ejercicioId, series, repeticiones)
                 if (res >= 0) {
-                    // actualizamos el state para reflejar el cambio (opcional)
                     val current = state.value?.ejercicio
                     if (current != null) {
-                        state.value = DetalleEntrenamientoState(ejercicio = current.copy(series = series, repeticiones = repeticiones), mensaje = "Relación actualizada", guardado = true)
+                        state.value = DetalleEntrenamientoState(ejercicio = current.copy(series = series, repeticiones = repeticiones), mensaje = Constantes.MENSAJE_RELACION_ACTUALIZADA, guardado = true)
                     } else {
-                        state.value = DetalleEntrenamientoState(mensaje = "Relación actualizada", guardado = true)
+                        state.value = DetalleEntrenamientoState(mensaje = Constantes.MENSAJE_RELACION_ACTUALIZADA, guardado = true)
                     }
                 } else {
-                    state.value = DetalleEntrenamientoState(mensaje = "Error actualizando relación", guardado = false)
+                    state.value = DetalleEntrenamientoState(mensaje = Constantes.MENSAJE_ERROR_RELACION, guardado = false)
                 }
-            } catch (e: Exception) {
-                Log.w("DetalleVM","Error actualizando relacion series", e)
-                state.value = DetalleEntrenamientoState(mensaje = "Error actualizando relación: ${e.message}", guardado = false)
-            }
+
         }
     }
 

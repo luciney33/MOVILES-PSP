@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.navigation.R
 import com.example.navigation.databinding.FragmentRegistroProgresoBinding
 import com.google.android.material.snackbar.Snackbar
+import com.example.navigation.data.constants.Constantes
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -37,7 +39,12 @@ class RegistroProgresoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // inicializar fecha mostrada
+        eventos()
+
+       observar()
+    }
+
+    private fun eventos(){
         binding.etFecha.setText(dateFormat.format(fechaMs))
 
         binding.etFecha.setOnClickListener {
@@ -47,25 +54,21 @@ class RegistroProgresoFragment : Fragment() {
         binding.btnGuardar.setOnClickListener {
             onGuardarClicked()
         }
+    }
 
-        // observar estado
+    private fun observar(){
         viewModel.state.observe(viewLifecycleOwner) { st ->
             binding.btnGuardar.isEnabled = !st.isLoading
             if (st.success) {
-                Snackbar.make(binding.root, st.message ?: "Guardado", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, st.mensaje ?: getString(R.string.guardado), Snackbar.LENGTH_SHORT).show()
                 viewModel.clearState()
                 findNavController().popBackStack()
             } else if (st.error != null) {
-                Snackbar.make(binding.root, "Error: ${st.error}", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, Constantes.MENSAJE_ERROR_GENERICO + ": ${st.error}", Snackbar.LENGTH_LONG).show()
                 viewModel.clearState()
             }
         }
-
-        // leer argumento ejercicioId si necesitas usarlo/mostraro
-        val ejercicioId = arguments?.getInt("ejercicioId")
-        ejercicioId?.let { /* opcional: mostrar nombre, precargar datos */ }
     }
-
     private fun showDatePicker() {
         val cal = Calendar.getInstance()
         cal.timeInMillis = fechaMs
@@ -81,17 +84,17 @@ class RegistroProgresoFragment : Fragment() {
     private fun onGuardarClicked() {
         val pesoStr = binding.etPeso.text?.toString()?.trim() ?: ""
         val grasaStr = binding.etGrasa.text?.toString()?.trim() ?: ""
-        val notas = "" // podrías añadir un campo de notas si quieres
+        val notas = ""
 
         if (pesoStr.isEmpty()) {
-            binding.tilPeso.error = "Introduce peso"
+            binding.tilPeso.error = getString(R.string.introduce_peso)
             return
         } else {
             binding.tilPeso.error = null
         }
 
         if (grasaStr.isEmpty()) {
-            binding.tilGrasa.error = "Introduce grasa corporal"
+            binding.tilGrasa.error = getString(R.string.introduce_grasa)
             return
         } else {
             binding.tilGrasa.error = null
@@ -100,15 +103,14 @@ class RegistroProgresoFragment : Fragment() {
         val peso = pesoStr.toDoubleOrNull()
         val grasa = grasaStr.toDoubleOrNull()
         if (peso == null) {
-            binding.tilPeso.error = "Peso inválido"
+            binding.tilPeso.error = getString(R.string.peso_invalido)
             return
         }
         if (grasa == null) {
-            binding.tilGrasa.error = "Grasa inválida"
+            binding.tilGrasa.error = getString(R.string.grasa_invalida)
             return
         }
 
-        // guardar en bd
         viewModel.saveProgreso(fechaMs, peso, grasa, notas)
     }
 

@@ -7,7 +7,6 @@
     android:background="?attr/colorSurface"
     tools:context=".ui.menuEntrenamiento.detalleEntrenamiento.DetalleEntrenamientoFragment">
 
-    <!-- Card con información de la rutina -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardInfo"
         android:layout_width="0dp"
@@ -24,7 +23,6 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <!-- Nombre del entrenamiento / ejercicio -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilNombre"
                 android:layout_width="0dp"
@@ -45,7 +43,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Volumen (kg) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilVolumen"
                 android:layout_width="0dp"
@@ -66,7 +63,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Descripción / Notas -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilDescripcion"
                 android:layout_width="0dp"
@@ -92,7 +88,6 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Título ejercicios -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvTituloEjercicios"
         android:layout_width="wrap_content"
@@ -105,7 +100,6 @@
         app:layout_constraintTop_toBottomOf="@id/cardInfo"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- RecyclerView con ejercicios (opcional si quieres mostrar la lista editable) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvEjercicios"
         android:layout_width="0dp"
@@ -130,21 +124,6 @@
         android:layout_margin="16dp"
         style="@style/Widget.Material3.Button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Mensaje vacío -->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvVacio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/vacio_ejercicios"
-        android:textAlignment="center"
-        android:textAppearance="?attr/textAppearanceBodyLarge"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="@id/rvEjercicios"
-        app:layout_constraintBottom_toBottomOf="@id/rvEjercicios"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

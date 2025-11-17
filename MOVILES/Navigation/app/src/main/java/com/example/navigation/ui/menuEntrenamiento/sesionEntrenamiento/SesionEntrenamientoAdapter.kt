@@ -27,15 +27,13 @@ class SesionEntrenamientoAdapter(
         private val binding: ItemEjercicioSesionBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: SesionEjercicio, actions: Actions) {
             binding.tvNombreEjercicio.text = item.nombreEjercicio
-            // Mostrar volumen y también series x repeticiones si existen
             val contexto = binding.root.context
             val volumeText = contexto.getString(com.example.navigation.R.string.volumen_placeholder, item.volumenKg)
             val seriesText = if (item.series > 0) "${item.series} x ${item.repeticiones}" else ""
             binding.tvSeriesRecomendadas.text = if (seriesText.isNotEmpty()) "$volumeText • $seriesText" else volumeText
 
-            binding.rvSeries.visibility = android.view.View.GONE // si no se usan series, ocultar
+            binding.rvSeries.visibility = android.view.View.GONE
 
-            // El botón 'Actualizar Serie' disparará la acción con el ejercicio
             binding.btnActualizarSerie.setOnClickListener {
                 actions.onActualizarSerie(item)
             }

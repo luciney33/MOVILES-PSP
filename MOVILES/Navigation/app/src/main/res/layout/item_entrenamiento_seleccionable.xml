@@ -16,7 +16,6 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Icono del entrenamiento -->
         <ImageView
             android:id="@+id/ivIconoEntrenamiento"
             android:layout_width="56dp"
@@ -28,13 +27,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- Nombre del entrenamiento -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvNombreEntrenamiento"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Entrenamiento Torso"
+            android:text="@string/entrenamiento_torso"
             android:textAppearance="?attr/textAppearanceTitleLarge"
             android:textColor="?attr/colorOnSurface"
             android:maxLines="1"
@@ -42,42 +40,38 @@
             app:layout_constraintTop_toTopOf="@id/ivIconoEntrenamiento"
             app:layout_constraintStart_toEndOf="@id/ivIconoEntrenamiento"
             app:layout_constraintEnd_toStartOf="@id/ivFlecha"
-            tools:text="Torso Push" />
+            />
 
-        <!-- Descripción -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvDescripcionEntrenamiento"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:text="Pecho, Hombros, Tríceps"
+            android:text="@string/entrenamiento_musculos"
             android:textAppearance="?attr/textAppearanceBodyMedium"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:maxLines="1"
             android:ellipsize="end"
             app:layout_constraintTop_toBottomOf="@id/tvNombreEntrenamiento"
             app:layout_constraintStart_toEndOf="@id/ivIconoEntrenamiento"
-            app:layout_constraintEnd_toStartOf="@id/ivFlecha"
-            tools:text="Pecho, Hombros" />
+            app:layout_constraintEnd_toStartOf="@id/ivFlecha" />
 
-        <!-- Número de ejercicios -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvNumeroEjercicios"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:text="8 ejercicios · 45 min aprox"
+            android:text="@string/entrenamiento_info"
             android:textAppearance="?attr/textAppearanceBodySmall"
             android:textColor="?attr/colorPrimary"
             app:layout_constraintTop_toBottomOf="@id/tvDescripcionEntrenamiento"
             app:layout_constraintBottom_toBottomOf="@id/ivIconoEntrenamiento"
             app:layout_constraintStart_toEndOf="@id/ivIconoEntrenamiento"
             app:layout_constraintEnd_toStartOf="@id/ivFlecha"
-            tools:text="8 ejercicios" />
+             />
 
-        <!-- Flecha indicadora -->
         <ImageView
             android:id="@+id/ivFlecha"
             android:layout_width="24dp"
@@ -93,4 +87,3 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
-
