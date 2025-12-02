@@ -1,89 +1,114 @@
 package org.example.springdemo.ui.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.example.springdemo.common.constantes;
+import org.example.springdemo.common.Constantes;
 import org.example.springdemo.domain.model.Entrenamiento;
-import org.example.springdemo.ui.dto.EntrenamientoDTO;
-import org.example.springdemo.ui.mapper.EntrenamientoDtoMapper;
-import org.example.springdemo.ui.service.EntrenamientoService;
+import org.example.springdemo.domain.service.EntrenamientoService;
+import org.example.springdemo.ui.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping(constantes.API_ENTRENAMIENTOS)
+@RequestMapping(Constantes.API_ENTRENAMIENTOS)
 public class EntrenamientoController {
 
     private final EntrenamientoService entrenamientoService;
-    private final EntrenamientoDtoMapper entrenamientoDtoMapper;
+    private final AuthService authService;
 
-    public EntrenamientoController(EntrenamientoService entrenamientoService, EntrenamientoDtoMapper entrenamientoDtoMapper) {
+    public EntrenamientoController(EntrenamientoService entrenamientoService, AuthService authService) {
+        this.authService = authService;
         this.entrenamientoService = entrenamientoService;
-        this.entrenamientoDtoMapper = entrenamientoDtoMapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<EntrenamientoDTO>> listar(HttpSession session) {
-        if (!entrenamientoService.isAuthenticated(session)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<List<Entrenamiento>> listar(HttpSession session) {
+        if (authService.isAuthenticated(session)) {
+            if (authService.isAdmin(session)) {
+                return ResponseEntity.ok(entrenamientoService.getAll());
+            } else {
+                int userId = authService.getUsuarioFromSession(session).intValue();
+                return ResponseEntity.ok(entrenamientoService.getByUserId(userId));
+            }
         }
-        List<Entrenamiento> list = entrenamientoService.getAll(session);
-        List<EntrenamientoDTO> dtoList = entrenamientoDtoMapper.toDtoList(list);
-        return ResponseEntity.ok(dtoList);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @GetMapping(constantes.PATH_ID)
-    public ResponseEntity<EntrenamientoDTO> getById(@PathVariable int id, HttpSession session) {
-        if (!entrenamientoService.isAuthenticated(session)) {
+    @GetMapping(Constantes.PATH_ID)
+    public ResponseEntity<Entrenamiento> getById(@PathVariable Long id, HttpSession session) {
+        if (!authService.isAuthenticated(session)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        Optional<Entrenamiento> opt = entrenamientoService.getById(id, session);
-        return opt
-                .map(entrenamientoDtoMapper::toDto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
+
+        Entrenamiento entrenamiento = entrenamientoService.getById(id);
+        if (entrenamiento == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        int userId = authService.getUsuarioFromSession(session).intValue();
+        if (authService.isAdmin(session) || entrenamiento.usuarioId() == userId) {
+            return ResponseEntity.ok(entrenamiento);
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PostMapping
-    public ResponseEntity<EntrenamientoDTO> crear(@RequestBody EntrenamientoDTO entrenamientoDTO, HttpSession session) {
-        if (!entrenamientoService.isAuthenticated(session)) {
+    public ResponseEntity<Entrenamiento> crear(@RequestBody Entrenamiento entrenamiento, HttpSession session) {
+        if (authService.isAuthenticated(session)) {
+            if (authService.isAdmin(session)) {
+                Entrenamiento newReno = entrenamientoService.save(entrenamiento);
+                return ResponseEntity.status(HttpStatus.CREATED).body(newReno);
+            }
+            else
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        else
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        try {
-            Entrenamiento domain = entrenamientoDtoMapper.toDomain(entrenamientoDTO);
-            Entrenamiento creado = entrenamientoService.save(domain, session);
-            EntrenamientoDTO createdDto = entrenamientoDtoMapper.toDto(creado);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdDto);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
     }
 
 
-    @PutMapping(constantes.PATH_ID)
-    public ResponseEntity<Void> actualizar(@PathVariable int id, @RequestBody EntrenamientoDTO entrenamientoDTO, HttpSession session) {
-        if (!entrenamientoService.isAuthenticated(session)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    @PutMapping(Constantes.PATH_ID)
+    public ResponseEntity<Entrenamiento> actualizar(@PathVariable Long id, @RequestBody Entrenamiento entrenamiento, HttpSession session) {
+        if (authService.isAuthenticated(session)) {
+            if (authService.isAdmin(session)) {
+                Entrenamiento updated = entrenamientoService.update(id, entrenamiento);
+                if (updated != null) {
+                    return ResponseEntity.ok(updated);
+                } else {
+                    return ResponseEntity.notFound().build();
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         }
-        if (!entrenamientoService.isAdmin(session)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        Entrenamiento domain = entrenamientoDtoMapper.toDomain(entrenamientoDTO);
-        Entrenamiento toUpdate = new Entrenamiento(id, domain.usuarioId(), domain.nombre(), domain.descripcion());
-        entrenamientoService.update(toUpdate, session);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @DeleteMapping(constantes.PATH_ID)
-    public ResponseEntity<Void> borrar(@PathVariable int id, HttpSession session) {
-        if (!entrenamientoService.isAuthenticated(session)) {
+    @DeleteMapping(Constantes.PATH_ID)
+    public ResponseEntity<Void> borrar(@PathVariable Long id, HttpSession session) {
+        if (!authService.isAuthenticated(session)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        boolean borrado = entrenamientoService.delete(id, session);
-        if (borrado) return ResponseEntity.noContent().build();
-        else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        if (authService.isAdmin(session)) {
+            return entrenamientoService.delete(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        }
+
+        Entrenamiento entrenamiento = entrenamientoService.getById(id);
+        if (entrenamiento == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        int userId = authService.getUsuarioFromSession(session).intValue();
+        if (entrenamiento.usuarioId() != userId) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        return entrenamientoService.delete(id)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

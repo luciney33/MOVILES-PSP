@@ -1,10 +1,11 @@
 package org.example.springdemo.domain.model;
 
 public record Usuario(
-        int id,
+        Long id,
         String username,
+        String password,
         String email,
         String nombre,
-        String rol
+        Rol rol
 ) {
 }

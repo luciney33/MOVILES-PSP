@@ -1,10 +1,12 @@
 package org.example.springdemo.ui.dto;
 
+import org.example.springdemo.domain.model.Rol;
+
 public record UsuarioDTO(
-        int id,
+        Long id,
         String username,
         String email,
         String nombre,
-        String rol
+        Rol rol
 ) {
 }

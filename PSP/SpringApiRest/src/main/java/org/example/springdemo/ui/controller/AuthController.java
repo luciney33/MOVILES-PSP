@@ -1,52 +1,54 @@
 package org.example.springdemo.ui.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.example.springdemo.common.constantes;
+import org.example.springdemo.common.Constantes;
+import org.example.springdemo.ui.service.AuthService;
 import org.example.springdemo.ui.dto.LoginRequest;
 import org.example.springdemo.ui.dto.LoginResponse;
-import org.example.springdemo.ui.mapper.UsuarioDtoMapper;
-import org.example.springdemo.ui.service.UsuarioService;
+import org.example.springdemo.domain.model.Usuario;
+import org.example.springdemo.ui.dto.UsuarioDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
-@RequestMapping(constantes.API_AUTH)
+@RequestMapping(Constantes.API_AUTH)
 public class AuthController {
-    private final UsuarioService usuarioService;
-    private final UsuarioDtoMapper usuarioDtoMapper;
+    private final AuthService authService;
 
-    public AuthController(UsuarioService usuarioService, UsuarioDtoMapper usuarioDtoMapper) {
-        this.usuarioService = usuarioService;
-        this.usuarioDtoMapper = usuarioDtoMapper;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+
     }
 
 
-    @PostMapping(constantes.AUTH_LOGIN)
+    @PostMapping(Constantes.AUTH_LOGIN)
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpSession session) {
-        return usuarioService.login(request.username(), request.password(), session)
-                .map(usuario -> ResponseEntity.ok(
-                        new LoginResponse(true, constantes.MSG_LOGIN_SUCCESS, usuarioDtoMapper.toDto(usuario))
-                ))
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new LoginResponse(false, constantes.MSG_LOGIN_INVALID, null)));
+        Usuario usuario = authService.login(request.username(), request.password(), session);
+
+        if (usuario != null) {
+            UsuarioDTO usuarioDTO = new UsuarioDTO(
+                    usuario.id(),
+                    usuario.username(),
+                    usuario.email(),
+                    usuario.nombre(),
+                    usuario.rol()
+            );
+
+            LoginResponse response = new LoginResponse(usuarioDTO, Constantes.MSG_LOGIN_SUCCESS);
+            return ResponseEntity.ok(response);
+        }
+
+        LoginResponse errorResponse = new LoginResponse(Constantes.MSG_LOGIN_INVALID);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
 
-    @PostMapping(constantes.AUTH_LOGOUT)
-    public ResponseEntity<LoginResponse> logout(HttpSession session) {
-        usuarioService.logout(session);
-        return ResponseEntity.ok(new LoginResponse(true, constantes.MSG_LOGOUT_SUCCESS, null));
+    @PostMapping(Constantes.AUTH_LOGOUT)
+    public ResponseEntity<String> logout(HttpSession session) {
+        authService.logout(session);
+        return ResponseEntity.ok(Constantes.MSG_LOGOUT_SUCCESS);
     }
 
-    @GetMapping(constantes.AUTH_SESSION)
-    public ResponseEntity<LoginResponse> checkSession(HttpSession session) {
-        return usuarioService.getUsuarioFromSession(session)
-                .map(usuario -> ResponseEntity.ok(
-                        new LoginResponse(true, constantes.MSG_USER_AUTHENTICATED, usuarioDtoMapper.toDto(usuario))
-                ))
-                .orElse(ResponseEntity.ok(
-                        new LoginResponse(false, constantes.MSG_USER_NOT_AUTHENTICATED, null)
-                ));
-    }
 }

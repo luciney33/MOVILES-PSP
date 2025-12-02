@@ -93,7 +93,7 @@ public class JuegoServlet extends HttpServlet {
         long inicioPartida = (long) session.getAttribute("inicioPartida");
         long tiempoJuego = System.currentTimeMillis() - inicioPartida;
 
-        Estadistica estadistica = Estadistica.cogerCrearEstadistica(usuario);
+        Estadistica estadistica = Estadisti(usuario);
 
         int puntuacion = 55 - (intentos * 5);
         Partida partida = new Partida(puntuacion, intentos, tiempoJuego);

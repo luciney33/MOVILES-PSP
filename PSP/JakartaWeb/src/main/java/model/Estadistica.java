@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Estadistica {
-    private static Map<String, Estadistica> estadisticasUsuarios = new HashMap<>();
+    private final Map<String, Estadistica> estadisticasUsuarios = new HashMap<>();
     private List<Partida> partidas;
 
     public Estadistica() {
@@ -33,19 +33,18 @@ public class Estadistica {
         this.partidas.add(partida);
     }
 
-    public static Estadistica cogerEstadistica(String usuario) {
+    public Estadistica cogerEstadistica(String usuario) {
         return estadisticasUsuarios.get(usuario);
     }
-
-    public static void crearEstadistica(String usuario) {
+    public void crearEstadistica(String usuario) {
         estadisticasUsuarios.putIfAbsent(usuario, new Estadistica());
     }
 
-    public static Estadistica cogerCrearEstadistica(String usuario) {
+    public Estadistica cogerCrearEstadistica(String usuario) {
         crearEstadistica(usuario);
         return cogerEstadistica(usuario);
     }
-    public static Map<String, Estadistica> todasEstadisticas() {
+    public Map<String, Estadistica> todasEstadisticas() {
         return new HashMap<>(estadisticasUsuarios);
     }
 }
