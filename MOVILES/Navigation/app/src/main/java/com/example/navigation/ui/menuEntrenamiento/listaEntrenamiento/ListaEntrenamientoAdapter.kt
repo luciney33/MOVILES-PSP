@@ -10,7 +10,8 @@ import com.example.navigation.domain.model.Entrenamiento
 
 class ListaEntrenamientoAdapter(
     val actions : EntrenamientoAdapterActions
-) : ListAdapter<Entrenamiento, ListaEntrenamientoAdapter.ListaEntrenamientoHolder>(ListaEntreDiffCallback()) {
+) : ListAdapter<Entrenamiento, ListaEntrenamientoAdapter.ListaEntrenamientoHolder>(
+    ListaEntreDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListaEntrenamientoHolder {
         val binding = ItemEntrenamientoBinding.inflate(
