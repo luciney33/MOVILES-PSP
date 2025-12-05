@@ -1,30 +1,47 @@
-package org.example.emailspring.interceptor;
+package org.example.emailspring.ui.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.emailspring.ui.service.AuthService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 @Component
-public class RequestInterceptor implements HandlerInterceptor {
+public class AuthInterceptor implements HandlerInterceptor {
+    public final AuthService authService;
+
+    public AuthInterceptor(AuthService authService) {
+        this.authService = authService;
+    }
+
 
     // Request is intercepted by this method before reaching the Controller
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-        //* Business logic just when the request is received and intercepted by this interceptor before reaching the controller
-        try {
-            System.out.println("1 - preHandle() : Before sending request to the Controller");
-            System.out.println("Method Type: " + request.getMethod());
-            System.out.println("Request URL: " + request.getRequestURI());
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
+            return true;
         }
-        //* If the Exception is caught, this method will return false
-        catch (Exception e) {
-            e.printStackTrace();
-            return false;
+
+        RequiresAuth requiresAuth = handlerMethod.getMethodAnnotation(RequiresAuth.class);
+        // Si tiene anotación @RequiresAuth, usarla
+        if (requiresAuth != null) {
+            if (!authService.isAuthenticated(request.getSession())) {
+                sendError(response, HttpStatus.UNAUTHORIZED, "Debe iniciar sesión");
+                return false;
+            }
+
+            if (requiresAuth.admin() && !authService.isAdmin(request.getSession())) {
+                sendError(response, HttpStatus.FORBIDDEN, "Acceso denegado");
+                return false;
+            }
+
+            return true;
         }
         return true;
+
     }
 
     // Response is intercepted by this method before reaching the client
@@ -49,5 +66,9 @@ public class RequestInterceptor implements HandlerInterceptor {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendError(HttpServletResponse response, HttpStatus status, String message) throws Exception {
+        response.sendError(status.value(), message);
     }
 }
