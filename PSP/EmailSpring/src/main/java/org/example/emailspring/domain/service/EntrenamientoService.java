@@ -1,5 +1,7 @@
 package org.example.emailspring.domain.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import org.example.emailspring.common.Constantes;
 import org.example.emailspring.data.EntrenamientoRepository;
 import org.example.emailspring.data.entity.EntrenamientoEntity;
 import org.example.emailspring.domain.mapper.EntrenamientoMapper;
@@ -28,7 +30,7 @@ public class EntrenamientoService {
     public Entrenamiento getById(Long id) {
         return entrenamientoRepository.findById(id)
                 .map(entrenamientoMapper::toDomain)
-                .orElse(null);
+                .orElseThrow(() -> new EntityNotFoundException(Constantes.NO_ENCONTRADO));
     }
 
     public Entrenamiento save(Entrenamiento entrenamiento) {
@@ -42,28 +44,15 @@ public class EntrenamientoService {
                     updated.setId(existing.getId());
                     return entrenamientoMapper.toDomain(entrenamientoRepository.save(updated));
                 })
-                .orElse(null);
+                .orElseThrow(() -> new EntityNotFoundException(Constantes.NO_ENCONTRADO));
     }
 
     public boolean delete(Long id) {
         if (entrenamientoRepository.existsById(id)) {
             entrenamientoRepository.deleteById(id);
             return true;
+        } else {
+            throw new EntityNotFoundException(Constantes.NO_ENCONTRADO);
         }
-        return false;
-    }
-
-    public List<Entrenamiento> getByUsuarioId(int userId) {
-        return entrenamientoRepository.getByUsuarioId(userId)
-                .stream()
-                .map(entrenamientoMapper::toDomain)
-                .toList();
-    }
-
-    public List<Entrenamiento> getByNombre(String nombre) {
-        return entrenamientoRepository.getByNombre(nombre)
-                .stream()
-                .map(entrenamientoMapper::toDomain)
-                .toList();
     }
 }

@@ -18,8 +18,7 @@ public class AuthService {
 
     public Usuario login(String username, String password, HttpSession session) {
         Usuario usuario = usuarioService.login(username, password);
-        if (usuario != null)
-            session.setAttribute(Constantes.SESSION_ATTR_USUARIO, usuario);
+        session.setAttribute(Constantes.SESSION_ATTR_USUARIO, usuario);
         return usuario;
     }
 
@@ -30,16 +29,13 @@ public class AuthService {
     public boolean isAuthenticated(HttpSession session) {
         return session.getAttribute(Constantes.SESSION_USUARIO_ID) != null;
     }
-    public Long getUsuarioFromSession(HttpSession session) {
-        return ((Usuario) session.getAttribute(Constantes.SESSION_ATTR_USUARIO)).id();
-    }
+
     public Rol getRolFromSession(HttpSession session) {
         return session.getAttribute(Constantes.SESSION_ATTR_USUARIO) != null
                 ? ((Usuario) session.getAttribute(Constantes.SESSION_ATTR_USUARIO)).rol()
                 : null;
     }
     public boolean isAdmin(HttpSession session) {
-        Rol rol = getRolFromSession(session);
-        return Rol.ADMIN.equals(rol);
+        return Rol.ADMIN.equals(getRolFromSession(session));
     }
 }

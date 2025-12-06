@@ -6,6 +6,7 @@ import org.example.emailspring.domain.model.Usuario;
 import org.example.emailspring.ui.dto.LoginRequest;
 import org.example.emailspring.ui.dto.LoginResponse;
 import org.example.emailspring.ui.dto.UsuarioDTO;
+import org.example.emailspring.ui.interceptor.RequiresAuth;
 import org.example.emailspring.ui.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,24 +28,21 @@ public class AuthController {
 
 
     @PostMapping(Constantes.AUTH_LOGIN)
+    @RequiresAuth
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpSession session) {
-        Usuario usuario = authService.login(request.username(), request.password(), session);
+        Usuario usuario = authService.login(request.username(), request.password(),session);
 
-        if (usuario != null) {
-            UsuarioDTO usuarioDTO = new UsuarioDTO(
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO(
                     usuario.id(),
                     usuario.username(),
                     usuario.email(),
                     usuario.nombre(),
                     usuario.rol()
-            );
+        );
 
-            LoginResponse response = new LoginResponse(usuarioDTO, Constantes.MSG_LOGIN_SUCCESS);
-            return ResponseEntity.ok(response);
-        }
-
-        LoginResponse errorResponse = new LoginResponse(Constantes.MSG_LOGIN_INVALID);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+        LoginResponse response = new LoginResponse(usuarioDTO, Constantes.MSG_LOGIN_SUCCESS);
+        return ResponseEntity.ok(response);
     }
 
 

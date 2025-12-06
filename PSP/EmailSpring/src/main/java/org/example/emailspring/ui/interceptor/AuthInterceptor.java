@@ -2,8 +2,10 @@ package org.example.emailspring.ui.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.emailspring.common.Constantes;
+import org.example.emailspring.domain.error.ForbiddenException;
+import org.example.emailspring.domain.error.UnauthorizedException;
 import org.example.emailspring.ui.service.AuthService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -18,7 +20,6 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
 
-    // Request is intercepted by this method before reaching the Controller
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!(handler instanceof HandlerMethod handlerMethod)) {
@@ -26,16 +27,13 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         RequiresAuth requiresAuth = handlerMethod.getMethodAnnotation(RequiresAuth.class);
-        // Si tiene anotación @RequiresAuth, usarla
         if (requiresAuth != null) {
             if (!authService.isAuthenticated(request.getSession())) {
-                sendError(response, HttpStatus.UNAUTHORIZED, "Debe iniciar sesión");
-                return false;
+                throw new UnauthorizedException(Constantes.MSG_USER_NOT_AUTHENTICATED);
             }
 
             if (requiresAuth.admin() && !authService.isAdmin(request.getSession())) {
-                sendError(response, HttpStatus.FORBIDDEN, "Acceso denegado");
-                return false;
+                throw new ForbiddenException(Constantes.MSG_LOGIN_INVALID);
             }
 
             return true;
@@ -44,7 +42,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     }
 
-    // Response is intercepted by this method before reaching the client
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         //* Business logic just before the response reaches the client and the request is served
@@ -68,7 +65,4 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
     }
 
-    private void sendError(HttpServletResponse response, HttpStatus status, String message) throws Exception {
-        response.sendError(status.value(), message);
-    }
 }
