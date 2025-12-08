@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.domain.model.Rol;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = Constantes.TABLE_USUARIOS)
@@ -17,19 +19,25 @@ public class UsuarioEntity {
     private String password;
     private String email;
     private String nombre;
+    private boolean activo;
+    private String codigoActivacion;
+    private LocalDateTime expiracionCodigo;
 
     @Enumerated(EnumType.STRING)
     private Rol rol;
 
     public UsuarioEntity() {}
 
-    public UsuarioEntity(Long id, String username, String password, String email, String nombre, Rol rol) {
+    public UsuarioEntity(Long id, String username, String password, String email, String nombre, Rol rol, boolean activo, String codigoActivacion, LocalDateTime expiracionCodigo) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.nombre = nombre;
         this.rol = rol;
+        this.activo = activo;
+        this.codigoActivacion = codigoActivacion;
+        this.expiracionCodigo = expiracionCodigo;
     }
 
     public Long getId() {
@@ -38,6 +46,30 @@ public class UsuarioEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCodigoActivacion() {
+        return codigoActivacion;
+    }
+
+    public boolean activo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public void setCodigoActivacion(String codigoActivacion) {
+        this.codigoActivacion = codigoActivacion;
+    }
+
+    public LocalDateTime getExpiracionCodigo() {
+        return expiracionCodigo;
+    }
+
+    public void setExpiracionCodigo(LocalDateTime expiracionCodigo) {
+        this.expiracionCodigo = expiracionCodigo;
     }
 
     public String getUsername() {

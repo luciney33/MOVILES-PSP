@@ -3,9 +3,9 @@ package org.example.emailspring.ui.dto;
 public record LoginResponse(
         boolean success,
         String message,
-        UsuarioDTO usuario
+        UsuarioResponseDTO usuario
 ) {
-    public LoginResponse(UsuarioDTO usuario, String message) {
+    public LoginResponse(UsuarioResponseDTO usuario, String message) {
         this(true, message, usuario);
     }
 

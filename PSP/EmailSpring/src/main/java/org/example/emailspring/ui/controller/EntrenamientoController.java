@@ -1,11 +1,9 @@
 package org.example.emailspring.ui.controller;
 
-import jakarta.servlet.http.HttpSession;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.domain.model.Entrenamiento;
 import org.example.emailspring.domain.service.EntrenamientoService;
 import org.example.emailspring.ui.interceptor.RequiresAuth;
-import org.example.emailspring.ui.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

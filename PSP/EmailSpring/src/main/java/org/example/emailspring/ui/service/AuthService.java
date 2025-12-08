@@ -5,6 +5,7 @@ import org.example.emailspring.common.Constantes;
 import org.example.emailspring.domain.model.Rol;
 import org.example.emailspring.domain.model.Usuario;
 import org.example.emailspring.domain.service.UsuarioService;
+import org.example.emailspring.ui.dto.UsuarioDTO;
 import org.springframework.stereotype.Service;
 
 
@@ -26,6 +27,9 @@ public class AuthService {
         session.invalidate();
     }
 
+    public Usuario register(UsuarioDTO usuario) {
+        return usuarioService.register(usuario);
+    }
     public boolean isAuthenticated(HttpSession session) {
         return session.getAttribute(Constantes.SESSION_USUARIO_ID) != null;
     }

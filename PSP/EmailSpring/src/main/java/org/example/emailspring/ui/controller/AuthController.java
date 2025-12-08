@@ -6,6 +6,7 @@ import org.example.emailspring.domain.model.Usuario;
 import org.example.emailspring.ui.dto.LoginRequest;
 import org.example.emailspring.ui.dto.LoginResponse;
 import org.example.emailspring.ui.dto.UsuarioDTO;
+import org.example.emailspring.ui.dto.UsuarioResponseDTO;
 import org.example.emailspring.ui.interceptor.RequiresAuth;
 import org.example.emailspring.ui.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 
 @RestController
@@ -33,15 +35,15 @@ public class AuthController {
         Usuario usuario = authService.login(request.username(), request.password(),session);
 
 
-        UsuarioDTO usuarioDTO = new UsuarioDTO(
-                    usuario.id(),
-                    usuario.username(),
-                    usuario.email(),
-                    usuario.nombre(),
-                    usuario.rol()
+        UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
+                usuario.id(),
+                usuario.username(),
+                usuario.email(),
+                usuario.nombre(),
+                usuario.rol()
         );
 
-        LoginResponse response = new LoginResponse(usuarioDTO, Constantes.MSG_LOGIN_SUCCESS);
+        LoginResponse response = new LoginResponse(usuarioResponseDTO, Constantes.MSG_LOGIN_SUCCESS);
         return ResponseEntity.ok(response);
     }
 
@@ -50,6 +52,14 @@ public class AuthController {
     public ResponseEntity<String> logout(HttpSession session) {
         authService.logout(session);
         return ResponseEntity.ok(Constantes.MSG_LOGOUT_SUCCESS);
+    }
+
+
+    @PostMapping(Constantes.AUTH_REGISTER)
+    @RequiresAuth
+    public ResponseEntity<Usuario> register(@RequestBody UsuarioDTO usuario) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(usuario));
+
     }
 
 }

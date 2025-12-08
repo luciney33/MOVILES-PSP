@@ -13,9 +13,12 @@ public class UsuarioMapper {
                 entity.getId(),
                 entity.getUsername(),
                 entity.getPassword(),
-                entity.getNombre(),
                 entity.getEmail(),
-                entity.getRol()
+                entity.getNombre(),
+                entity.getRol(),
+                entity.activo(),
+                entity.getCodigoActivacion(),
+                entity.getExpiracionCodigo()
         );
     }
 
@@ -27,7 +30,10 @@ public class UsuarioMapper {
                 u.password(),
                 u.email(),
                 u.nombre(),
-                u.rol()
-        );
+                u.rol(),
+                u.activo(),
+                u.codigoActivacion(),
+                u.expiracionCodigo()
+                );
     }
 }

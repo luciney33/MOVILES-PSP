@@ -1,4 +1,4 @@
-package org.example.emailspring.ui.config;
+package org.example.emailspring.config;
 
 import org.example.emailspring.ui.interceptor.AuthInterceptor;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +38,7 @@ public class AuthInterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("*")
+                .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)

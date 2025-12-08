@@ -41,28 +41,4 @@ public class AuthInterceptor implements HandlerInterceptor {
         return true;
 
     }
-
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        //* Business logic just before the response reaches the client and the request is served
-        try {
-            System.out.println("2 - postHandle() : After the Controller serves the request (before returning back response to the client)");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // This method is called after request & response HTTP communication is done.
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        //* Business logic after request and response is Completed
-        try {
-            System.out.println("3 - afterCompletion() : After the request and Response is completed");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }
