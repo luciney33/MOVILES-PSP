@@ -1,4 +1,4 @@
-package org.example.emailspring.config;
+package org.example.emailspring.ui.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -30,9 +30,15 @@ public class AuthService {
     public Usuario register(UsuarioDTO usuario) {
         return usuarioService.register(usuario);
     }
+
+    public Usuario activarCuenta(String codigoActivacion) {
+        return usuarioService.activarCuenta(codigoActivacion);
+    }
+
     public boolean isAuthenticated(HttpSession session) {
         return session.getAttribute(Constantes.SESSION_USUARIO_ID) != null;
     }
+
 
     public Rol getRolFromSession(HttpSession session) {
         return session.getAttribute(Constantes.SESSION_ATTR_USUARIO) != null

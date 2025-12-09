@@ -8,8 +8,4 @@ public record LoginResponse(
     public LoginResponse(UsuarioResponseDTO usuario, String message) {
         this(true, message, usuario);
     }
-
-    public LoginResponse(String message) {
-        this(false, message, null);
-    }
 }

@@ -1,6 +1,24 @@
 package org.example.emailspring.common;
 
 public final class Constantes {
+    public static final String CODIGO = "codigo";
+    public static final String NOMBRE_USUARIO = "nombreUsuario";
+    public static final String TEMPLATE = "usuario-activo";
+    public static final String API = "/api/**";
+    public static final String EXCLUDE_URL = "/api/auth/**";
+    public static final String SWAGGER_UI = "/swagger-ui/**";
+    public static final String CLASSPATH_SWAGGER = "classpath:/META-INF/resources/webjars/springdoc-openapi-ui/";
+    public static final String WEBJARS = "/webjars/**";
+    public static final String CLASSPATH_WEBJARS = "classpath:/META-INF/resources/webjars/";
+    public static final String SWAGGER_UI_HTML = "/swagger-ui.html";
+    public static final String SWAGGER_UI_INDEX_HTML = "/swagger-ui/index.html";
+    public static final String GET = "GET";
+    public static final String POST = "POST";
+    public static final String PUT = "PUT";
+    public static final String DELETE = "DELETE";
+    public static final String OPTIONS = "OPTIONS";
+
+
     private Constantes() {}
 
 
@@ -8,12 +26,16 @@ public final class Constantes {
     public static final String API_ENTRENAMIENTOS = "/api/entrenamientos";
     public static final String TABLE_ENTRENAMIENTO= "entrenamientos";
     public static final String TABLE_USUARIOS = "usuarios";
+    public static final String API_ACTIVAR = "/api/auth/activar";
+
 
 
     public static final String AUTH_LOGIN = "/login";
     public static final String AUTH_LOGOUT = "/logout";
     public static final String AUTH_REGISTER= "/register";
 
+    public static final String CODIGO_DE_ACTIVACION_INVALIDO= "Código de activación inválido.";
+    public static final String EXPORADO_CODIGO_DE_ACTIVACION = "El código de activación ha expirado.";
 
     public static final String PATH_ID = "/{id}";
 

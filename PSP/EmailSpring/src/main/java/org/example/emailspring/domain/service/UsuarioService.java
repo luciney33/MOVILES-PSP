@@ -3,6 +3,7 @@ package org.example.emailspring.domain.service;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.data.UsuarioRepository;
 import org.example.emailspring.data.entity.UsuarioEntity;
+import org.example.emailspring.domain.error.BadRequestException;
 import org.example.emailspring.domain.mapper.UsuarioMapper;
 import org.example.emailspring.domain.model.Usuario;
 import org.example.emailspring.domain.error.BadCredentialsException;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 @Service
 public class UsuarioService {
+    public static final String CÓDIGO_DE_ACTIVACIÓN_INVÁLIDO = "Código de activación inválido.";
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioMapper usuarioMapper;
@@ -57,7 +59,7 @@ public class UsuarioService {
                 request.email(),
                 request.nombre(),
                 request.rol(),
-                true,
+                false,
                 codigoActivacion,
                 expiracionCodigo
         );
@@ -67,6 +69,23 @@ public class UsuarioService {
         emailService.enviarEmailActivacion(usuarioGuardado.getEmail(), usuarioGuardado.getNombre(),  codigoActivacion);
 
         return usuarioMapper.toDomain(usuarioGuardado);
+    }
+
+    public Usuario activarCuenta(String codigoActivacion) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findByCodigoActivacion(codigoActivacion);
+        if (usuarioEntity == null) {
+            throw new BadRequestException(Constantes.CODIGO_DE_ACTIVACION_INVALIDO);
+        }
+        if (usuarioEntity.getExpiracionCodigo() != null && usuarioEntity.getExpiracionCodigo().isBefore(LocalDateTime.now())) {
+            throw new BadRequestException(Constantes.EXPORADO_CODIGO_DE_ACTIVACION);
+        }
+
+        usuarioEntity.setActivo(true);
+        usuarioEntity.setCodigoActivacion(null);
+        usuarioEntity.setExpiracionCodigo(null);
+
+        UsuarioEntity usuarioActualizado = usuarioRepository.save(usuarioEntity);
+        return usuarioMapper.toDomain(usuarioActualizado);
     }
 
 }

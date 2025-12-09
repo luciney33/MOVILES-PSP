@@ -1,5 +1,6 @@
-package org.example.emailspring.config;
+package org.example.emailspring.ui.config;
 
+import org.example.emailspring.common.Constantes;
 import org.example.emailspring.ui.interceptor.AuthInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
@@ -15,31 +16,31 @@ public class AuthInterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/auth/**");
+                .addPathPatterns(Constantes.API)
+                .excludePathPatterns(Constantes.EXCLUDE_URL);
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/swagger-ui/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/springdoc-openapi-ui/")
+        registry.addResourceHandler(Constantes.SWAGGER_UI)
+                .addResourceLocations(Constantes.CLASSPATH_SWAGGER)
                 .resourceChain(false);
 
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/")
+        registry.addResourceHandler(Constantes.WEBJARS)
+                .addResourceLocations(Constantes.CLASSPATH_WEBJARS)
                 .resourceChain(false);
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addRedirectViewController("/swagger-ui.html", "/swagger-ui/index.html");
+        registry.addRedirectViewController(Constantes.SWAGGER_UI_HTML, Constantes.SWAGGER_UI_INDEX_HTML);
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
+        registry.addMapping(Constantes.API)
                 .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedMethods(Constantes.GET, Constantes.POST, Constantes.PUT, Constantes.DELETE, Constantes.OPTIONS)
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3600);

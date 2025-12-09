@@ -4,7 +4,10 @@ CREATE TABLE usuario (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100),
     nombre VARCHAR(100),
-    rol VARCHAR(20)
+    rol VARCHAR(20),
+    activo BOOLEAN DEFAULT FALSE,
+    codigoActivacion VARCHAR(255),
+    expiracionCodigo TIMESTAMP
 );
 
 CREATE TABLE entrenamiento (
