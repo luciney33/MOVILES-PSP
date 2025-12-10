@@ -20,3 +20,7 @@ data class Transformation(
     val ki: String,
     val name: String
 )
+
+data class DragonBallResponse(
+    val results: List<DragonBallCharacter>
+)

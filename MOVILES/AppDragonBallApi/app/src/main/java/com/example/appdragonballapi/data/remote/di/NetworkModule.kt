@@ -1,7 +1,7 @@
 package com.example.appdragonballapi.data.remote.di
 
-import com.example.navigationhiltroom.BuildConfig
-import com.example.navigationhiltroom.data.remote.api.RickMortyApiService
+import com.example.appdragonballapi.BuildConfig
+import com.example.appdragonballapi.data.remote.api.DragonBallApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,7 +23,7 @@ object NetworkModule {
     @Singleton
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            HttpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            level = HttpLoggingInterceptor.Level.BODY
         }
     }
 
@@ -57,7 +57,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideDragongBallApiService(retrofit: Retrofit): RickMortyApiService {
-        return retrofit.create(RickMortyApiService::class.java)
+    fun provideDragongBallApiService(retrofit: Retrofit): DragonBallApiService {
+        return retrofit.create(DragonBallApiService::class.java)
     }
 }
