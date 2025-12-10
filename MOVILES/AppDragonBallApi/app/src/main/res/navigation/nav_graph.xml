@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/listaFragment"
+        android:name="com.example.appdragonballapi.ui.pantallaListaCharacters.ListaFragment"
+        android:label="fragment_lista"
+        tools:layout="@layout/fragment_lista" />
+    <fragment
+        android:id="@+id/detalleFragment"
+        android:name="com.example.appdragonballapi.ui.pantallaDetalleCharacter.DetalleFragment"
+        android:label="fragment_detalle"
+        tools:layout="@layout/fragment_detalle" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.appdragonballapi.ui.pantallaHome.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+</navigation>

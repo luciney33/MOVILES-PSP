@@ -1,18 +1,18 @@
 package com.example.appdragonballapi.data
 
+import com.example.appdragonballapi.data.remote.api.DragonBallApiService
+import com.example.appdragonballapi.domain.model.DragonBallCharacter
 import com.example.navigationhiltroom.common.NetworkResult
-import com.example.navigationhiltroom.data.remote.api.RickMortyApiService
-import com.example.navigationhiltroom.domain.model.RickMortyCharacter
 import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RickMortyRepository @Inject constructor(
-    private val apiService: RickMortyApiService
+class DragonBallRepository @Inject constructor(
+    private val apiService: DragonBallApiService
 ) {
 
-    suspend fun getCharacters(page: Int = 1): NetworkResult<List<RickMortyCharacter>> {
+    suspend fun getCharacters(page: Int = 1): NetworkResult<List<DragonBallCharacter>> {
         try {
             val response = apiService.getCharacters(page)
             return NetworkResult.Success(response.results)
@@ -21,7 +21,7 @@ class RickMortyRepository @Inject constructor(
         }
     }
 
-    suspend fun searchCharacters(name: String, page: Int = 1): List<RickMortyCharacter> {
+    suspend fun searchCharacters(name: String, page: Int = 1): List<DragonBallCharacter> {
         try {
 
             val response = apiService.searchCharacters(name, page)

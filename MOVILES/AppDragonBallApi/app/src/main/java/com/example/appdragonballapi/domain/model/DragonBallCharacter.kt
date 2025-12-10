@@ -10,7 +10,8 @@ data class DragonBallCharacter(
     val description: String,
     val image: String,
     val affiliation: String,
-    val deletedAt: Any
+    val deletedAt: Any,
+    val transformations: List<Transformation>
 )
 
 data class Transformation(
