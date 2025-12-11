@@ -77,7 +77,7 @@ public class UsuarioService {
             throw new BadRequestException(Constantes.CODIGO_DE_ACTIVACION_INVALIDO);
         }
         if (usuarioEntity.getExpiracionCodigo() != null && usuarioEntity.getExpiracionCodigo().isBefore(LocalDateTime.now())) {
-            throw new BadRequestException(Constantes.EXPORADO_CODIGO_DE_ACTIVACION);
+            throw new BadRequestException(Constantes.EXPIRADO_CODIGO_DE_ACTIVACION);
         }
 
         usuarioEntity.setActivo(true);

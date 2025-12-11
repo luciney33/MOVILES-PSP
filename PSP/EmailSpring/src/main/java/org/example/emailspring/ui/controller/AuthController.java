@@ -9,6 +9,7 @@ import org.example.emailspring.ui.dto.UsuarioDTO;
 import org.example.emailspring.ui.dto.UsuarioResponseDTO;
 import org.example.emailspring.ui.interceptor.RequiresAuth;
 import org.example.emailspring.ui.service.AuthService;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class AuthController {
         this.authService = authService;
 
     }
+
 
 
     @PostMapping(Constantes.AUTH_LOGIN)

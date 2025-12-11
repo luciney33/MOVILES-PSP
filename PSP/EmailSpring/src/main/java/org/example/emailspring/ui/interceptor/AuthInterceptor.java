@@ -6,10 +6,10 @@ import org.example.emailspring.common.Constantes;
 import org.example.emailspring.domain.error.ForbiddenException;
 import org.example.emailspring.domain.error.UnauthorizedException;
 import org.example.emailspring.ui.service.AuthService;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
@@ -21,7 +21,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler){
         if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
