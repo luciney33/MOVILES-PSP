@@ -11,6 +11,8 @@ public final class Constantes {
     public static final String API = "/api/**";
     public static final String EXCLUDE_URL = "/api/auth/**";
     public static final String SWAGGER_UI = "/swagger-ui/**";
+    public static final String SWAGGER_DOCS = "/v3/api-docs/**";
+
     public static final String CLASSPATH_SWAGGER = "classpath:/META-INF/resources/webjars/springdoc-openapi-ui/";
     public static final String WEBJARS = "/webjars/**";
     public static final String CLASSPATH_WEBJARS = "classpath:/META-INF/resources/webjars/";

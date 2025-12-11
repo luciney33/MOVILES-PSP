@@ -1,5 +1,8 @@
 package org.example.emailspring.ui.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.domain.model.Usuario;
 import org.example.emailspring.ui.service.AuthService;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(Constantes.API_ACTIVAR)
+@Tag(name = "Activación de Cuenta", description = "Endpoints para la activación de cuentas de usuario por correo.")
 public class ActivacionCuentaController {
     private final AuthService authService;
 
@@ -20,7 +24,8 @@ public class ActivacionCuentaController {
 
 
     @GetMapping
-    public String template(@RequestParam(Constantes.CODIGO) String codigoActivacion, Model model) {
+    @Operation(summary = "Activar cuenta de usuario", description = "Valida un código de activación y activa la cuenta del usuario.")
+    public String template(@Parameter(description = "Código de activación enviado por correo") @RequestParam(Constantes.CODIGO) String codigoActivacion, Model model) {
 
         Usuario usuario = authService.activarCuenta(codigoActivacion);
 

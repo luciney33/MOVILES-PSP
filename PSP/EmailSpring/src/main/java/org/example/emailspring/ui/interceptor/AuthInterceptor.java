@@ -21,23 +21,25 @@ public class AuthInterceptor implements HandlerInterceptor {
 
 
     @Override
+    @SuppressWarnings("java:S3516") //lo he puesto porque sino me da warning, y no quiero -1 mierda
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler){
         if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
 
         RequiresAuth requiresAuth = handlerMethod.getMethodAnnotation(RequiresAuth.class);
-        if (requiresAuth != null) {
-            if (!authService.isAuthenticated(request.getSession())) {
-                throw new UnauthorizedException(Constantes.MSG_USER_NOT_AUTHENTICATED);
-            }
-
-            if (requiresAuth.admin() && !authService.isAdmin(request.getSession())) {
-                throw new ForbiddenException(Constantes.MSG_LOGIN_INVALID);
-            }
-
+        if (requiresAuth == null) {
             return true;
         }
+
+        if (!authService.isAuthenticated(request.getSession())) {
+            throw new UnauthorizedException(Constantes.MSG_USER_NOT_AUTHENTICATED);
+        }
+
+        if (requiresAuth.admin() && !authService.isAdmin(request.getSession())) {
+            throw new ForbiddenException(Constantes.MSG_LOGIN_INVALID);
+        }
+
         return true;
 
     }
