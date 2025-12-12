@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(Constantes.API_AUTH)
-@Tag(name = "Autenticación", description = "Operaciones de registro, login y logout de usuarios.")
+@Tag(name = Constantes.TAG_AUTENTICACION, description = Constantes.TAG_AUTENTICACION_DESC)
 public class AuthController {
     private final AuthService authService;
 
@@ -34,12 +34,12 @@ public class AuthController {
 
     @PostMapping(Constantes.AUTH_LOGIN)
     @RequiresAuth
-    @Operation(summary = "Iniciar sesión", description = "Autentica a un usuario y establece una sesión.")
+    @Operation(summary = Constantes.OP_INICIAR_SESION, description = Constantes.OP_INICIAR_SESION_DESC)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = Constantes.MSG_LOGIN_SUCCESS),
-            @ApiResponse(responseCode = "401", description = Constantes.MSG_LOGIN_INVALID)
+            @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.MSG_LOGIN_SUCCESS),
+            @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.MSG_LOGIN_INVALID)
     })
-    public ResponseEntity<@NonNull LoginResponse> login(@RequestBody LoginRequest request, HttpSession session) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request, HttpSession session) {
         Usuario usuario = authService.login(request.username(), request.password(),session);
 
 
@@ -57,18 +57,18 @@ public class AuthController {
 
 
     @PostMapping(Constantes.AUTH_LOGOUT)
-    @Operation(summary = "Cerrar sesión", description = "Invalida la sesión actual del usuario.")
-    @ApiResponse(responseCode = "200", description = Constantes.MSG_LOGOUT_SUCCESS)
-    public ResponseEntity<@NonNull String> logout(HttpSession session) {
+    @Operation(summary = Constantes.OP_CERRAR_SESION, description = Constantes.OP_CERRAR_SESION_DESC)
+    @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.MSG_LOGOUT_SUCCESS)
+    public ResponseEntity<String> logout(HttpSession session) {
         authService.logout(session);
         return ResponseEntity.ok(Constantes.MSG_LOGOUT_SUCCESS);
     }
 
 
     @PostMapping(Constantes.AUTH_REGISTER)
-    @Operation(summary = "Registrar nuevo usuario", description = "Crea una nueva cuenta de usuario y envía correo de activación.")
-    @ApiResponse(responseCode = "201", description = "Usuario registrado exitosamente")
-    public ResponseEntity<@NonNull Usuario> register(@RequestBody UsuarioDTO usuario) {
+    @Operation(summary = Constantes.OP_REGISTRAR_USUARIO, description = Constantes.OP_REGISTRAR_USUARIO_DESC)
+    @ApiResponse(responseCode = Constantes.HTTP_201, description = Constantes.RESP_USUARIO_REGISTRADO_EXITOSAMENTE)
+    public ResponseEntity<Usuario> register(@RequestBody UsuarioDTO usuario) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(usuario));
 
     }

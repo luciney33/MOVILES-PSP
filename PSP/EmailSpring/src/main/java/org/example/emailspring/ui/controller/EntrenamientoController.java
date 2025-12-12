@@ -20,8 +20,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(Constantes.API_ENTRENAMIENTOS)
-@Tag(name = "Entrenamientos", description = "Gestión de entrenamientos y rutinas (requiere autenticación).")
-@SecurityRequirement(name = "sessionCookieAuth")
+@Tag(name = Constantes.TAG_ENTRENAMIENTOS, description = Constantes.TAG_ENTRENAMIENTOS_DESC)
+@SecurityRequirement(name = Constantes.SECURITY_SESSION_COOKIE_AUTH)
 public class EntrenamientoController {
 
     private final EntrenamientoService entrenamientoService;
@@ -30,49 +30,49 @@ public class EntrenamientoController {
         this.entrenamientoService = entrenamientoService;
     }
 
-    @GetMapping
     @RequiresAuth
-    @Operation(summary = "Listar todos los entrenamientos", description = "Permite a usuarios autenticados ver todos los entrenamientos disponibles.")
-    @ApiResponse(responseCode = "200", description = "Lista de entrenamientos recuperada con éxito")
-    @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content(schema = @Schema(hidden = true)))
-    public ResponseEntity<@NonNull List<Entrenamiento>> listar() {
+    @GetMapping
+    @Operation(summary = Constantes.OP_LISTAR_ENTRENAMIENTOS, description = Constantes.OP_LISTAR_ENTRENAMIENTOS_DESC)
+    @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_LISTA_ENTRENAMIENTOS_RECUPERADA)
+    @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.RESP_NO_AUTORIZADO, content = @Content(schema = @Schema(hidden = true)))
+    public ResponseEntity<List<Entrenamiento>> listar() {
         return ResponseEntity.ok(entrenamientoService.getAll());
     }
 
+    @RequiresAuth
     @GetMapping(Constantes.PATH_ID)
-    @RequiresAuth(admin = true)
-    @Operation(summary = "Obtener entrenamiento por ID", description = "Recupera un entrenamiento específico. Solo accesible para administradores.")
+    @Operation(summary = Constantes.OP_OBTENER_ENTRENAMIENTO, description = Constantes.OP_OBTENER_ENTRENAMIENTO_DESC)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Entrenamiento encontrado"),
-            @ApiResponse(responseCode = "403", description = "Acceso denegado (no es admin)", content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "404", description = Constantes.NO_ENCONTRADO, content = @Content(schema = @Schema(hidden = true)))
+            @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ENTRENAMIENTO_ENCONTRADO),
+            @ApiResponse(responseCode = Constantes.HTTP_403, description = Constantes.RESP_ACCESO_DENEGADO_NO_ADMIN, content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = Constantes.HTTP_404, description = Constantes.NO_ENCONTRADO, content = @Content(schema = @Schema(hidden = true)))
     })
-    public ResponseEntity<@NonNull Entrenamiento> getById(@PathVariable Long id) {
+    public ResponseEntity<Entrenamiento> getById(@PathVariable Long id) {
         return ResponseEntity.ok(entrenamientoService.getById(id));
 
     }
 
     @RequiresAuth(admin = true)
     @PostMapping
-    @Operation(summary = "Crear un nuevo entrenamiento", description = "Crea un nuevo registro de entrenamiento. Solo accesible para administradores.")
+    @Operation(summary = Constantes.OP_CREAR_ENTRENAMIENTO, description = Constantes.OP_CREAR_ENTRENAMIENTO_DESC)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Entrenamiento creado con éxito"),
-            @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos", content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "403", description = "Acceso denegado (no es admin)", content = @Content(schema = @Schema(hidden = true)))
+            @ApiResponse(responseCode = Constantes.HTTP_201, description = Constantes.RESP_ENTRENAMIENTO_CREADO),
+            @ApiResponse(responseCode = Constantes.HTTP_400, description = Constantes.RESP_DATOS_INVALIDOS, content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = Constantes.HTTP_403, description = Constantes.RESP_ACCESO_DENEGADO_NO_ADMIN, content = @Content(schema = @Schema(hidden = true)))
     })
-    public ResponseEntity<@NonNull Entrenamiento> crear(@RequestBody Entrenamiento entrenamiento) {
+    public ResponseEntity<Entrenamiento> crear(@RequestBody Entrenamiento entrenamiento) {
         return ResponseEntity.status(HttpStatus.CREATED).body(entrenamientoService.save(entrenamiento));
     }
 
     @RequiresAuth(admin = true)
     @PutMapping(Constantes.PATH_ID)
-    @Operation(summary = "Actualizar entrenamiento existente", description = "Actualiza los detalles de un entrenamiento por su ID. Solo accesible para administradores.")
+    @Operation(summary = Constantes.OP_ACTUALIZAR_ENTRENAMIENTO, description = Constantes.OP_ACTUALIZAR_ENTRENAMIENTO_DESC)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Entrenamiento actualizado"),
-            @ApiResponse(responseCode = "403", description = "Acceso denegado (no es admin)", content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "404", description = Constantes.NO_ENCONTRADO, content = @Content(schema = @Schema(hidden = true)))
+            @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ENTRENAMIENTO_ACTUALIZADO),
+            @ApiResponse(responseCode = Constantes.HTTP_403, description = Constantes.RESP_ACCESO_DENEGADO_NO_ADMIN, content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = Constantes.HTTP_404, description = Constantes.NO_ENCONTRADO, content = @Content(schema = @Schema(hidden = true)))
     })
-    public ResponseEntity<@NonNull Entrenamiento> actualizar(@PathVariable Long id, @RequestBody Entrenamiento entrenamiento) {
+    public ResponseEntity<Entrenamiento> actualizar(@PathVariable Long id, @RequestBody Entrenamiento entrenamiento) {
         return ResponseEntity.ok(entrenamientoService.update(id, entrenamiento));
 
     }
@@ -80,13 +80,13 @@ public class EntrenamientoController {
 
     @RequiresAuth(admin = true)
     @DeleteMapping(Constantes.PATH_ID)
-    @Operation(summary = "Eliminar entrenamiento", description = "Elimina un entrenamiento por su ID. Solo accesible para administradores.")
+    @Operation(summary = Constantes.OP_ELIMINAR_ENTRENAMIENTO, description = Constantes.OP_ELIMINAR_ENTRENAMIENTO_DESC)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Entrenamiento eliminado (sin contenido de respuesta)"),
-            @ApiResponse(responseCode = "403", description = "Acceso denegado (no es admin)", content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "404", description = Constantes.NO_ENCONTRADO, content = @Content(schema = @Schema(hidden = true)))
+            @ApiResponse(responseCode = Constantes.HTTP_204, description = Constantes.RESP_ENTRENAMIENTO_ELIMINADO),
+            @ApiResponse(responseCode = Constantes.HTTP_403, description = Constantes.RESP_ACCESO_DENEGADO_NO_ADMIN, content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = Constantes.HTTP_404, description = Constantes.NO_ENCONTRADO, content = @Content(schema = @Schema(hidden = true)))
     })
-    public ResponseEntity<@NonNull Void> borrar(@PathVariable Long id) {
+    public ResponseEntity<Void> borrar(@PathVariable Long id) {
         entrenamientoService.delete(id);
         return ResponseEntity.noContent().build();
     }

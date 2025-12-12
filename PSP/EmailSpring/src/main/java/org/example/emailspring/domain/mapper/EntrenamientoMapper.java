@@ -12,7 +12,7 @@ public class EntrenamientoMapper {
         if (domain.id() != null && domain.id() != 0) {
             entity.setId(domain.id());
         }
-        entity.setUsuarioId(domain.usuarioId());
+        entity.setUsuarioId(domain.usuarioId().longValue());
         entity.setNombre(domain.nombre());
         entity.setDescripcion(domain.descripcion());
         return entity;
@@ -23,7 +23,7 @@ public class EntrenamientoMapper {
 
         return new Entrenamiento(
                 entity.getId(),
-                entity.getUsuarioId(),
+                entity.getUsuarioId().longValue(),
                 entity.getNombre(),
                 entity.getDescripcion()
         );

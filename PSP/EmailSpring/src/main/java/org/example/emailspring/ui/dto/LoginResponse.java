@@ -1,14 +1,15 @@
 package org.example.emailspring.ui.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.emailspring.common.Constantes;
 
-@Schema(description = "Respuesta devuelta tras un intento de login exitoso.")
+@Schema(description = Constantes.SCHEMA_LOGIN_RESPONSE_DESC)
 public record LoginResponse(
-        @Schema(description = "Indica si la operación fue exitosa (siempre true en esta respuesta).", example = "true")
+        @Schema(description = Constantes.SCHEMA_LOGIN_SUCCESS_DESC, example = Constantes.SCHEMA_LOGIN_SUCCESS_EXAMPLE)
         boolean success,
-        @Schema(description = "Mensaje descriptivo del resultado.", example = "Login exitoso")
+        @Schema(description = Constantes.SCHEMA_LOGIN_MESSAGE_DESC, example = Constantes.SCHEMA_LOGIN_MESSAGE_EXAMPLE)
         String message,
-        @Schema(description = "Detalles del usuario autenticado.")
+        @Schema(description = Constantes.SCHEMA_LOGIN_USUARIO_DESC)
         UsuarioResponseDTO usuario
 ) {
     public LoginResponse(UsuarioResponseDTO usuario, String message) {

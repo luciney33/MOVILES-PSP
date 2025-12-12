@@ -1,9 +1,8 @@
-INSERT INTO entrenamiento (usuarioId, nombre, descripcion) VALUES
+INSERT INTO usuarios (username, password, email, nombre,activo,rol) VALUES
+('admin', '$2a$10$JLwB82ikhv1.1BQfISy0QuT7D1.cIP9DaXBeVtoDT9vItR/DGMxoC', 'admin@gmail.com', 'Administrador',true,'ADMIN'),
+('user', '$2a$10$e635KEsmmDkMTcqjFjucMe5JjnGI.Xbq3KxapficixxxY0St9g3EG', 'usuario@gmail.com', 'Usuario',true,'USER');
+
+INSERT INTO entrenamientos (usuario_id, nombre, descripcion) VALUES
 (1, 'Entrenamiento admin 1', 'Rutina para admin'),
 (2, 'Entrenamiento user 1', 'Rutina para usuario');
 
-INSERT INTO ejercicio (entrenamientoId, nombre, repeticiones, series) VALUES
-(1, 'Flexiones', 15, 3),
-(1, 'Sentadillas', 20, 3),
-(2, 'Abdominales', 25, 2),
-(2, 'Lagartijas', 10, 2);

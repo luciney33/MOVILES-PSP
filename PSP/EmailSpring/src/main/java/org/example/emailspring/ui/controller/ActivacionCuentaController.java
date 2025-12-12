@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(Constantes.API_ACTIVAR)
-@Tag(name = "Activación de Cuenta", description = "Endpoints para la activación de cuentas de usuario por correo.")
+@Tag(name = Constantes.TAG_ACTIVACION_CUENTA, description = Constantes.TAG_ACTIVACION_CUENTA_DESC)
 public class ActivacionCuentaController {
     private final AuthService authService;
 
@@ -24,8 +24,8 @@ public class ActivacionCuentaController {
 
 
     @GetMapping
-    @Operation(summary = "Activar cuenta de usuario", description = "Valida un código de activación y activa la cuenta del usuario.")
-    public String template(@Parameter(description = "Código de activación enviado por correo") @RequestParam(Constantes.CODIGO) String codigoActivacion, Model model) {
+    @Operation(summary = Constantes.OP_ACTIVAR_CUENTA, description = Constantes.OP_ACTIVAR_CUENTA_DESC)
+    public String template(@Parameter(description = Constantes.PARAM_CODIGO_ACTIVACION_DESC) @RequestParam(Constantes.CODIGO) String codigoActivacion, Model model) {
 
         Usuario usuario = authService.activarCuenta(codigoActivacion);
 

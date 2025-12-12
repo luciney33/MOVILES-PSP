@@ -1,18 +1,19 @@
 package org.example.emailspring.ui.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.emailspring.common.Constantes;
 import org.example.emailspring.domain.model.Rol;
 
-@Schema(description = "Representación pública y segura de los datos de un usuario.")
+@Schema(description = Constantes.SCHEMA_USUARIO_RESPONSE_DESC)
 public record UsuarioResponseDTO(
-        @Schema(description = "ID del usuario.", example = "1")
+        @Schema(description = Constantes.SCHEMA_ID_DESC, example = Constantes.SCHEMA_ID_EXAMPLE)
         Long id,
-        @Schema(description = "Nombre de usuario.", example = "juan_perez")
+        @Schema(description = Constantes.SCHEMA_USERNAME_DESC, example = Constantes.SCHEMA_USERNAME_RESPONSE_EXAMPLE)
         String username,
-        @Schema(description = "Correo electrónico del usuario.", example = "juan@ejemplo.com")
+        @Schema(description = Constantes.SCHEMA_EMAIL_DESC, example = Constantes.SCHEMA_EMAIL_RESPONSE_EXAMPLE)
         String email,
-        @Schema(description = "Nombre visible del usuario.", example = "Juan Perez")
+        @Schema(description = Constantes.SCHEMA_NOMBRE_RESPONSE_DESC, example = Constantes.SCHEMA_NOMBRE_RESPONSE_EXAMPLE)
         String nombre,
-        @Schema(description = "Rol del usuario en el sistema.", example = "USER")
+        @Schema(description = Constantes.SCHEMA_ROL_DESC, example = Constantes.SCHEMA_ROL_EXAMPLE)
         Rol rol) {
 }

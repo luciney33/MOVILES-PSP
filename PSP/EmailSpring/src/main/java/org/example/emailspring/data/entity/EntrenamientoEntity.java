@@ -9,8 +9,11 @@ public class EntrenamientoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer usuarioId;
+    @Column(name = "usuario_id")
+    private Long usuarioId;
+    @Column
     private String nombre;
+    @Column
     private String descripcion;
 
     public Long getId() {
@@ -21,14 +24,12 @@ public class EntrenamientoEntity {
         this.id = id;
     }
 
-    public Integer getUsuarioId() {
+    public Long getUsuarioId() {
         return usuarioId;
     }
-
-    public void setUsuarioId(Integer usuarioId) {
+    public void setUsuarioId(Long usuarioId) {
         this.usuarioId = usuarioId;
     }
-
     public String getNombre() {
         return nombre;
     }

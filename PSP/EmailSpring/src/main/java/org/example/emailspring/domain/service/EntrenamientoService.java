@@ -47,10 +47,9 @@ public class EntrenamientoService {
                 .orElseThrow(() -> new EntityNotFoundException(Constantes.NO_ENCONTRADO));
     }
 
-    public boolean delete(Long id) {
+    public void delete(Long id) {
         if (entrenamientoRepository.existsById(id)) {
             entrenamientoRepository.deleteById(id);
-            return true;
         } else {
             throw new EntityNotFoundException(Constantes.NO_ENCONTRADO);
         }

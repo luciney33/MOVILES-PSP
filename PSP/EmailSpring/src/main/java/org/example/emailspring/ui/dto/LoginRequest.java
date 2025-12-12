@@ -1,12 +1,13 @@
 package org.example.emailspring.ui.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.emailspring.common.Constantes;
 
-@Schema(description = "Petición de credenciales para iniciar sesión.")
+@Schema(description = Constantes.SCHEMA_LOGIN_REQUEST_DESC)
 public record LoginRequest(
-        @Schema(description = "Nombre de usuario o dirección de correo electrónico.", example = "juan_perez")
+        @Schema(description = Constantes.SCHEMA_LOGIN_USERNAME_DESC, example = Constantes.SCHEMA_LOGIN_USERNAME_EXAMPLE)
         String username,
-        @Schema(description = "Contraseña del usuario.", example = "unaContraseñaSegura123")
+        @Schema(description = Constantes.SCHEMA_LOGIN_PASSWORD_DESC, example = Constantes.SCHEMA_LOGIN_PASSWORD_EXAMPLE)
         String password
 ) {
 }

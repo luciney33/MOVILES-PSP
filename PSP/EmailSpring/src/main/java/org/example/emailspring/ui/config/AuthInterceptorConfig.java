@@ -27,9 +27,9 @@ public class AuthInterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping(Constantes.API)
-                .allowedOriginPatterns("*")
+                .allowedOriginPatterns(Constantes.ALL)
                 .allowedMethods(Constantes.GET, Constantes.POST, Constantes.PUT, Constantes.DELETE, Constantes.OPTIONS)
-                .allowedHeaders("*")
+                .allowedHeaders(Constantes.ALL)
                 .allowCredentials(true)
                 .maxAge(3600);
     }

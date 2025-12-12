@@ -13,7 +13,7 @@ import org.thymeleaf.context.Context;
 @Service
 public class EmailService {
 
-    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+    private final Logger log = LoggerFactory.getLogger(EmailService.class);
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
 
@@ -30,7 +30,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, Constantes.UTF_8);
 
             helper.setTo(destinatario);
-            helper.setSubject(Constantes.ACTIVACIÓN_DE_CUENTA_SISTEMA);
+            helper.setSubject(Constantes.ACTIVACION_DE_CUENTA_SISTEMA);
             helper.setText(construirMensajeActivacion(nombreUsuario, codigoActivacion), true);
             mailSender.send(mensaje);
         } catch (Exception e) {

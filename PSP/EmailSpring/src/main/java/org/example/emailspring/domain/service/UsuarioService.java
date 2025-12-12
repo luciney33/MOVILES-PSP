@@ -18,7 +18,6 @@ import java.util.UUID;
 
 @Service
 public class UsuarioService {
-    public static final String CÓDIGO_DE_ACTIVACIÓN_INVÁLIDO = "Código de activación inválido.";
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final UsuarioMapper usuarioMapper;
@@ -42,10 +41,10 @@ public class UsuarioService {
 
     public Usuario register(UsuarioDTO request) {
         if (usuarioRepository.existsByUsername(request.username())) {
-            throw new IllegalArgumentException("El nombre de usuario ya está en uso.");
+            throw new IllegalArgumentException(Constantes.MSG_USERNAME_YA_EN_USO);
         }
         if (usuarioRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException("El correo electrónico ya está en uso.");
+            throw new IllegalArgumentException(Constantes.MSG_EMAIL_YA_EN_USO);
         }
 
         String codigoActivacion = UUID.randomUUID().toString();

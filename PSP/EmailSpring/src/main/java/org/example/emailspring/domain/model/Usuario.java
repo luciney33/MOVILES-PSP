@@ -1,30 +1,30 @@
 package org.example.emailspring.domain.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.emailspring.common.Constantes;
 
 import java.time.LocalDateTime;
 
 
-@Schema(description = "Detalles completos de un usuario del sistema.")
+@Schema(description = Constantes.SCHEMA_USUARIO)
 public record Usuario(
-        @Schema(description = "Identificador único del usuario", example = "1")
+        @Schema(description = Constantes.SCHEMA_USUARIO_ID, example = Constantes.SCHEMA_USUARIO_ID_EXAMPLE)
         Long id,
-        @Schema(description = "Nombre de usuario (login)", example = "jane_doe")
+        @Schema(description = Constantes.SCHEMA_USUARIO_USERNAME, example = Constantes.SCHEMA_USUARIO_USERNAME_EXAMPLE)
         String username,
-        @Schema(description = "Contraseña (solo escritura, no se muestra en respuestas)", accessMode = Schema.AccessMode.WRITE_ONLY)
+        @Schema(description = Constantes.SCHEMA_USUARIO_PASSWORD, accessMode = Schema.AccessMode.WRITE_ONLY)
         String password,
-        @Schema(description = "Correo electrónico del usuario", example = "jane@example.com")
+        @Schema(description = Constantes.SCHEMA_USUARIO_EMAIL, example = Constantes.SCHEMA_USUARIO_EMAIL_EXAMPLE)
         String email,
-        @Schema(description = "Nombre completo del usuario", example = "Jane Doe")
+        @Schema(description = Constantes.SCHEMA_USUARIO_NOMBRE, example = Constantes.SCHEMA_USUARIO_NOMBRE_EXAMPLE)
         String nombre,
-        @Schema(description = "Rol del usuario (ADMIN o USER)", example = "USER")
+        @Schema(description = Constantes.SCHEMA_USUARIO_ROL, example = Constantes.SCHEMA_USUARIO_ROL_EXAMPLE)
         Rol rol,
-        @Schema(description = "Estado de activación de la cuenta", example = "true")
+        @Schema(description = Constantes.SCHEMA_USUARIO_ACTIVO, example = Constantes.SCHEMA_USUARIO_ACTIVO_EXAMPLE)
         boolean activo,
-        // Ocultamos estos campos de la vista pública de la API si no son relevantes en la respuesta
-        @Schema(description = "Código de activación (oculto en respuestas públicas)", accessMode = Schema.AccessMode.READ_ONLY)
+        @Schema(description = Constantes.SCHEMA_USUARIO_CODIGO_ACTIVACION, accessMode = Schema.AccessMode.READ_ONLY)
         String codigoActivacion,
-        @Schema(description = "Fecha/hora de expiración del código de activación", accessMode = Schema.AccessMode.READ_ONLY)
+        @Schema(description = Constantes.SCHEMA_USUARIO_EXPIRACION_CODIGO, accessMode = Schema.AccessMode.READ_ONLY)
         LocalDateTime expiracionCodigo
 ) {
 }

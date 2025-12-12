@@ -1,19 +1,20 @@
 package org.example.emailspring.ui.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.emailspring.common.Constantes;
 import org.example.emailspring.domain.model.Rol;
 
-@Schema(description = "Datos necesarios para registrar un nuevo usuario en el sistema.")
+@Schema(description = Constantes.SCHEMA_USUARIO_DTO_DESC)
 public record UsuarioDTO(
-        @Schema(description = "Nombre de usuario único.", example = "nuevo_usuario")
+        @Schema(description = Constantes.SCHEMA_USERNAME_DESC, example = Constantes.SCHEMA_USERNAME_EXAMPLE)
         String username,
-        @Schema(description = "Contraseña segura para la cuenta.", example = "MiPasswordFuerte123")
+        @Schema(description = Constantes.SCHEMA_PASSWORD_DESC, example = Constantes.SCHEMA_PASSWORD_EXAMPLE)
         String password,
-        @Schema(description = "Dirección de correo electrónico válida.", example = "correo@ejemplo.com")
+        @Schema(description = Constantes.SCHEMA_EMAIL_DESC, example = Constantes.SCHEMA_EMAIL_EXAMPLE)
         String email,
-        @Schema(description = "Nombre completo o apodo del usuario.", example = "Nuevo Usuario Demo")
+        @Schema(description = Constantes.SCHEMA_NOMBRE_DESC, example = Constantes.SCHEMA_NOMBRE_EXAMPLE)
         String nombre,
-        @Schema(description = "Rol asignado al usuario (opcional, si el registro permite elegir rol).", example = "USER")
+        @Schema(description = Constantes.ROL_ASIGNADO_AL_USUARIO_OPCIONAL_SI_EL_REGISTRO_PERMITE_ELEGIR_ROL, example = Constantes.USER)
         Rol rol
 ) {
-}
+    }
