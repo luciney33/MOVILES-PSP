@@ -4,24 +4,21 @@ data class DragonBallCharacter(
     val id: Int,
     val name: String,
     val ki: String,
-    val maxKi: String,
     val race: String,
-    val gender: String,
     val description: String,
-    val image: String,
-    val affiliation: String,
-    val deletedAt: Any,
+    val imageUrl: String,
+    val planet: Planet?,
     val transformations: List<Transformation>
 )
 
-data class Transformation(
-    val deletedAt: Any,
-    val id: Int,
-    val image: String,
-    val ki: String,
-    val name: String
+data class Planet(
+    val name: String,
+    val description: String,
+    val imageUrl: String
 )
 
-data class DragonBallResponse(
-    val results: List<DragonBallCharacter>
+data class Transformation(
+    val name: String,
+    val imageUrl: String,
+    val ki: String
 )

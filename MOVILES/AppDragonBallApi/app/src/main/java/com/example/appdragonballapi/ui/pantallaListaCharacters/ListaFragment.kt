@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.appdragonballapi.R
 import com.example.appdragonballapi.databinding.FragmentListaBinding
+import com.example.navigationhiltroom.ui.viewmodel.ListaViewModel
 import kotlin.getValue
 
 
@@ -15,8 +16,8 @@ class ListaFragment : Fragment() {
     private var _binding: FragmentListaBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: RickMortyViewModel by viewModels()
-    private lateinit var adapter: RickMortyAdapter
+    private val viewModel: ListaViewModel by viewModels()
+//    private lateinit var adapter: RickMortyAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
