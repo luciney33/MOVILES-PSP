@@ -18,8 +18,8 @@ public class AuthService {
     }
 
     public Usuario login(String username, String password, HttpSession session) {
-        Usuario usuario = usuarioService.login(username, password);
-        session.setAttribute(Constantes.SESSION_ATTR_USUARIO, usuario);
+        Usuario usuario = usuarioService.login(username, password, session);
+            session.setAttribute(Constantes.SESSION_USUARIO_ID, usuario);
         return usuario;
     }
 
@@ -41,8 +41,8 @@ public class AuthService {
 
 
     public Rol getRolFromSession(HttpSession session) {
-        return session.getAttribute(Constantes.SESSION_ATTR_USUARIO) != null
-                ? ((Usuario) session.getAttribute(Constantes.SESSION_ATTR_USUARIO)).rol()
+        return session.getAttribute(Constantes.SESSION_USUARIO_ID) != null
+                ? ((Usuario) session.getAttribute(Constantes.SESSION_USUARIO_ID)).rol()
                 : null;
     }
     public boolean isAdmin(HttpSession session) {

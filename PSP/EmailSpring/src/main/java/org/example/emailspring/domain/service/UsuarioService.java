@@ -1,5 +1,6 @@
 package org.example.emailspring.domain.service;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.data.UsuarioRepository;
 import org.example.emailspring.data.entity.UsuarioEntity;
@@ -30,9 +31,11 @@ public class UsuarioService {
         this.emailService = emailService;
     }
 
-    public Usuario login(String username, String password) {
+    public Usuario login(String username, String password,HttpSession session) {
         UsuarioEntity entity = usuarioRepository.getByUsername(username);
-        if (entity == null || !passwordEncoder.matches(password, entity.getPassword())) {
+        session.setAttribute(Constantes.SESSION_USUARIO_ID, entity.getId());
+        session.setAttribute(Constantes.ROL, entity.getRol());
+        if (!passwordEncoder.matches(password, entity.getPassword())) {
             throw new BadCredentialsException(Constantes.MSG_LOGIN_INVALID);
         }
 

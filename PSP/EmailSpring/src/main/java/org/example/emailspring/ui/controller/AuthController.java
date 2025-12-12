@@ -11,9 +11,7 @@ import org.example.emailspring.ui.dto.LoginRequest;
 import org.example.emailspring.ui.dto.LoginResponse;
 import org.example.emailspring.ui.dto.UsuarioDTO;
 import org.example.emailspring.ui.dto.UsuarioResponseDTO;
-import org.example.emailspring.ui.interceptor.RequiresAuth;
 import org.example.emailspring.ui.service.AuthService;
-import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +31,6 @@ public class AuthController {
 
 
     @PostMapping(Constantes.AUTH_LOGIN)
-    @RequiresAuth
     @Operation(summary = Constantes.OP_INICIAR_SESION, description = Constantes.OP_INICIAR_SESION_DESC)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.MSG_LOGIN_SUCCESS),

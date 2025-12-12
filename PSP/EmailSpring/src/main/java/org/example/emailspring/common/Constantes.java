@@ -29,6 +29,7 @@ public final class Constantes {
     public static final String ROL_ASIGNADO_AL_USUARIO_OPCIONAL_SI_EL_REGISTRO_PERMITE_ELEGIR_ROL = "Rol asignado al usuario (opcional, si el registro permite elegir rol).";
     public static final String USER = "USER";
     public static final String ALL = "*";
+    public static final String ROL = "rol";
 
 
     private Constantes() {}
@@ -55,7 +56,6 @@ public final class Constantes {
     public static final String MSG_USER_NOT_AUTHENTICATED = "No autenticado";
     public static final String NO_ENCONTRADO = "Entrenamiento no encontrado";
     public static final String SESSION_USUARIO_ID = "usuario_id";
-    public static final String SESSION_ATTR_USUARIO = "usuario";
 
     public static final String MSG_USERNAME_YA_EN_USO = "El nombre de usuario ya está en uso.";
     public static final String MSG_EMAIL_YA_EN_USO = "El correo electrónico ya está en uso.";

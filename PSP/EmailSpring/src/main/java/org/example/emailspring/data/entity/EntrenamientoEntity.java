@@ -9,7 +9,7 @@ public class EntrenamientoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "usuario_id")
+    @Column(name = Constantes.SESSION_USUARIO_ID)
     private Long usuarioId;
     @Column
     private String nombre;
