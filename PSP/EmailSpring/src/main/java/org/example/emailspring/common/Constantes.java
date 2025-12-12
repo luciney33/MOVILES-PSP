@@ -1,9 +1,10 @@
 package org.example.emailspring.common;
 
 public final class Constantes {
+    private Constantes() {}
     public static final String CODIGO = "codigo";
-    public static final String ACTIVAR = "/activar";
 
+    public static final String ACTIVAR = "/activar";
     public static final String NOMBRE_USUARIO = "nombreUsuario";
     public static final String MENSAJE_ERROR = "mensajeError";
     public static final String TEMPLATE = "usuario-activo";
@@ -11,8 +12,8 @@ public final class Constantes {
     public static final String API = "/api/**";
     public static final String EXCLUDE_URL = "/api/auth/**";
     public static final String SWAGGER_UI = "/swagger-ui/**";
-    public static final String SWAGGER_DOCS = "/v3/api-docs/**";
 
+    public static final String SWAGGER_DOCS = "/v3/api-docs/**";
     public static final String WEBJARS = "/webjars/**";
     public static final String SWAGGER_UI_HTML = "/swagger-ui.html";
     public static final String GET = "GET";
@@ -29,10 +30,9 @@ public final class Constantes {
     public static final String ROL_ASIGNADO_AL_USUARIO_OPCIONAL_SI_EL_REGISTRO_PERMITE_ELEGIR_ROL = "Rol asignado al usuario (opcional, si el registro permite elegir rol).";
     public static final String USER = "USER";
     public static final String ALL = "*";
+
     public static final String ROL = "rol";
 
-
-    private Constantes() {}
 
 
     public static final String API_AUTH = "/api/auth";
