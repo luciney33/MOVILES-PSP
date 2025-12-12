@@ -4,7 +4,7 @@ import com.example.appdragonballapi.domain.model.DragonBallCharacter
 import com.example.appdragonballapi.domain.model.Planet
 import com.example.appdragonballapi.domain.model.Transformation
 
-data class DragonBallEntity(
+data class DragonBallResponse(
     val characterEntities: List<CharacterEntity>,
     val links: Links,
     val meta: Meta
