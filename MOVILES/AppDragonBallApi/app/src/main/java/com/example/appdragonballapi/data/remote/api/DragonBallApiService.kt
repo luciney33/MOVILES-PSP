@@ -1,5 +1,6 @@
 package com.example.appdragonballapi.data.remote.api
 
+import com.example.appdragonballapi.data.remote.entity.CharacterEntity
 import com.example.appdragonballapi.data.remote.entity.DragonBallResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -12,26 +13,25 @@ import retrofit2.http.Query
 
 
 interface DragonBallApiService {
-
     @GET("characters")
-    suspend fun getCharacters(@Query("page") page: Int = 1): Response<DragonBallResponse>
-
-    @GET("characters")
-    suspend fun searchCharacters(@Query("name") name: String, @Query("page") page: Int = 1): Response<DragonBallResponse>
-
-        @GET("/characters/{id}")
-    suspend fun getCharacter(@Path("id") id : Int) : Response<DragonBallResponse>
-
-    @POST("/characters")
-    suspend fun postCharacter(@Body character: DragonBallResponse) : Response<DragonBallResponse>
-
-    @PUT("/characters/{id}")
-    suspend fun putCharacter(@Path("id") id : Int,@Body user: DragonBallResponse) : Response<DragonBallResponse>
+    suspend fun getCharacters(@Query("page") page: Int = 1, @Query("name") name: String? = null): Response<DragonBallResponse>
 
 
-    @DELETE("/characters/{id}")
-    suspend fun delCharacter(@Path("id") id : Int) : Response<Unit>
+    @GET("characters/{id}")
+    suspend fun getCharacter(@Path("id") id: Int): Response<CharacterEntity>
 
+
+
+    @POST("characters")
+    suspend fun addCharacter(@Body character: CharacterEntity): Response<CharacterEntity>
+
+
+    @PUT("characters/{id}")
+    suspend fun updateCharacter(@Path("id") id: Int, @Body character: CharacterEntity): Response<CharacterEntity>
+
+
+    @DELETE("characters/{id}")
+    suspend fun delCharacter(@Path("id") id: Int): Response<Unit>
 
 }
 

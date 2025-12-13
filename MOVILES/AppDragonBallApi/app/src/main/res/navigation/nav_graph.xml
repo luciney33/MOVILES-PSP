@@ -6,18 +6,32 @@
     app:startDestination="@id/homeFragment">
 
     <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.appdragonballapi.ui.pantallaHome.HomeFragment"
+        android:label="Dragon Ball"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
         android:id="@+id/listaFragment"
         android:name="com.example.appdragonballapi.ui.pantallaListaCharacters.ListaFragment"
-        android:label="fragment_lista"
+        android:label="Personajes"
         tools:layout="@layout/fragment_lista" />
+
+    <fragment
+        android:id="@+id/favoritosFragment"
+        android:name="com.example.appdragonballapi.ui.pantallaFavoritos.FavoritosFragment"
+        android:label="Favoritos"
+        tools:layout="@layout/fragment_favoritos" />
+
+    <fragment
+        android:id="@+id/transformacionesFragment"
+        android:name="com.example.appdragonballapi.ui.pantallaTransformaciones.TransformacionesFragment"
+        android:label="Transformaciones"
+        tools:layout="@layout/fragment_transformaciones" />
+
     <fragment
         android:id="@+id/detalleFragment"
         android:name="com.example.appdragonballapi.ui.pantallaDetalleCharacter.DetalleFragment"
-        android:label="fragment_detalle"
+        android:label="Detalle"
         tools:layout="@layout/fragment_detalle" />
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.appdragonballapi.ui.pantallaHome.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
 </navigation>

@@ -2,4 +2,22 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Dragon Ball Theme Colors -->
+    <color name="primary_gradient_start">#FF6B35</color>
+    <color name="primary_gradient_end">#F7931E</color>
+
+    <!-- Card Colors -->
+    <color name="card_characters">#FF5722</color>
+    <color name="card_planets">#3F51B5</color>
+    <color name="card_favorites">#E91E63</color>
+    <color name="card_featured">#9C27B0</color>
+    <color name="card_transformations">#FF9800</color>
+
+    <!-- Home Colors -->
+    <color name="home_primary">#FF6B35</color>
+    <color name="home_accent">#FFC107</color>
+
+    <!-- Ripple Effect -->
+    <color name="ripple_color">#40FFFFFF</color>
 </resources>

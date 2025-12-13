@@ -1,5 +1,32 @@
 <resources>
-    <string name="app_name">AppDragonBallApi</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="menu_characters">Personajes</string>
+    <string name="menu_favorites">Favoritos</string>
+    <string name="menu_transformations">Transformaciones</string>
+    <string name="menu_transformations_short">Transf.</string>
+
+    <string name="dragon_ball_logo">Dragon Ball Logo</string>
+    <string name="welcome_message">¡Bienvenido a Dragon Ball!</string>
+    <string name="welcome_subtitle">Tu portal al universo de Dragon Ball</string>
+    <string name="app_description">Descubre personajes, planetas y transformaciones épicas</string>
+    <string name="start_exploring">Comienza tu aventura</string>
+    <string name="explore_now">Explorar Ahora</string>
+
+    <string name="explore_universe">Explora el universo de Dragon Ball</string>
+    <string name="quick_actions">Acciones Rápidas</string>
+    <string name="characters">Personajes</string>
+    <string name="explore_characters">Descubre todos los guerreros</string>
+    <string name="planets">Planetas</string>
+    <string name="explore_planets">Viaja por el universo</string>
+    <string name="favorites">Favoritos</string>
+    <string name="view_favorites">Tus personajes guardados</string>
+    <string name="featured">Destacado</string>
+    <string name="featured_content">Contenido destacado</string>
+    <string name="featured_title">¡Nuevos Personajes!</string>
+    <string name="featured_description">Descubre los nuevos personajes añadidos a la colección</string>
+    <string name="app_name">AppDragonBallApi</string>
+    <string name="search_characters">Search characters</string>
+    <string name="add_character">Add character</string>
+    <string name="no_characters_found">No characters found</string>
 </resources>

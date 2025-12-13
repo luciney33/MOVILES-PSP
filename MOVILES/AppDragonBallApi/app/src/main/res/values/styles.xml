@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Circular Image Style -->
+    <style name="CircleImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- Rounded Rectangle Image Style -->
+    <style name="RoundedRectangleImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+</resources>
+

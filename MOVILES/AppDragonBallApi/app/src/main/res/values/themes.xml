@@ -1,8 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.AppDragonBallApi" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/primary_gradient_start</item>
+        <item name="colorPrimaryVariant">@color/primary_gradient_end</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Surface colors -->
+        <item name="colorSurface">#F5F5F5</item>
+        <item name="colorOnSurface">#1C1C1C</item>
+
+        <!-- Material Design 3 -->
+        <item name="materialCardViewElevatedStyle">@style/Widget.Material3.CardView.Elevated</item>
     </style>
 
     <style name="Theme.AppDragonBallApi" parent="Base.Theme.AppDragonBallApi" />
