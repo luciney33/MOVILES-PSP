@@ -12,16 +12,13 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.appdragonballapi.R
 import com.example.appdragonballapi.databinding.FragmentListaBinding
-import com.example.navigationhiltroom.ui.adapter.ListaAdapter
 import com.example.navigationhiltroom.ui.common.UiEvent
-import com.example.navigationhiltroom.ui.viewmodel.ListaViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
-import kotlin.toString
 
-
+@AndroidEntryPoint
 class ListaFragment : Fragment() {
     private var _binding: FragmentListaBinding? = null
     private val binding get() = _binding!!
@@ -58,6 +55,8 @@ class ListaFragment : Fragment() {
         binding.recyclerViewCharacters.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = this@ListaFragment.adapter
+            setHasFixedSize(true)
+            isNestedScrollingEnabled = true
         }
     }
 

@@ -1,12 +1,9 @@
-package com.example.navigationhiltroom.ui.viewmodel
+package com.example.appdragonballapi.ui.pantallaListaCharacters
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appdragonballapi.data.DragonBallRepository
 
 import com.example.appdragonballapi.domain.usecase.GetAllCharacters
-import com.example.appdragonballapi.ui.pantallaListaCharacters.DragonBallIntent
-import com.example.appdragonballapi.ui.pantallaListaCharacters.ListaUiState
 import com.example.navigationhiltroom.common.NetworkResult
 import com.example.navigationhiltroom.ui.common.UiEvent
 
@@ -23,7 +20,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListaViewModel @Inject constructor(
-    private val repository: DragonBallRepository,
     private val getCharactersUseCase: GetAllCharacters,
 
     ) : ViewModel() {
@@ -37,7 +33,7 @@ class ListaViewModel @Inject constructor(
 
 
     init {
-//        handleIntent(RickMortyIntent.LoadCharacters)
+       handleIntent(DragonBallIntent.LoadCharacters)
     }
 
 

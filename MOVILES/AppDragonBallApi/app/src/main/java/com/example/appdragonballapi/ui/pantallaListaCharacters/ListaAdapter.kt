@@ -1,6 +1,5 @@
-package com.example.navigationhiltroom.ui.adapter
+package com.example.appdragonballapi.ui.pantallaListaCharacters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

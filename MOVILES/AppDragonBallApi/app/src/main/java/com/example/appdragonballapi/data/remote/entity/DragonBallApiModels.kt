@@ -3,8 +3,10 @@ package com.example.appdragonballapi.data.remote.entity
 import com.example.appdragonballapi.domain.model.DragonBallCharacter
 import com.example.appdragonballapi.domain.model.Planet
 import com.example.appdragonballapi.domain.model.Transformation
+import com.google.gson.annotations.SerializedName
 
 data class DragonBallResponse(
+    @SerializedName("items")
     val characterEntities: List<CharacterEntity>,
     val links: Links,
     val meta: Meta
