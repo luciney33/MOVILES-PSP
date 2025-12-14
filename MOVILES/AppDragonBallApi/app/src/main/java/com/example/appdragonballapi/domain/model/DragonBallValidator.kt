@@ -17,13 +17,4 @@ object DragonBallValidator {
             true
         )
     }
-    fun isNameValidIfPresent(name: String?): NetworkResult<Boolean> {
-        return if (name.isNullOrBlank()) {
-            NetworkResult.Success(true)
-        } else if (name.length < 2) {
-            NetworkResult.Error(Constantes.ERROR_NOMBRE_BUSQUEDA)
-        } else {
-            NetworkResult.Success(true)
-        }
-    }
 }

@@ -29,4 +29,18 @@
     <string name="search_characters">Search characters</string>
     <string name="add_character">Add character</string>
     <string name="no_characters_found">No characters found</string>
+    <string name="planetas_no_encontrados">Planetas no encontrados</string>
+    <string name="transformaciones_no_ecnotradas">Transformaciones no ecnotradas</string>
+    <string name="planet_namek">Planet Namek</string>
+    <string name="super_saiyan">Super Saiyan</string>
+    <string name="ki_150_000_000">Ki: 150,000,000</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="description">Description</string>
+    <string name="race">Race</string>
+    <string name="ki">Ki</string>
+    <string name="name">Name</string>
+    <string name="edit_character">Edit Character</string>
+    <string name="save">Save</string>
+    <string name="son_goku">Son Goku</string>
+    <string name="alive_human">Alive - Human</string>
 </resources>

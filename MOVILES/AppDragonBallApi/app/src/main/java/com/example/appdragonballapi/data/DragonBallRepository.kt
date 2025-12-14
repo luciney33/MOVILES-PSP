@@ -2,9 +2,11 @@ package com.example.appdragonballapi.data
 
 import com.example.appdragonballapi.common.Constantes
 import com.example.appdragonballapi.data.remote.api.DragonBallApiService
+import com.example.appdragonballapi.data.remote.api.PlaceholderApiService
 import com.example.appdragonballapi.data.remote.entity.toDomain
 import com.example.appdragonballapi.data.remote.entity.toEntity
 import com.example.appdragonballapi.domain.model.DragonBallCharacter
+import com.example.appdragonballapi.domain.model.Planet
 import com.example.navigationhiltroom.common.NetworkResult
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,16 +14,35 @@ import javax.inject.Singleton
 
 @Singleton
 class DragonBallRepository @Inject constructor(
-    private val apiService: DragonBallApiService
+    private val apiService: DragonBallApiService,
+    private val placeholderApi: PlaceholderApiService
 ) {
 
-    suspend fun getCharacters(page: Int = 1, name: String?): NetworkResult<List<DragonBallCharacter>> {
+    suspend fun getCharacters(page: Int = 1): NetworkResult<List<DragonBallCharacter>> {
         return try {
-            val response = apiService.getCharacters(page, name)
+            val response = apiService.getCharacters(page)
 
             if (response.isSuccessful) {
                 val dragonBallResponse = response.body()
                 val domainList = dragonBallResponse?.characterEntities?.map { it.toDomain() } ?: emptyList()
+                NetworkResult.Success(domainList)
+
+            } else {
+                NetworkResult.Error("${Constantes.ERROR_DEL_SERVIDOR}${response.code()} ${response.message()}")
+            }
+
+        } catch (e: Exception) {
+            NetworkResult.Error("${Constantes.ERROR_DE_CONEXION}${e.message}")
+        }
+    }
+
+    suspend fun getPlanets(page: Int = 1): NetworkResult<List<Planet>> {
+        return try {
+            val response = apiService.getPlanets(page)
+
+            if (response.isSuccessful) {
+                val dragonBallResponse = response.body()
+                val domainList = dragonBallResponse?.planetEntity ?.map { it.toDomain() } ?: emptyList()
                 NetworkResult.Success(domainList)
 
             } else {
@@ -56,7 +77,7 @@ class DragonBallRepository @Inject constructor(
 
     suspend fun deleteCharacter(id: Int): NetworkResult<Unit> {
         return try {
-            val response = apiService.delCharacter(id)
+            val response = placeholderApi.delCharacter(id)
 
             if (response.isSuccessful) {
                 NetworkResult.Success(Unit)
@@ -71,7 +92,7 @@ class DragonBallRepository @Inject constructor(
     suspend fun updateCharacter(id: Int, character: DragonBallCharacter): NetworkResult<DragonBallCharacter> {
         return try {
             val characterEntity = character.toEntity()
-            val response = apiService.updateCharacter(id, characterEntity)
+            val response = placeholderApi.updateCharacter(id, characterEntity)
 
             if (response.isSuccessful) {
                 val updatedEntity = response.body()
@@ -91,7 +112,7 @@ class DragonBallRepository @Inject constructor(
     suspend fun addCharacter(character: DragonBallCharacter): NetworkResult<DragonBallCharacter> {
         return try {
             val characterEntity = character.toEntity()
-            val response = apiService.addCharacter(characterEntity)
+            val response = placeholderApi.addCharacter(characterEntity)
 
             if (response.isSuccessful) {
                 val newEntity = response.body()

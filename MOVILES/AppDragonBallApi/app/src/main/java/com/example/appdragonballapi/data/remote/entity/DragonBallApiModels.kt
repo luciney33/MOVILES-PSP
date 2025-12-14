@@ -1,13 +1,23 @@
 package com.example.appdragonballapi.data.remote.entity
 
+import com.example.appdragonballapi.common.Constantes
 import com.example.appdragonballapi.domain.model.DragonBallCharacter
 import com.example.appdragonballapi.domain.model.Planet
 import com.example.appdragonballapi.domain.model.Transformation
 import com.google.gson.annotations.SerializedName
 
+
+
 data class DragonBallResponse(
-    @SerializedName("items")
+    @SerializedName(Constantes.ITEMS)
     val characterEntities: List<CharacterEntity>,
+    val links: Links,
+    val meta: Meta
+)
+
+data class PlanetaResponse(
+    @SerializedName(Constantes.ITEMS)
+    val planetEntity: List<PlanetEntity>,
     val links: Links,
     val meta: Meta
 )
@@ -68,21 +78,20 @@ fun CharacterEntity.toDomain(): DragonBallCharacter {
     )
 }
 
-fun PlanetEntity.toDomain() = Planet(name, description, image)
-fun TransformationEntity.toDomain() = Transformation(name, image, ki)
+fun PlanetEntity.toDomain() = Planet(id, name, image)
+fun TransformationEntity.toDomain() = Transformation(id, name, image, ki)
 
-// Funciones para convertir de Domain a Entity (necesarias para POST y PUT)
 fun DragonBallCharacter.toEntity(): CharacterEntity {
     return CharacterEntity(
         id = this.id,
         name = this.name,
         ki = this.ki,
-        maxKi = this.ki, // Usamos ki como maxKi por defecto
+        maxKi = this.ki,
         race = this.race,
-        gender = "", // Campo vacío por defecto
+        gender = "",
         description = this.description,
         image = this.imageUrl,
-        affiliation = "", // Campo vacío por defecto
+        affiliation = "",
         deletedAt = null,
         originPlanet = this.planet?.toEntity(),
         transformations = this.transformations.map { it.toEntity() }
@@ -91,10 +100,10 @@ fun DragonBallCharacter.toEntity(): CharacterEntity {
 
 fun Planet.toEntity(): PlanetEntity {
     return PlanetEntity(
-        id = 0, // ID por defecto
+        id = this.id,
         name = this.name,
         isDestroyed = false,
-        description = this.description,
+        description = "",
         image = this.imageUrl,
         deletedAt = null
     )
@@ -102,7 +111,7 @@ fun Planet.toEntity(): PlanetEntity {
 
 fun Transformation.toEntity(): TransformationEntity {
     return TransformationEntity(
-        id = 0, // ID por defecto
+        id = this.id,
         name = this.name,
         image = this.imageUrl,
         ki = this.ki,

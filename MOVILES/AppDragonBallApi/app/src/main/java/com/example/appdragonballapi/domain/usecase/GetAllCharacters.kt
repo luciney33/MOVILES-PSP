@@ -8,12 +8,11 @@ import jakarta.inject.Inject
 
 class GetAllCharacters @Inject constructor(private val repository: DragonBallRepository) {
 
-    suspend operator fun invoke(page: Int, name : String?): NetworkResult<List<DragonBallCharacter>> =
+    suspend operator fun invoke(page: Int): NetworkResult<List<DragonBallCharacter>> =
         DragonBallValidator.isPageNotNegative(page)
             .then { DragonBallValidator.isPageLimit(page) }
-            .then { DragonBallValidator.isNameValidIfPresent(name) }
             .then {
-                repository.getCharacters(page, name)
+                repository.getCharacters(page)
             }
 
 

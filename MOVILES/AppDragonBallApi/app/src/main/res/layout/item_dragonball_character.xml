@@ -22,6 +22,19 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
 
+        <ImageButton
+            android:id="@+id/btnTransformations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_transformations"
+            app:layout_constraintBottom_toBottomOf="@+id/ivOverflow"
+            app:layout_constraintEnd_toStartOf="@+id/ivOverflow"
+            app:layout_constraintTop_toTopOf="@+id/ivOverflow"
+            app:layout_constraintVertical_bias="0.0"
+            app:tint="@color/dragon_ball_yellow" />
+
         <TextView
             android:id="@+id/tvCharacterName"
             android:layout_width="0dp"
@@ -30,10 +43,9 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-            app:layout_constraintEnd_toStartOf="@+id/ivFavorite"
             app:layout_constraintStart_toEndOf="@+id/ivCharacter"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Son Goku" />
+            tools:text="@string/son_goku" />
 
         <TextView
             android:id="@+id/tvCharacterKi"
@@ -46,7 +58,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivCharacter"
             app:layout_constraintTop_toBottomOf="@id/tvCharacterName"
-            tools:text="Alive - Human" />
+            tools:text="@string/alive_human" />
 
         <TextView
             android:id="@+id/tvCharacterRace"
@@ -59,7 +71,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivCharacter"
             app:layout_constraintTop_toBottomOf="@id/tvCharacterKi"
-            tools:text="Alive - Human" />
+            tools:text="@string/alive_human" />
 
         <TextView
             android:id="@+id/tvCharacterDescription"
@@ -72,17 +84,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivCharacter"
             app:layout_constraintTop_toBottomOf="@id/tvCharacterRace"
-            tools:text="Alive - Human" />
+            tools:text="@string/alive_human" />
 
-        <ImageView
-            android:id="@+id/ivFavorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/ivOverflow"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_star_border" />
 
         <ImageView
             android:id="@+id/ivOverflow"

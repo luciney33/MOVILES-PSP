@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_listaFragment_to_editarFragment"
             app:destination="@id/editarFragment" />
+        <action
+            android:id="@+id/action_listaFragment_to_transformacionesFragment"
+            app:destination="@id/transformacionesFragment" />
     </fragment>
 
     <fragment
@@ -35,9 +38,12 @@
         android:name="com.example.appdragonballapi.ui.pantallaTransformaciones.TransformacionesFragment"
         android:label="Transformaciones"
         tools:layout="@layout/fragment_transformaciones" >
+        <argument
+            android:name="characterId"
+            app:argType="integer" />
         <action
-            android:id="@+id/action_transformacionesFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_transformacionesFragment_to_listaFragment"
+            app:destination="@id/listaFragment" />
     </fragment>
 
     <fragment
@@ -51,11 +57,14 @@
         <action
             android:id="@+id/action_detalleFragment_to_listaFragment"
             app:destination="@id/listaFragment" />
+        <action
+            android:id="@+id/action_detalleFragment_to_editarFragment"
+            app:destination="@id/editarFragment" />
     </fragment>
     <fragment
         android:id="@+id/crearFragment"
         android:name="com.example.appdragonballapi.ui.pantallaCrearCharacter.CrearFragment"
-        android:label="fragment_crear"
+        android:label="Crear"
         tools:layout="@layout/fragment_crear" >
         <action
             android:id="@+id/action_crearFragment_to_listaFragment"
@@ -64,16 +73,22 @@
     <fragment
         android:id="@+id/editarFragment"
         android:name="com.example.appdragonballapi.ui.pantallaEditarCharacter.EditarFragment"
-        android:label="fragment_editar"
+        android:label="Editar"
         tools:layout="@layout/fragment_editar" >
+        <argument
+            android:name="characterId"
+            app:argType="integer" />
         <action
             android:id="@+id/action_editarFragment_to_listaFragment"
             app:destination="@id/listaFragment" />
+        <action
+            android:id="@+id/action_editarFragment_to_detalleFragment"
+            app:destination="@id/detalleFragment" />
     </fragment>
     <fragment
         android:id="@+id/planetasFragment"
-        android:name="com.example.appdragonballapi.PlanetasFragment"
-        android:label="fragment_planetas"
+        android:name="com.example.appdragonballapi.ui.pantallaPlanetas.PlanetasFragment"
+        android:label="Planetas"
         tools:layout="@layout/fragment_planetas" >
         <action
             android:id="@+id/action_planetasFragment_to_homeFragment"

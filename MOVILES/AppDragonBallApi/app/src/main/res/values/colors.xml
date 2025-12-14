@@ -20,4 +20,10 @@
 
     <!-- Ripple Effect -->
     <color name="ripple_color">#40FFFFFF</color>
+
+    <!-- New Colors for Detail/Edit Screens -->
+    <color name="dragon_ball_orange_light">#FFB74D</color>
+    <color name="dragon_ball_blue">#1565C0</color>
+    <color name="dragon_ball_blue_light">#42A5F5</color>
+    <color name="dragon_ball_yellow">#FFCA28</color>
 </resources>

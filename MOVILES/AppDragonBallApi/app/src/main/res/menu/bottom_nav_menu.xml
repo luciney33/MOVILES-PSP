@@ -8,8 +8,4 @@
         android:id="@+id/planetasFragment"
         android:icon="@drawable/outline_planet_24"
         android:title="@string/menu_planetas" />
-    <item
-        android:id="@+id/transformacionesFragment"
-        android:icon="@android:drawable/ic_menu_rotate"
-        android:title="@string/menu_transformations" />
 </menu>

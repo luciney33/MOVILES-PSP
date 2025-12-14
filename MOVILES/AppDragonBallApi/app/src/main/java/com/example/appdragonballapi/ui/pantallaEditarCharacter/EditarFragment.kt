@@ -1,60 +1,91 @@
 package com.example.appdragonballapi.ui.pantallaEditarCharacter
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.appdragonballapi.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.example.appdragonballapi.databinding.FragmentEditarBinding
+import com.example.appdragonballapi.ui.common.UiEvent
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [EditarFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class EditarFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentEditarBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: EditarViewModel by viewModels()
+    private val args: EditarFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_editar, container, false)
+    ): View {
+        _binding = FragmentEditarBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditarFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EditarFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.handleIntent(EditarIntent.LoadCharacter(args.characterId))
+        setupListeners()
+        observeState()
+        observeEvents()
+    }
+
+    private fun setupListeners() {
+        binding.apply {
+            btnSave.setOnClickListener {
+                val character = viewModel.uiState.value.character?.copy(
+                    name = etName.text.toString(),
+                    ki = etKi.text.toString(),
+                    race = etRace.text.toString(),
+                    description = etDescription.text.toString()
+                )
+                if (character != null) {
+                    viewModel.handleIntent(EditarIntent.UpdateCharacter(character))
                 }
             }
+        }
+    }
+
+    private fun observeState() {
+        lifecycleScope.launch {
+            viewModel.uiState.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).collect { state ->
+                state.character?.let {
+                    binding.etName.setText(it.name)
+                    binding.etKi.setText(it.ki)
+                    binding.etRace.setText(it.race)
+                    binding.etDescription.setText(it.description)
+                }
+            }
+        }
+    }
+
+    private fun observeEvents() {
+        lifecycleScope.launch {
+            viewModel.events.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED).collect { event ->
+                when (event) {
+                    is UiEvent.NavigateBack -> findNavController().navigateUp()
+                    is UiEvent.ShowSnackbar -> {
+                        Snackbar.make(binding.root, event.message, Snackbar.LENGTH_SHORT).show()
+                    }
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

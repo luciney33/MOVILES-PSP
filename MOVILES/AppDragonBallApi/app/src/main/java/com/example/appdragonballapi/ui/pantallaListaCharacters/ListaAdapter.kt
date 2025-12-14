@@ -19,6 +19,7 @@ class ListaAdapter(
         fun onCharacterClick(characterId: Int)
         fun onCharacterEdit(character: DragonBallCharacter)
         fun onCharacterDelete(character: DragonBallCharacter)
+        fun onCharacterTransformations(characterId: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
@@ -56,17 +57,18 @@ class ListaAdapter(
                     actions.onCharacterClick(character.id)
                 }
 
+                btnTransformations.setOnClickListener { 
+                    actions.onCharacterTransformations(character.id)
+                }
+
                 ivOverflow.setOnClickListener { view ->
-                    // Creamos el PopupMenu
                     val menu = PopupMenu(view.context, view)
-                    // Inflamos el menú desde un recurso XML
                     menu.inflate(R.menu.character_item_menu)
-                    // Configuramos los listeners para cada opción del menú
                     menu.setOnMenuItemClickListener { item ->
                         when (item.itemId) {
                             R.id.menu_edit -> {
                                 actions.onCharacterEdit(character)
-                                true // Indica que el evento ha sido manejado
+                                true
                             }
                             R.id.menu_delete -> {
                                 actions.onCharacterDelete(character)
@@ -75,7 +77,6 @@ class ListaAdapter(
                             else -> false
                         }
                     }
-                    // Mostramos el menú
                     menu.show()
                 }
             }

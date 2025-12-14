@@ -23,19 +23,12 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-
-
-
-
-
-
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-        // Configuración de los destinos de nivel superior (sin botón de retroceso)
         val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.listaFragment, R.id.planetasFragment, R.id.transformacionesFragment)
+            setOf(R.id.listaFragment, R.id.planetasFragment)
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appdragonballapi.databinding.FragmentListaBinding
 import com.example.appdragonballapi.domain.model.DragonBallCharacter
-import com.example.navigationhiltroom.ui.common.UiEvent
+import com.example.appdragonballapi.ui.common.UiEvent
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -42,37 +41,39 @@ class ListaFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        setupSearch()
+        setupClickListeners()
         observeCharacters()
         observeEvents()
     }
 
+    private fun setupClickListeners() {
+        binding.fabAddCharacter.setOnClickListener {
+            val action = ListaFragmentDirections.actionListaFragmentToCrearFragment()
+            findNavController().navigate(action)
+        }
+    }
+
     private fun setupRecyclerView() {
-        // Inicializamos el adapter implementando la nueva interfaz
         adapter = ListaAdapter(
             actions = object : ListaAdapter.CharacterActions {
                 override fun onCharacterClick(characterId: Int) {
-                    // Lógica de navegación al detalle
                     val action = ListaFragmentDirections.actionListaFragmentToDetalleFragment(characterId)
                     findNavController().navigate(action)
                 }
 
                 override fun onCharacterEdit(character: DragonBallCharacter) {
-                    // TODO: Navegar a la pantalla de edición pasando el personaje
-                    // Por ahora, mostramos un Toast
-                    Toast.makeText(requireContext(), "Editar: ${character.name}", Toast.LENGTH_SHORT).show()
-
-                    // Ejemplo de cómo actualizarlo (descomentar cuando tengas la pantalla de edición):
-                    // val updatedCharacter = character.copy(name = "Nuevo Nombre")
-                    // viewModel.handleIntent(DragonBallIntent.UpdateCharacter(character.id, updatedCharacter))
+                    val action = ListaFragmentDirections.actionListaFragmentToEditarFragment(character.id)
+                    findNavController().navigate(action)
                 }
 
                 override fun onCharacterDelete(character: DragonBallCharacter) {
-                    // Mostrar diálogo de confirmación antes de borrar
                     viewModel.handleIntent(DragonBallIntent.DeleteCharacter(character.id))
                 }
 
-
+                override fun onCharacterTransformations(characterId: Int) {
+                    val action = ListaFragmentDirections.actionListaFragmentToTransformacionesFragment(characterId)
+                    findNavController().navigate(action)
+                }
             }
         )
 
@@ -83,14 +84,6 @@ class ListaFragment : Fragment() {
         }
     }
 
-
-    private fun setupSearch() {
-        binding.etSearch.setOnEditorActionListener { v, _, _ ->
-            val query = v.text.toString()
-            viewModel.handleIntent(DragonBallIntent.SearchCharacters(query))
-            true
-        }
-    }
 
     private fun observeCharacters() {
         viewLifecycleOwner.lifecycleScope.launch {
