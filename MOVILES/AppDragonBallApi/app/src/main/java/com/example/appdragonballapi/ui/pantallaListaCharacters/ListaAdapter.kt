@@ -2,6 +2,7 @@ package com.example.appdragonballapi.ui.pantallaListaCharacters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -9,11 +10,16 @@ import coil.load
 import com.example.appdragonballapi.R
 import com.example.appdragonballapi.databinding.ItemDragonballCharacterBinding
 import com.example.appdragonballapi.domain.model.DragonBallCharacter
-import kotlin.apply
 
 class ListaAdapter(
-    private val onCharacterClick: (DragonBallCharacter) -> Unit
+    private val actions: CharacterActions,
 ) : ListAdapter<DragonBallCharacter, ListaAdapter.CharacterViewHolder>(CharacterDiffCallback()) {
+
+    interface CharacterActions {
+        fun onCharacterClick(characterId: Int)
+        fun onCharacterEdit(character: DragonBallCharacter)
+        fun onCharacterDelete(character: DragonBallCharacter)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val binding = ItemDragonballCharacterBinding.inflate(
@@ -21,7 +27,7 @@ class ListaAdapter(
             parent,
             false
         )
-        return CharacterViewHolder(binding)
+        return CharacterViewHolder(binding, actions)
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
@@ -29,7 +35,8 @@ class ListaAdapter(
     }
 
     inner class CharacterViewHolder(
-        private val binding: ItemDragonballCharacterBinding
+        private val binding: ItemDragonballCharacterBinding,
+        private val actions: CharacterActions
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(character: DragonBallCharacter) {
@@ -39,42 +46,37 @@ class ListaAdapter(
                 tvCharacterRace.text = character.race
                 tvCharacterDescription.text = character.description
 
-
-                // Cargar imagen con Coil
                 ivCharacter.load(character.imageUrl) {
-                    // crossfade: Animación suave de transición (true = 300ms por defecto)
                     crossfade(true)
-
-                    // placeholder: Imagen que se muestra MIENTRAS se está cargando
                     placeholder(R.drawable.ic_launcher_foreground)
-
-                    // error: Imagen que se muestra SI falla la carga
                     error(R.drawable.ic_launcher_foreground)
-
-                    // Callbacks opcionales para controlar el estado de carga
-                    listener(
-                        onStart = {
-                            // Se ejecuta cuando EMPIEZA a cargar la imagen
-                            // Aquí podrías mostrar un ProgressBar
-                        },
-                        onSuccess = { _, _ ->
-                            // Se ejecuta cuando la imagen se carga EXITOSAMENTE
-                            // Aquí podrías ocultar el ProgressBar
-                        },
-                        onError = { _, throwable ->
-                            // Se ejecuta si hay un ERROR al cargar
-                            // Aquí podrías mostrar un mensaje de error
-                        }
-                    )
-
-                    // Otras opciones útiles:
-                    // transformations(CircleCropTransformation()) // Para imagen circular
-                    // size(100, 100) // Tamaño específico
-                    // scale(Scale.FILL) // Cómo escalar la imagen
                 }
 
                 root.setOnClickListener {
-                    onCharacterClick(character)
+                    actions.onCharacterClick(character.id)
+                }
+
+                ivOverflow.setOnClickListener { view ->
+                    // Creamos el PopupMenu
+                    val menu = PopupMenu(view.context, view)
+                    // Inflamos el menú desde un recurso XML
+                    menu.inflate(R.menu.character_item_menu)
+                    // Configuramos los listeners para cada opción del menú
+                    menu.setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.menu_edit -> {
+                                actions.onCharacterEdit(character)
+                                true // Indica que el evento ha sido manejado
+                            }
+                            R.id.menu_delete -> {
+                                actions.onCharacterDelete(character)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                    // Mostramos el menú
+                    menu.show()
                 }
             }
         }

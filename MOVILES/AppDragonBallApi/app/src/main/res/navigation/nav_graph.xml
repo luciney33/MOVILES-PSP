@@ -15,23 +15,68 @@
         android:id="@+id/listaFragment"
         android:name="com.example.appdragonballapi.ui.pantallaListaCharacters.ListaFragment"
         android:label="Personajes"
-        tools:layout="@layout/fragment_lista" />
-
-    <fragment
-        android:id="@+id/favoritosFragment"
-        android:name="com.example.appdragonballapi.ui.pantallaFavoritos.FavoritosFragment"
-        android:label="Favoritos"
-        tools:layout="@layout/fragment_favoritos" />
+        tools:layout="@layout/fragment_lista" >
+        <action
+            android:id="@+id/action_listaFragment_to_detalleFragment"
+            app:destination="@id/detalleFragment" />
+        <action
+            android:id="@+id/action_listaFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_listaFragment_to_crearFragment"
+            app:destination="@id/crearFragment" />
+        <action
+            android:id="@+id/action_listaFragment_to_editarFragment"
+            app:destination="@id/editarFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/transformacionesFragment"
         android:name="com.example.appdragonballapi.ui.pantallaTransformaciones.TransformacionesFragment"
         android:label="Transformaciones"
-        tools:layout="@layout/fragment_transformaciones" />
+        tools:layout="@layout/fragment_transformaciones" >
+        <action
+            android:id="@+id/action_transformacionesFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/detalleFragment"
         android:name="com.example.appdragonballapi.ui.pantallaDetalleCharacter.DetalleFragment"
         android:label="Detalle"
-        tools:layout="@layout/fragment_detalle" />
+        tools:layout="@layout/fragment_detalle" >
+        <argument
+            android:name="characterId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_detalleFragment_to_listaFragment"
+            app:destination="@id/listaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/crearFragment"
+        android:name="com.example.appdragonballapi.ui.pantallaCrearCharacter.CrearFragment"
+        android:label="fragment_crear"
+        tools:layout="@layout/fragment_crear" >
+        <action
+            android:id="@+id/action_crearFragment_to_listaFragment"
+            app:destination="@id/listaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editarFragment"
+        android:name="com.example.appdragonballapi.ui.pantallaEditarCharacter.EditarFragment"
+        android:label="fragment_editar"
+        tools:layout="@layout/fragment_editar" >
+        <action
+            android:id="@+id/action_editarFragment_to_listaFragment"
+            app:destination="@id/listaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/planetasFragment"
+        android:name="com.example.appdragonballapi.PlanetasFragment"
+        android:label="fragment_planetas"
+        tools:layout="@layout/fragment_planetas" >
+        <action
+            android:id="@+id/action_planetasFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

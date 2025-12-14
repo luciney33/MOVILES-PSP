@@ -70,3 +70,42 @@ fun CharacterEntity.toDomain(): DragonBallCharacter {
 
 fun PlanetEntity.toDomain() = Planet(name, description, image)
 fun TransformationEntity.toDomain() = Transformation(name, image, ki)
+
+// Funciones para convertir de Domain a Entity (necesarias para POST y PUT)
+fun DragonBallCharacter.toEntity(): CharacterEntity {
+    return CharacterEntity(
+        id = this.id,
+        name = this.name,
+        ki = this.ki,
+        maxKi = this.ki, // Usamos ki como maxKi por defecto
+        race = this.race,
+        gender = "", // Campo vacío por defecto
+        description = this.description,
+        image = this.imageUrl,
+        affiliation = "", // Campo vacío por defecto
+        deletedAt = null,
+        originPlanet = this.planet?.toEntity(),
+        transformations = this.transformations.map { it.toEntity() }
+    )
+}
+
+fun Planet.toEntity(): PlanetEntity {
+    return PlanetEntity(
+        id = 0, // ID por defecto
+        name = this.name,
+        isDestroyed = false,
+        description = this.description,
+        image = this.imageUrl,
+        deletedAt = null
+    )
+}
+
+fun Transformation.toEntity(): TransformationEntity {
+    return TransformationEntity(
+        id = 0, // ID por defecto
+        name = this.name,
+        image = this.imageUrl,
+        ki = this.ki,
+        deletedAt = null
+    )
+}

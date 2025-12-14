@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         // Configuración de los destinos de nivel superior (sin botón de retroceso)
         val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.listaFragment, R.id.favoritosFragment, R.id.transformacionesFragment)
+            setOf(R.id.listaFragment, R.id.planetasFragment, R.id.transformacionesFragment)
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)

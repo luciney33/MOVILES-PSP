@@ -2,7 +2,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="menu_characters">Personajes</string>
-    <string name="menu_favorites">Favoritos</string>
+    <string name="menu_planetas">Planetas</string>
     <string name="menu_transformations">Transformaciones</string>
     <string name="menu_transformations_short">Transf.</string>
 
