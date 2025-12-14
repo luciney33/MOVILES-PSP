@@ -22,7 +22,6 @@ android {
 
     buildTypes {
         debug {
-            // URL para desarrollo (puedes cambiarla si tienes un servidor de pruebas)
             buildConfigField("String", "BASE_URL", "\"https://dragonball-api.com/api/\"")
             buildConfigField("String", "BASE_URL_PLACEHOLDER", "\"https://jsonplaceholder.typicode.com/\"")
         }
@@ -34,6 +33,7 @@ android {
             )
 
             buildConfigField("String", "BASE_URL", "\"https://dragonball-api.com/api/\"")
+            buildConfigField("String", "BASE_URL_PLACEHOLDER", "\"https://jsonplaceholder.typicode.com/\"")
         }
     }
     buildFeatures {
