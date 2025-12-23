@@ -29,7 +29,7 @@ class PlanetasViewModel @Inject constructor(
     init {
         handleIntent(PlanetasIntent.LoadPlanets)
     }
-
+    
     fun handleIntent(intent: PlanetasIntent) {
         when (intent) {
             is PlanetasIntent.LoadPlanets -> {
