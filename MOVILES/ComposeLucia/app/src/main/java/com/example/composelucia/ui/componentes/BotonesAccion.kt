@@ -13,20 +13,17 @@ import androidx.compose.ui.graphics.Color
 import com.example.composelucia.ui.theme.Dimens
 
 @Composable
-fun BotonesActtion(
-    enableBorrar : Boolean,
-    enableActualizar : Boolean,
-    onGuardar: () -> Unit,
-    onLimpiarFormulario: () -> Unit,
-    onBorrar: () -> Unit,
-    onActualizar: () -> Unit
-) {
-    // Botones de acción
+fun BotonesActtion(modifier: Modifier = Modifier,
+                   enableBorrar : Boolean,
+                   enableActualizar : Boolean,
+                   onGuardar: () -> Unit = {},
+                   onLimpiarFormulario: () -> Unit = {},
+                   onBorrar: () -> Unit = {},
+                   onActualizar: () -> Unit = {},     ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSmall)
     ) {
-        // Limpiar
         Button(
             onClick = { onLimpiarFormulario() },
             colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
@@ -37,7 +34,6 @@ fun BotonesActtion(
             Text("Limpiar", fontSize = Dimens.textSizeSmall)
         }
 
-        // Actualizar
         Button(
             onClick = { onActualizar() },
             enabled = enableActualizar,
@@ -49,7 +45,6 @@ fun BotonesActtion(
             Text("Actualizar", fontSize = Dimens.textSizeSmall)
         }
 
-        // Borrar
         Button(
             onClick = { onBorrar() },
             enabled = enableBorrar,
@@ -61,7 +56,6 @@ fun BotonesActtion(
             Text("Borrar", fontSize = Dimens.textSizeSmall)
         }
 
-        // Guardar
         Button(
             onClick = { onGuardar() },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF669900)),
@@ -72,6 +66,4 @@ fun BotonesActtion(
             Text("Guardar", fontSize = Dimens.textSizeSmall)
         }
     }
-
-
 }

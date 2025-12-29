@@ -3,10 +3,6 @@ package com.example.composelucia.ui.theme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-/**
- * Sistema de dimensiones siguiendo Material Design 3
- * Basado en múltiplos de 4dp para consistencia
- */
 object Dimens {
     // Padding y Spacing
     val paddingExtraSmall = 4.dp
