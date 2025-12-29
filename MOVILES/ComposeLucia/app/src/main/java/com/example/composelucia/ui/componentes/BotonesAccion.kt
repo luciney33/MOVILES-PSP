@@ -20,10 +20,12 @@ fun BotonesActtion(modifier: Modifier = Modifier,
                    onLimpiarFormulario: () -> Unit = {},
                    onBorrar: () -> Unit = {},
                    onActualizar: () -> Unit = {},     ) {
+    // Botones de acción
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSmall)
     ) {
+        // Limpiar
         Button(
             onClick = { onLimpiarFormulario() },
             colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
@@ -34,6 +36,7 @@ fun BotonesActtion(modifier: Modifier = Modifier,
             Text("Limpiar", fontSize = Dimens.textSizeSmall)
         }
 
+        // Actualizar
         Button(
             onClick = { onActualizar() },
             enabled = enableActualizar,
@@ -45,6 +48,7 @@ fun BotonesActtion(modifier: Modifier = Modifier,
             Text("Actualizar", fontSize = Dimens.textSizeSmall)
         }
 
+        // Borrar
         Button(
             onClick = { onBorrar() },
             enabled = enableBorrar,
@@ -56,6 +60,7 @@ fun BotonesActtion(modifier: Modifier = Modifier,
             Text("Borrar", fontSize = Dimens.textSizeSmall)
         }
 
+        // Guardar
         Button(
             onClick = { onGuardar() },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF669900)),
@@ -66,4 +71,6 @@ fun BotonesActtion(modifier: Modifier = Modifier,
             Text("Guardar", fontSize = Dimens.textSizeSmall)
         }
     }
+
+
 }
