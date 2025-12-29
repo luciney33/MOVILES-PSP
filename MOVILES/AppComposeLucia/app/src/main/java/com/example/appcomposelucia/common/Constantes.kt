@@ -24,5 +24,7 @@ object Constantes {
     const val EMPTY_STRING = "0/0"
     const val SIG_ = "Sig. →"
     const val JUAN_PEREZ = "Juan Pérez"
+    const val ERROR_ACT = "Error al actualizar el pedido"
+    const val ERROR_BORRAR = "Error al borrar el pedido"
 
 }

@@ -228,8 +228,8 @@ fun PedidoFormScreen(modifier: Modifier = Modifier,
 
             Botonera(
                 indiceActual = uiState.indiceActual,
-                size = uiState.pedidos.size,
-                isEmpty = uiState.pedidos.isEmpty(),
+                size = uiState.totalPedidos,
+                isEmpty = uiState.totalPedidos == 0,
                 onLimpiarFormulario = onLimpiarFormulario,
                 onNavegarSiguiente = onNavegarSiguiente,
                 onNavegarAnterior = onNavegarAnterior,
@@ -314,9 +314,7 @@ fun Botonera(
 fun PedidoFormScreenPreview() {
     ComposeAppTheme {
         PedidoFormScreen(uiState = PedidoState(
-            pedidos = listOf(
-                Pedido(nomape = Constantes.JUAN_PEREZ)
-            ),
+            totalPedidos = 1,
             indiceActual = 0,
             pedidoActual = Pedido(nomape = Constantes.JUAN_PEREZ)
         ))
