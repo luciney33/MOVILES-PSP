@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.appcomposelucia.common.Constantes
 import com.example.appcomposelucia.domain.model.Pedido
 import com.example.appcomposelucia.ui.componentes.BotonesActtion
 import com.example.appcomposelucia.ui.theme.ComposeAppTheme
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeAppTheme {
 
-                    UserFormScreenViewModel()
+                    PedidoScreenViewModel()
 
             }
         }
@@ -58,15 +59,13 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun UserFormScreenViewModel(
-    modifier: Modifier = Modifier,
+fun PedidoScreenViewModel(
     viewModel: PedidoViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Observar eventos de un solo uso con lifecycle awareness
     LaunchedEffect(Unit) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.uiEvent.collect { event ->
@@ -83,7 +82,7 @@ fun UserFormScreenViewModel(
         }
     }
 
-    UserFormScreen(uiState = uiState,
+    PedidoFormScreen(uiState = uiState,
         snackbarHostState = snackbarHostState,
         onChangePedido = { pedido -> viewModel.actualizarPedido(pedido) },
         onLimpiarFormulario = { viewModel.limpiarFormulario() },
@@ -93,26 +92,21 @@ fun UserFormScreenViewModel(
         onBorrar = { viewModel.borrarPedido() },
         onActualizar = { viewModel.guardarCambiosPedido() },
     )
-
-
-
-
-
-
 }
 
 
+
 @Composable
-fun UserFormScreen(modifier: Modifier = Modifier,
-                   uiState : PedidoState,
-                   snackbarHostState : SnackbarHostState = remember { SnackbarHostState() },
-                   onChangePedido: (Pedido) -> Unit = {},
-                   onLimpiarFormulario: () -> Unit = {},
-                   onNavegarSiguiente: () -> Unit = {},
-                   onNavegarAnterior: () -> Unit = {},
-                   onGuardar: () -> Unit = {},
-                   onBorrar: () -> Unit = {},
-                   onActualizar: () -> Unit = {},
+fun PedidoFormScreen(modifier: Modifier = Modifier,
+                     uiState : PedidoState,
+                     snackbarHostState : SnackbarHostState = remember { SnackbarHostState() },
+                     onChangePedido: (Pedido) -> Unit = {},
+                     onLimpiarFormulario: () -> Unit = {},
+                     onNavegarSiguiente: () -> Unit = {},
+                     onNavegarAnterior: () -> Unit = {},
+                     onGuardar: () -> Unit = {},
+                     onBorrar: () -> Unit = {},
+                     onActualizar: () -> Unit = {},
                    ) {
 
     Scaffold(
@@ -128,9 +122,8 @@ fun UserFormScreen(modifier: Modifier = Modifier,
             verticalArrangement = Arrangement.spacedBy(Dimens.spacingLarge)
         ) {
 
-            // Título
             Text(
-                text = "Añadir Nuevo Pedido",
+                text = Constantes.AyADIR_NUEVO_PEDIDO,
                 fontSize = Dimens.textSizeTitle,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -138,21 +131,19 @@ fun UserFormScreen(modifier: Modifier = Modifier,
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Campo Nombre y Apellidos
             OutlinedTextField(
                 value = uiState.pedidoActual.nomape,
                 onValueChange = { onChangePedido(uiState.pedidoActual.copy(nomape = it)) },
-                label = { Text("Nombre y Apellidos") },
+                label = { Text(Constantes.NOMBRE_Y_APELLIDOS) },
                 leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Campo Email
             OutlinedTextField(
                 value = uiState.pedidoActual.correo,
                 onValueChange = { onChangePedido(uiState.pedidoActual.copy(correo = it)) },
-                label = { Text("Email") },
+                label = { Text(Constantes.EMAIL) },
                 leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
@@ -165,7 +156,7 @@ fun UserFormScreen(modifier: Modifier = Modifier,
                 OutlinedTextField(
                     value = uiState.pedidoActual.telf,
                     onValueChange = { onChangePedido(uiState.pedidoActual.copy(telf = it)) },
-                    label = { Text("Teléfono") },
+                    label = { Text(Constantes.Telefono) },
                     leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
                     singleLine = true,
                     modifier = Modifier.weight(1f)
@@ -174,7 +165,7 @@ fun UserFormScreen(modifier: Modifier = Modifier,
                 OutlinedTextField(
                     value = uiState.pedidoActual.marca,
                     onValueChange = { onChangePedido(uiState.pedidoActual.copy(marca = it)) },
-                    label = { Text("Marca") },
+                    label = { Text(Constantes.MARCA) },
                     leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
                     singleLine = true,
                     modifier = Modifier.weight(1f)
@@ -182,13 +173,13 @@ fun UserFormScreen(modifier: Modifier = Modifier,
             }
 
 
-            // Género
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Talla:",
+                    text = Constantes.TALLA,
                     fontSize = Dimens.textSizeMedium,
                     color = Color.Black,
                     modifier = Modifier.padding(end = Dimens.paddingSmall)
@@ -200,35 +191,34 @@ fun UserFormScreen(modifier: Modifier = Modifier,
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         RadioButton(
-                            selected = uiState.pedidoActual.talla == "L",
-                            onClick = { onChangePedido(uiState.pedidoActual.copy(talla = "L")) }
+                            selected = uiState.pedidoActual.talla == Constantes.L,
+                            onClick = { onChangePedido(uiState.pedidoActual.copy(talla = Constantes.L)) }
                         )
-                        Text("L", modifier = Modifier.padding(end = Dimens.paddingSmall))
+                        Text(Constantes.L, modifier = Modifier.padding(end = Dimens.paddingSmall))
                     }
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         RadioButton(
-                            selected = uiState.pedidoActual.talla == "M",
-                            onClick = { onChangePedido(uiState.pedidoActual.copy(talla = "M")) }
+                            selected = uiState.pedidoActual.talla == Constantes.M,
+                            onClick = { onChangePedido(uiState.pedidoActual.copy(talla = Constantes.M)) }
                         )
-                        Text("M", modifier = Modifier.padding(end = Dimens.paddingSmall))
+                        Text(Constantes.M, modifier = Modifier.padding(end = Dimens.paddingSmall))
                     }
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         RadioButton(
-                            selected = uiState.pedidoActual.talla == "S",
-                            onClick = { onChangePedido(uiState.pedidoActual.copy(talla = "S")) }
+                            selected = uiState.pedidoActual.talla == Constantes.S,
+                            onClick = { onChangePedido(uiState.pedidoActual.copy(talla = Constantes.S)) }
                         )
-                        Text("S")
+                        Text(Constantes.S)
                     }
                 }
             }
 
-            // Comentarios
             OutlinedTextField(
                 value = uiState.pedidoActual.comentario,
                 onValueChange = { onChangePedido(uiState.pedidoActual.copy(comentario = it)) },
-                label = { Text("Comentarios") },
+                label = { Text(Constantes.COMENTARIOS) },
                 leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -252,6 +242,7 @@ fun UserFormScreen(modifier: Modifier = Modifier,
 
 }
 
+
 @Composable
 fun Botonera(
     indiceActual : Int,
@@ -266,7 +257,6 @@ fun Botonera(
 ){
 
 
-    // Botones de navegación
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -281,11 +271,11 @@ fun Botonera(
                 .height(Dimens.buttonHeightSmall)
                 .padding(end = Dimens.paddingExtraSmall)
         ) {
-            Text("← Ant.", fontSize = Dimens.textSizeSmall)
+            Text(Constantes._ANT_, fontSize = Dimens.textSizeSmall)
         }
 
         Text(
-            text = if (isEmpty) "0/0" else "${indiceActual + 1}/${size}",
+            text = if (isEmpty) Constantes.EMPTY_STRING else "${indiceActual + 1}/${size}",
             fontSize = Dimens.textSizeMedium,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -303,7 +293,7 @@ fun Botonera(
                 .height(Dimens.buttonHeightSmall)
                 .padding(start = Dimens.paddingExtraSmall)
         ) {
-            Text("Sig. →", fontSize = Dimens.textSizeSmall)
+            Text(Constantes.SIG_, fontSize = Dimens.textSizeSmall)
         }
     }
     BotonesActtion(
@@ -314,22 +304,21 @@ fun Botonera(
         onBorrar = onBorrar,
         onActualizar = onActualizar,
     )
-
-
-
 }
+
+
 
 
 @Preview(showBackground = true)
 @Composable
-fun UserFormScreenPreview() {
+fun PedidoFormScreenPreview() {
     ComposeAppTheme {
-        UserFormScreen(uiState = PedidoState(
+        PedidoFormScreen(uiState = PedidoState(
             pedidos = listOf(
-                Pedido(nomape = "Juan Pérez")
+                Pedido(nomape = Constantes.JUAN_PEREZ)
             ),
             indiceActual = 0,
-            pedidoActual = Pedido(nomape = "Juan Pérez")
+            pedidoActual = Pedido(nomape = Constantes.JUAN_PEREZ)
         ))
     }
 }

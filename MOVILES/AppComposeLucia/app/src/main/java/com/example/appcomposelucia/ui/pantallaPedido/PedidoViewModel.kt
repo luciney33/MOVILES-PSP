@@ -17,6 +17,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+
+
 @HiltViewModel
 class PedidoViewModel @Inject constructor() : ViewModel() {
 
@@ -73,12 +75,12 @@ class PedidoViewModel @Inject constructor() : ViewModel() {
             }
 
             if (pedido.correo.isNotBlank() && !Patterns.EMAIL_ADDRESS.matcher(pedido.correo).matches()) {
-                sendEvent(UiEvent.ShowSnackbar("El email no es válido"))
+                sendEvent(UiEvent.ShowSnackbar(Constantes.EL_EMAIL_NO_ES_VÁLIDO))
                 return@launch
             }
 
             if (pedido.telf.isNotBlank() && pedido.telf.length < 9) {
-                sendEvent(UiEvent.ShowSnackbar("El teléfono debe tener al menos 9 dígitos"))
+                sendEvent(UiEvent.ShowSnackbar(Constantes.EL_TELÉFONO_DEBE_TENER_AL_MENOS_9_DÍGITOS))
                 return@launch
             }
 
@@ -95,7 +97,7 @@ class PedidoViewModel @Inject constructor() : ViewModel() {
             }
 
             limpiarFormulario()
-            sendEvent(UiEvent.ShowSnackbar("Pedido guardado correctamente"))
+            sendEvent(UiEvent.ShowSnackbar(Constantes.PEDIDO_GUARDADO_CORRECTAMENTE))
         }
     }
 
@@ -107,17 +109,17 @@ class PedidoViewModel @Inject constructor() : ViewModel() {
 
                 // Validaciones
                 if (pedido.nomape.isBlank()) {
-                    sendEvent(UiEvent.ShowSnackbar(EL_NOMBRE_ES_OBLIGATORIO))
+                    sendEvent(UiEvent.ShowSnackbar(Constantes.EL_NOMBRE_ES_OBLIGATORIO))
                     return@launch
                 }
 
                 if (pedido.correo.isNotBlank() && !Patterns.EMAIL_ADDRESS.matcher(pedido.correo).matches()) {
-                    sendEvent(UiEvent.ShowSnackbar("El email no es válido"))
+                    sendEvent(UiEvent.ShowSnackbar(Constantes.EL_EMAIL_NO_ES_VÁLIDO))
                     return@launch
                 }
 
                 if (pedido.telf.isNotBlank() && pedido.telf.length < 9) {
-                    sendEvent(UiEvent.ShowSnackbar("El teléfono debe tener al menos 9 dígitos"))
+                    sendEvent(UiEvent.ShowSnackbar(Constantes.EL_TELÉFONO_DEBE_TENER_AL_MENOS_9_DÍGITOS))
                     return@launch
                 }
 
@@ -130,9 +132,9 @@ class PedidoViewModel @Inject constructor() : ViewModel() {
                     it.copy(pedidos = nuevaLista)
                 }
 
-                sendEvent(UiEvent.ShowSnackbar("Pedido actualizado correctamente"))
+                sendEvent(UiEvent.ShowSnackbar(Constantes.PEDIDO_ACTUALIZADO_CORRECTAMENTE))
             } else {
-                sendEvent(UiEvent.ShowSnackbar("No hay pedido seleccionado para actualizar"))
+                sendEvent(UiEvent.ShowSnackbar(Constantes.NO_HAY_PEDIDO))
             }
         }
     }
@@ -170,9 +172,9 @@ class PedidoViewModel @Inject constructor() : ViewModel() {
                     cargarPedido(nuevoIndice)
                 }
 
-                sendEvent(UiEvent.ShowSnackbar("Pedido borrado correctamente"))
+                sendEvent(UiEvent.ShowSnackbar(Constantes.PEDIDO_BORRADO))
             } else {
-                sendEvent(UiEvent.ShowSnackbar("No hay pedido seleccionado para borrar"))
+                sendEvent(UiEvent.ShowSnackbar(Constantes.NO_HAY_PEDIDO2))
             }
         }
     }
