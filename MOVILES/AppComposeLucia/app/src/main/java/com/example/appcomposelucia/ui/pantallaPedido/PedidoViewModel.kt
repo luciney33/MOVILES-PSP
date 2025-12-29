@@ -1,9 +1,11 @@
-package com.example.appcomposelucia.ui.viewmodel
+package com.example.appcomposelucia.ui.pantallaPedido
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.appcomposelucia.common.Constantes
 import com.example.appcomposelucia.domain.model.Pedido
+import com.example.appcomposelucia.ui.common.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +15,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @HiltViewModel
 class PedidoViewModel @Inject constructor() : ViewModel() {
@@ -64,9 +67,8 @@ class PedidoViewModel @Inject constructor() : ViewModel() {
             val state = _uiState.value
             val pedido = state.pedidoActual
 
-            // Validaciones
             if (pedido.nomape.isBlank()) {
-                sendEvent(UiEvent.ShowSnackbar("El nombre es obligatorio"))
+                sendEvent(UiEvent.ShowSnackbar(Constantes.EL_NOMBRE_ES_OBLIGATORIO))
                 return@launch
             }
 
@@ -105,7 +107,7 @@ class PedidoViewModel @Inject constructor() : ViewModel() {
 
                 // Validaciones
                 if (pedido.nomape.isBlank()) {
-                    sendEvent(UiEvent.ShowSnackbar("El nombre es obligatorio"))
+                    sendEvent(UiEvent.ShowSnackbar(EL_NOMBRE_ES_OBLIGATORIO))
                     return@launch
                 }
 

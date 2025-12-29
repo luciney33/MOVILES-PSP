@@ -1,4 +1,4 @@
-package com.example.appcomposelucia.ui.viewmodel
+package com.example.appcomposelucia.ui.pantallaPedido
 
 import com.example.appcomposelucia.domain.model.Pedido
 

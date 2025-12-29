@@ -1,4 +1,4 @@
-package com.example.appcomposelucia
+package com.example.appcomposelucia.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -36,9 +36,9 @@ import com.example.appcomposelucia.domain.model.Pedido
 import com.example.appcomposelucia.ui.componentes.BotonesActtion
 import com.example.appcomposelucia.ui.theme.ComposeAppTheme
 import com.example.appcomposelucia.ui.theme.Dimens
-import com.example.appcomposelucia.ui.viewmodel.PedidoViewModel
-import com.example.appcomposelucia.ui.viewmodel.UiEvent
-import com.example.appcomposelucia.ui.viewmodel.PedidoState
+import com.example.appcomposelucia.ui.pantallaPedido.PedidoViewModel
+import com.example.appcomposelucia.ui.common.UiEvent
+import com.example.appcomposelucia.ui.pantallaPedido.PedidoState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
