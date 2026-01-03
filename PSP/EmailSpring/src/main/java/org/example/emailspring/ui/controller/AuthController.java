@@ -10,6 +10,7 @@ import org.example.emailspring.common.Constantes;
 import org.example.emailspring.data.UsuarioRepository;
 import org.example.emailspring.domain.model.Usuario;
 import org.example.emailspring.ui.dto.*;
+import org.example.emailspring.ui.interceptor.RequiresAuth;
 import org.example.emailspring.ui.service.AuthService;
 import org.example.emailspring.ui.service.TotpService;
 import org.springframework.http.HttpStatus;
@@ -76,25 +77,23 @@ public class AuthController {
 
     }
 
-    // ============== ENDPOINTS 2FA (TOTP) ==============
 
-    @PostMapping("/2fa/enable")
-    public ResponseEntity<?> enable2FA(HttpSession session) {
+    @RequiresAuth
+    @PostMapping(Constantes.FA_ENABLE)
+    public ResponseEntity<Enable2FADataResponse> enable2FA(HttpSession session) {
         // Verificar que el usuario esté autenticado
         if (!authService.isAuthenticated(session)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("success", false, "message", "No autenticado"));
+            throw new UnauthorizedException("No autenticado");
         }
 
-        boolean usuarioId = authService.isAuthenticated(session);
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
+        Long usuarioId = authService.getUsuarioIdFromSession(session);
+        Optional<UsuarioEntity> usuarioEntityOpt = usuarioRepository.findById(usuarioId);
 
-        if (usuarioOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("success", false, "message", "Usuario no encontrado"));
+        if (usuarioEntityOpt.isEmpty()) {
+            throw new BadRequestException("Usuario no encontrado");
         }
 
-        Usuario usuario = usuarioOpt.get();
+        UsuarioEntity usuarioEntity = usuarioEntityOpt.get();
 
         try {
             // Generar secreto TOTP
@@ -103,165 +102,149 @@ public class AuthController {
             // Generar QR code
             String qrCodeUri = totpService.generateQrCodeImageUri(
                     secret,
-                    usuario.username(),
+                    usuarioEntity.getUsername(),
                     "MiAplicacion" // Nombre de tu app que aparecerá en Google Authenticator
             );
 
             // Guardar el secreto temporalmente (aún no activado)
-            usuario = usuario.set2FA(false,secret); // Aún no activado hasta confirmar
-            usuarioRepository.save(usuario);
+            usuarioEntity.setTwoFactorEnabled(false);
+            usuarioEntity.setTwoFactorSecret(secret);
+            usuarioRepository.save(usuarioEntity);
 
-            Enable2FAResponse response = new Enable2FAResponse(
+            Enable2FAResponse data = new Enable2FAResponse(
                     secret,
                     qrCodeUri,
                     "Escanea el código QR con tu aplicación autenticadora (Google Authenticator, Authy, etc.) y confirma con un código"
             );
 
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "data", response
-            ));
+            return ResponseEntity.ok(new Enable2FADataResponse(true, data));
         } catch (QrGenerationException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("success", false, "message", "Error generando código QR: " + e.getMessage()));
+            throw new BadRequestException("Error generando código QR: " + e.getMessage());
         }
     }
 
+    @RequiresAuth
     @PostMapping("/2fa/confirm")
-    public ResponseEntity<?> confirm2FA(@RequestBody Confirm2FARequest request, HttpSession session) {
+    public ResponseEntity<ApiResponse> confirm2FA(@RequestBody Confirm2FARequest request, HttpSession session) {
         // Verificar que el usuario esté autenticado
         if (!authService.isAuthenticated(session)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("success", false, "message", "No autenticado"));
-        }
-
-        Long usuarioId = authService.isAuthenticated(session);
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
-
-        if (usuarioOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("success", false, "message", "Usuario no encontrado"));
-        }
-
-        Usuario usuario = usuarioOpt.get();
-
-        // Verificar que tiene un secreto pendiente
-        if (usuario.twoFactorSecret() == null) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("success", false, "message", "No hay un proceso de habilitación 2FA pendiente"));
-        }
-
-        // Verificar el código TOTP
-        boolean isValid = totpService.verifyCode(usuario.twoFactorSecret(), request.code());
-
-        if (!isValid) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("success", false, "message", "Código inválido. Verifica que tu app esté sincronizada correctamente."));
-        }
-
-        // Activar 2FA
-        usuario = usuario.set2FA(true,usuario.twoFactorSecret());
-        usuarioRepository.save(usuario);
-
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "message", "Autenticación de dos factores activada correctamente"
-        ));
-    }
-
-    @PostMapping("/2fa/disable")
-    public ResponseEntity<?> disable2FA(HttpSession session) {
-        // Verificar que el usuario esté autenticado
-        if (!authService.isAuthenticated(session)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("success", false, "message", "No autenticado"));
+            throw new UnauthorizedException("No autenticado");
         }
 
         Long usuarioId = authService.getUsuarioIdFromSession(session);
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
+        Optional<UsuarioEntity> usuarioEntityOpt = usuarioRepository.findById(usuarioId);
 
-        if (usuarioOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("success", false, "message", "Usuario no encontrado"));
+        if (usuarioEntityOpt.isEmpty()) {
+            throw new BadRequestException("Usuario no encontrado");
         }
 
-        Usuario usuario = usuarioOpt.get().set2FA(false,null);
-        usuarioRepository.save(usuario);
+        UsuarioEntity usuarioEntity = usuarioEntityOpt.get();
 
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "message", "Autenticación de dos factores desactivada"
-        ));
+        // Verificar que tiene un secreto pendiente
+        if (usuarioEntity.getTwoFactorSecret() == null) {
+            throw new BadRequestException("No hay un proceso de habilitación 2FA pendiente");
+        }
+
+        // Verificar el código TOTP
+        boolean isValid = totpService.verifyCode(usuarioEntity.getTwoFactorSecret(), request.code());
+
+        if (!isValid) {
+            throw new UnauthorizedException("Código inválido. Verifica que tu app esté sincronizada correctamente.");
+        }
+
+        // Activar 2FA
+        usuarioEntity.setTwoFactorEnabled(true);
+        usuarioRepository.save(usuarioEntity);
+
+        return ResponseEntity.ok(new ApiResponse(true, "Autenticación de dos factores activada correctamente"));
     }
 
+    @RequiresAuth
+    @PostMapping("/2fa/disable")
+    public ResponseEntity<ApiResponse> disable2FA(HttpSession session) {
+        // Verificar que el usuario esté autenticado
+        if (!authService.isAuthenticated(session)) {
+            throw new UnauthorizedException("No autenticado");
+        }
+
+        Long usuarioId = authService.getUsuarioIdFromSession(session);
+        Optional<UsuarioEntity> usuarioEntityOpt = usuarioRepository.findById(usuarioId);
+
+        if (usuarioEntityOpt.isEmpty()) {
+            throw new BadRequestException("Usuario no encontrado");
+        }
+
+        UsuarioEntity usuarioEntity = usuarioEntityOpt.get();
+        usuarioEntity.setTwoFactorEnabled(false);
+        usuarioEntity.setTwoFactorSecret(null);
+        usuarioRepository.save(usuarioEntity);
+
+        return ResponseEntity.ok(new ApiResponse(true, "Autenticación de dos factores desactivada"));
+    }
+
+    @RequiresAuth
     @PostMapping("/2fa/verify")
-    public ResponseEntity<?> verify2FA(@RequestBody Verify2FARequest request, HttpSession session) {
+    public ResponseEntity<Verify2FAResponse> verify2FA(@RequestBody Verify2FARequest request, HttpSession session) {
         // Verificar que hay un login pendiente de 2FA
         String pendingUsername = (String) session.getAttribute("pendingTwoFactorUsername");
 
         if (pendingUsername == null || !pendingUsername.equals(request.username())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("success", false, "message", "No hay un login pendiente de verificación 2FA"));
+            throw new UnauthorizedException("No hay un login pendiente de verificación 2FA");
         }
 
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsername(request.username());
+        UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(request.username());
 
-        if (usuarioOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("success", false, "message", "Usuario no encontrado"));
+        if (usuarioEntity == null) {
+            throw new UnauthorizedException("Usuario no encontrado");
         }
-
-        Usuario usuario = usuarioOpt.get();
 
         // Verificar que tiene 2FA habilitado
-        if (!Boolean.TRUE.equals(usuario.twoFactorEnabled()) || usuario.twoFactorSecret() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("success", false, "message", "El usuario no tiene 2FA habilitado"));
+        if (!Boolean.TRUE.equals(usuarioEntity.getTwoFactorEnabled()) || usuarioEntity.getTwoFactorSecret() == null) {
+            throw new BadRequestException("El usuario no tiene 2FA habilitado");
         }
 
         // Verificar el código TOTP
-        boolean isValid = totpService.verifyCode(usuario.twoFactorSecret(), request.code());
+        boolean isValid = totpService.verifyCode(usuarioEntity.getTwoFactorSecret(), request.code());
 
         if (!isValid) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("success", false, "message", "Código de verificación inválido"));
+            throw new UnauthorizedException("Código de verificación inválido");
         }
 
         // Código válido - completar el login
         session.removeAttribute("pendingTwoFactorUsername");
-        session.setAttribute("usuarioId", usuario.id());
-        session.setAttribute("username", usuario.username());
-        session.setAttribute("rol", usuario.rol());
+        Usuario usuario = usuarioMapper.toDomain(usuarioEntity);
+        session.setAttribute(Constantes.SESSION_USUARIO_ID, usuario);
 
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "message", "Login completado exitosamente",
-                "usuario", usuario
-        ));
+        UsuarioResponseDTO usuarioDTO = new UsuarioResponseDTO(
+                usuario.id(),
+                usuario.username(),
+                usuario.email(),
+                usuario.nombre(),
+                usuario.rol()
+        );
+
+        return ResponseEntity.ok(new Verify2FAResponse(true, "Login completado exitosamente", usuarioDTO));
     }
 
 
+    @RequiresAuth
     @GetMapping("/2fa/status")
-    public ResponseEntity<?> get2FAStatus(HttpSession session) {
+    public ResponseEntity<TwoFactorStatusResponse> get2FAStatus(HttpSession session) {
         if (!authService.isAuthenticated(session)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("success", false, "message", "No autenticado"));
+            throw new UnauthorizedException("No autenticado");
         }
 
         Long usuarioId = authService.getUsuarioIdFromSession(session);
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
+        Optional<UsuarioEntity> usuarioEntityOpt = usuarioRepository.findById(usuarioId);
 
-        if (usuarioOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("success", false, "message", "Usuario no encontrado"));
+        if (usuarioEntityOpt.isEmpty()) {
+            throw new BadRequestException("Usuario no encontrado");
         }
 
-        Usuario usuario = usuarioOpt.get();
+        UsuarioEntity usuarioEntity = usuarioEntityOpt.get();
+        boolean twoFactorEnabled = usuarioEntity.getTwoFactorEnabled() != null && usuarioEntity.getTwoFactorEnabled();
 
-        return ResponseEntity.ok(Map.of(
-                "success", true,
-                "twoFactorEnabled", usuario.twoFactorEnabled()
-        ));
+        return ResponseEntity.ok(new TwoFactorStatusResponse(true, twoFactorEnabled));
     }
 
 }

@@ -173,4 +173,7 @@ public final class Constantes {
     public static final String HTTP_403 = "403";
     public static final String HTTP_404 = "404";
 
+    public static final String FA_ENABLE = "/2fa/enable";
+
+
 }
