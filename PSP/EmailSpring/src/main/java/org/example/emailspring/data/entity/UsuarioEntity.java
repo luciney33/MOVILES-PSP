@@ -34,9 +34,15 @@ public class UsuarioEntity {
     @Enumerated(EnumType.STRING)
     private Rol rol;
 
+    @Column
+    private Boolean twoFactorEnabled;
+
+    @Column
+    private String twoFactorSecret;
+
     public UsuarioEntity() {}
 
-    public UsuarioEntity(Long id, String username, String password, String email, String nombre, Rol rol, boolean activo, String codigoActivacion, LocalDateTime expiracionCodigo) {
+    public UsuarioEntity(Long id, String username, String password, String email, String nombre, Rol rol, boolean activo, String codigoActivacion, LocalDateTime expiracionCodigo, Boolean twoFactorEnabled, String twoFactorSecret) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -46,6 +52,8 @@ public class UsuarioEntity {
         this.activo = activo;
         this.codigoActivacion = codigoActivacion;
         this.expiracionCodigo = expiracionCodigo;
+        this.twoFactorEnabled = twoFactorEnabled;
+        this.twoFactorSecret = twoFactorSecret;
     }
 
     public Long getId() {
@@ -118,5 +126,21 @@ public class UsuarioEntity {
 
     public void setRol(Rol rol) {
         this.rol = rol;
+    }
+
+    public Boolean getTwoFactorEnabled() {
+        return twoFactorEnabled;
+    }
+
+    public void setTwoFactorEnabled(Boolean twoFactorEnabled) {
+        this.twoFactorEnabled = twoFactorEnabled;
+    }
+
+    public String getTwoFactorSecret() {
+        return twoFactorSecret;
+    }
+
+    public void setTwoFactorSecret(String twoFactorSecret) {
+        this.twoFactorSecret = twoFactorSecret;
     }
 }

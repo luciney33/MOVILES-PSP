@@ -39,6 +39,9 @@ public class AuthService {
         return session.getAttribute(Constantes.SESSION_USUARIO_ID) != null;
     }
 
+    public Long getUsuarioIdFromSession(HttpSession session) {
+        return ((Usuario) session.getAttribute(Constantes.SESSION_USUARIO_ID)).id();
+    }
 
     public Rol getRolFromSession(HttpSession session) {
         return session.getAttribute(Constantes.SESSION_USUARIO_ID) != null

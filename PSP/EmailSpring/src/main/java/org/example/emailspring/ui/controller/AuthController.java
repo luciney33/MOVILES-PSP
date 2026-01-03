@@ -8,6 +8,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.data.UsuarioRepository;
+import org.example.emailspring.data.entity.UsuarioEntity;
+import org.example.emailspring.domain.error.BadRequestException;
+import org.example.emailspring.domain.error.UnauthorizedException;
+import org.example.emailspring.domain.mapper.UsuarioMapper;
 import org.example.emailspring.domain.model.Usuario;
 import org.example.emailspring.ui.dto.*;
 import org.example.emailspring.ui.interceptor.RequiresAuth;
@@ -17,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Optional;
 
 
@@ -28,11 +31,13 @@ public class AuthController {
     private final AuthService authService;
     private final TotpService totpService;
     private final UsuarioRepository usuarioRepository;
+    private final UsuarioMapper usuarioMapper;
 
-    public AuthController(AuthService authService, TotpService totpService, UsuarioRepository usuarioRepository) {
+    public AuthController(AuthService authService, TotpService totpService, UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper) {
         this.authService = authService;
         this.totpService = totpService;
         this.usuarioRepository = usuarioRepository;
+        this.usuarioMapper = usuarioMapper;
     }
 
 
@@ -81,35 +86,27 @@ public class AuthController {
     @RequiresAuth
     @PostMapping(Constantes.FA_ENABLE)
     public ResponseEntity<Enable2FADataResponse> enable2FA(HttpSession session) {
-        // Verificar que el usuario esté autenticado
-        if (!authService.isAuthenticated(session)) {
-            throw new UnauthorizedException("No autenticado");
-        }
 
         Long usuarioId = authService.getUsuarioIdFromSession(session);
-        Optional<UsuarioEntity> usuarioEntityOpt = usuarioRepository.findById(usuarioId);
+        Optional<UsuarioEntity> usuarioEntity = usuarioRepository.findById(usuarioId);
 
-        if (usuarioEntityOpt.isEmpty()) {
+        if (usuarioEntity.isEmpty()) {
             throw new BadRequestException("Usuario no encontrado");
         }
 
-        UsuarioEntity usuarioEntity = usuarioEntityOpt.get();
+        UsuarioEntity usuEntity = usuarioEntity.get();
 
         try {
-            // Generar secreto TOTP
             String secret = totpService.generateSecret();
-
-            // Generar QR code
             String qrCodeUri = totpService.generateQrCodeImageUri(
                     secret,
-                    usuarioEntity.getUsername(),
-                    "MiAplicacion" // Nombre de tu app que aparecerá en Google Authenticator
+                    usuEntity.getUsername(),
+                    "EmailSpring con Autenticacion de dos factores"
             );
 
-            // Guardar el secreto temporalmente (aún no activado)
-            usuarioEntity.setTwoFactorEnabled(false);
-            usuarioEntity.setTwoFactorSecret(secret);
-            usuarioRepository.save(usuarioEntity);
+            usuEntity.setTwoFactorEnabled(false);
+            usuEntity.setTwoFactorSecret(secret);
+            usuarioRepository.save(usuEntity);
 
             Enable2FAResponse data = new Enable2FAResponse(
                     secret,
@@ -125,7 +122,7 @@ public class AuthController {
 
     @RequiresAuth
     @PostMapping("/2fa/confirm")
-    public ResponseEntity<ApiResponse> confirm2FA(@RequestBody Confirm2FARequest request, HttpSession session) {
+    public ResponseEntity<ApiSuccessResponse> confirm2FA(@RequestBody Confirm2FARequest request, HttpSession session) {
         // Verificar que el usuario esté autenticado
         if (!authService.isAuthenticated(session)) {
             throw new UnauthorizedException("No autenticado");
@@ -156,12 +153,12 @@ public class AuthController {
         usuarioEntity.setTwoFactorEnabled(true);
         usuarioRepository.save(usuarioEntity);
 
-        return ResponseEntity.ok(new ApiResponse(true, "Autenticación de dos factores activada correctamente"));
+        return ResponseEntity.ok(new ApiSuccessResponse(true, "Autenticación de dos factores activada correctamente"));
     }
 
     @RequiresAuth
     @PostMapping("/2fa/disable")
-    public ResponseEntity<ApiResponse> disable2FA(HttpSession session) {
+    public ResponseEntity<ApiSuccessResponse> disable2FA(HttpSession session) {
         // Verificar que el usuario esté autenticado
         if (!authService.isAuthenticated(session)) {
             throw new UnauthorizedException("No autenticado");
@@ -179,7 +176,7 @@ public class AuthController {
         usuarioEntity.setTwoFactorSecret(null);
         usuarioRepository.save(usuarioEntity);
 
-        return ResponseEntity.ok(new ApiResponse(true, "Autenticación de dos factores desactivada"));
+        return ResponseEntity.ok(new ApiSuccessResponse(true, "Autenticación de dos factores desactivada"));
     }
 
     @RequiresAuth

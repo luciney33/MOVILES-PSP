@@ -25,6 +25,10 @@ public record Usuario(
         @Schema(description = Constantes.SCHEMA_USUARIO_CODIGO_ACTIVACION, accessMode = Schema.AccessMode.READ_ONLY)
         String codigoActivacion,
         @Schema(description = Constantes.SCHEMA_USUARIO_EXPIRACION_CODIGO, accessMode = Schema.AccessMode.READ_ONLY)
-        LocalDateTime expiracionCodigo
+        LocalDateTime expiracionCodigo,
+        @Schema(description = "Indica si el usuario tiene habilitada la autenticación de dos factores")
+        Boolean twoFactorEnabled,
+        @Schema(description = "Secreto TOTP para autenticación de dos factores", accessMode = Schema.AccessMode.READ_ONLY)
+        String twoFactorSecret
 ) {
 }
