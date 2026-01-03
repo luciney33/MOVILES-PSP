@@ -1,0 +1,50 @@
+
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### 2. Habilitar 2FA
+POST http://localhost:8080/api/auth/2fa/enable
+
+### 3. Confirmar 2FA con código de autenticador
+POST http://localhost:8080/api/auth/2fa/confirm
+Content-Type: application/json
+
+{
+  "code": "071114"
+}
+
+### 4. Ver estado de 2FA
+GET http://localhost:8080/api/auth/2fa/status
+
+### 5. Deshabilitar 2FA
+POST http://localhost:8080/api/auth/2fa/disable
+
+### 6. Logout
+POST http://localhost:8080/api/auth/logout
+
+
+### 7. Login inicial
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### 8. Verificar código 2FA durante login
+POST http://localhost:8080/api/auth/2fa/verify
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "code": "123456"
+}
+
+### 9. Logout
+POST http://localhost:8080/api/auth/logout

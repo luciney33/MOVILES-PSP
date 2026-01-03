@@ -63,7 +63,9 @@ public class UsuarioService {
                 request.rol(),
                 false,
                 codigoActivacion,
-                expiracionCodigo
+                expiracionCodigo,
+                false,
+                null
         );
 
         UsuarioEntity usuarioGuardado = usuarioRepository.save(usuarioMapper.toEntity(nuevoUsuario));

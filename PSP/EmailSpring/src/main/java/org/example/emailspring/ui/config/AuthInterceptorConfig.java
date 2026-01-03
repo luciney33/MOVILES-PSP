@@ -17,7 +17,10 @@ public class AuthInterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns(Constantes.API)
-                .excludePathPatterns(Constantes.EXCLUDE_URL)
+                .excludePathPatterns(Constantes.AUTH_PUBLIC_LOGIN)
+                .excludePathPatterns(Constantes.AUTH_PUBLIC_REGISTER)
+                .excludePathPatterns(Constantes.AUTH_PUBLIC_ACTIVAR)
+                .excludePathPatterns(Constantes.AUTH_PUBLIC_LOGOUT)
                 .excludePathPatterns(Constantes.SWAGGER_UI)
                 .excludePathPatterns(Constantes.SWAGGER_DOCS)
                 .excludePathPatterns(Constantes.SWAGGER_UI_HTML)

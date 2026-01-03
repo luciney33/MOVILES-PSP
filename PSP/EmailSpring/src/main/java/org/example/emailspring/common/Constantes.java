@@ -1,6 +1,17 @@
 package org.example.emailspring.common;
 
 public final class Constantes {
+    public static final String USUARIO_NO_ENCONTRADO = "Usuario no encontrado";
+    public static final String NOM_APP_GOOGLEAUTHTENTICATOR = "EmailSpring con Autenticacion de dos factores";
+    public static final String ESCANEA_CODIGOQR_Y_CONFIRMA = "Escanea el código QR con tu aplicación autenticadora (Google Authenticator, Authy, etc.) y confirma con un código";
+    public static final String ERROR_GENERANDO_CODIGO_QR = "Error generando código QR: ";
+    public static final String NO_HAY_UN_PROCESO_DE_HABILITACION_2_FA_PENDIENTE = "No hay un proceso de habilitación 2FA pendiente";
+    public static final String CODIGO_INVALIDO_VERIFICA_QUE_TU_APP_ESTE_SINCRONIZADA_CORRECTAMENTE = "Código inválido. Verifica que tu app esté sincronizada correctamente.";
+    public static final String PENDING_TWO_FACTOR_USERNAME = "pendingTwoFactorUsername";
+    public static final String NO_HAY_UN_LOGIN_PENDIENTE_DE_VERIFICACION_2_FA = "No hay un login pendiente de verificación 2FA";
+    public static final String EL_USUARIO_NO_TIENE_2_FA_HABILITADO = "El usuario no tiene 2FA habilitado";
+    public static final String CODIGO_DE_VERIFICACION_INVALIDO = "Código de verificación inválido";
+
     private Constantes() {}
     public static final String CODIGO = "codigo";
 
@@ -10,7 +21,10 @@ public final class Constantes {
     public static final String TEMPLATE = "usuario-activo";
     public static final String TEMPLATE_ERROR = "error-activacion";
     public static final String API = "/api/**";
-    public static final String EXCLUDE_URL = "/api/auth/**";
+    public static final String AUTH_PUBLIC_LOGIN = "/api/auth/login";
+    public static final String AUTH_PUBLIC_REGISTER = "/api/auth/register";
+    public static final String AUTH_PUBLIC_ACTIVAR = "/api/auth/activar";
+    public static final String AUTH_PUBLIC_LOGOUT = "/api/auth/logout";
     public static final String SWAGGER_UI = "/swagger-ui/**";
 
     public static final String SWAGGER_DOCS = "/v3/api-docs/**";
@@ -33,15 +47,11 @@ public final class Constantes {
 
     public static final String ROL = "rol";
 
-
-
     public static final String API_AUTH = "/api/auth";
     public static final String API_ENTRENAMIENTOS = "/api/entrenamientos";
     public static final String TABLE_ENTRENAMIENTO= "entrenamientos";
     public static final String TABLE_USUARIOS = "usuarios";
     public static final String API_ACTIVAR = "/api/auth/activar";
-
-
 
     public static final String AUTH_LOGIN = "/login";
     public static final String AUTH_LOGOUT = "/logout";
@@ -174,6 +184,12 @@ public final class Constantes {
     public static final String HTTP_404 = "404";
 
     public static final String FA_ENABLE = "/2fa/enable";
-
+    public static final String FA_CONFIRM = "/2fa/confirm";
+    public static final String DE_DOS_FACTORES_ACTIVADA_CORRECTAMENTE = "Autenticación de dos factores activada correctamente";
+    public static final String FA_DISABLE = "/2fa/disable";
+    public static final String DE_DOS_FACTORES_DESACTIVADA = "Autenticación de dos factores desactivada";
+    public static final String FA_VERIFY = "/2fa/verify";
+    public static final String LOGIN_COMPLETADO_EXITOSAMENTE = "Login completado exitosamente";
+    public static final String FA_STATUS = "/2fa/status";
 
 }
