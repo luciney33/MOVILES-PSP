@@ -3,7 +3,7 @@ package com.example.appdragonballapi.ui.pantallaPlanetas
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appdragonballapi.domain.usecase.GetAllPlanets
-import com.example.navigationhiltroom.common.NetworkResult
+import com.example.appdragonballapi.common.NetworkResult
 import com.example.appdragonballapi.ui.common.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -29,7 +29,7 @@ class PlanetasViewModel @Inject constructor(
     init {
         handleIntent(PlanetasIntent.LoadPlanets)
     }
-    
+
     fun handleIntent(intent: PlanetasIntent) {
         when (intent) {
             is PlanetasIntent.LoadPlanets -> {

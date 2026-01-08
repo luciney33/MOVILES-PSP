@@ -1,7 +1,7 @@
 package com.example.appdragonballapi.domain.model
 
 import com.example.appdragonballapi.common.Constantes
-import com.example.navigationhiltroom.common.NetworkResult
+import com.example.appdragonballapi.common.NetworkResult
 
 
 

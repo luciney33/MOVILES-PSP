@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appdragonballapi.domain.usecase.GetCharacterById
 import com.example.appdragonballapi.ui.common.UiEvent
-import com.example.navigationhiltroom.common.NetworkResult
+import com.example.appdragonballapi.common.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

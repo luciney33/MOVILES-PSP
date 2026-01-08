@@ -7,7 +7,7 @@ import com.example.appdragonballapi.data.remote.entity.toDomain
 import com.example.appdragonballapi.data.remote.entity.toEntity
 import com.example.appdragonballapi.domain.model.DragonBallCharacter
 import com.example.appdragonballapi.domain.model.Planet
-import com.example.navigationhiltroom.common.NetworkResult
+import com.example.appdragonballapi.common.NetworkResult
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.appdragonballapi.common.Constantes
 import com.example.appdragonballapi.domain.model.DragonBallCharacter
 import com.example.appdragonballapi.domain.usecase.AddCharacter
-import com.example.navigationhiltroom.common.NetworkResult
+import com.example.appdragonballapi.common.NetworkResult
 import com.example.appdragonballapi.ui.common.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

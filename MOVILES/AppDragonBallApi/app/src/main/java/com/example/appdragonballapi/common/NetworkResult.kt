@@ -1,4 +1,4 @@
-package com.example.navigationhiltroom.common
+package com.example.appdragonballapi.common
 
 
 sealed class NetworkResult<T>(
