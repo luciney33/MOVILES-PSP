@@ -27,11 +27,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.appcomposelucia.common.Constantes
 import com.example.appcomposelucia.domain.model.Pedido
 import com.example.appcomposelucia.ui.componentes.BotonesActtion

@@ -26,5 +26,9 @@ object Constantes {
     const val JUAN_PEREZ = "Juan Pérez"
     const val ERROR_ACT = "Error al actualizar el pedido"
     const val ERROR_BORRAR = "Error al borrar el pedido"
+    const val LIMPIAR = "Limpiar"
+    const val ACTUALIZAR = "Actualizar"
+    const val BORRAR = "Borrar"
+    const val GUARDAR = "Guardar"
 
 }

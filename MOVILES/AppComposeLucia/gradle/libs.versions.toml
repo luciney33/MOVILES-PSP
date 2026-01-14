@@ -8,9 +8,9 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
 composeBom = "2024.11.00"
-hilt = "2.52"
+hilt = "2.57.2"
 ksp = "2.0.21-1.0.28"
-hiltNavigationCompose = "1.2.0"
+hiltNavigationCompose = "1.3.0"
 lifecycleViewmodelCompose = "2.8.7"
 
 [libraries]

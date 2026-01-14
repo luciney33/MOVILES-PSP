@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.example.appcomposelucia"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.appcomposelucia"

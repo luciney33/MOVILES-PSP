@@ -11,11 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.appcomposelucia.common.Constantes
 import com.example.appcomposelucia.ui.theme.BtnActualizarColor
 import com.example.appcomposelucia.ui.theme.BtnBorrarColor
 import com.example.appcomposelucia.ui.theme.BtnGuardarColor
 import com.example.appcomposelucia.ui.theme.BtnLimpiarColor
 import com.example.appcomposelucia.ui.theme.Dimens
+
+
 
 @Composable
 fun BotonesActtion(
@@ -40,7 +43,7 @@ fun BotonesActtion(
                 .height(Dimens.buttonHeightMedium)
         ) {
             Text(
-                text = "Limpiar",
+                text = Constantes.LIMPIAR,
                 fontSize = 11.sp
             )
         }
@@ -57,7 +60,7 @@ fun BotonesActtion(
                 .height(Dimens.buttonHeightMedium)
         ) {
             Text(
-                text = "Actualizar",
+                text = Constantes.ACTUALIZAR,
                 fontSize = 11.sp
             )
         }
@@ -74,7 +77,7 @@ fun BotonesActtion(
                 .height(Dimens.buttonHeightMedium)
         ) {
             Text(
-                text = "Borrar",
+                text = Constantes.BORRAR,
                 fontSize = 11.sp
             )
         }
@@ -89,7 +92,7 @@ fun BotonesActtion(
                 .height(Dimens.buttonHeightMedium)
         ) {
             Text(
-                text = "Guardar",
+                text = Constantes.GUARDAR,
                 fontSize = 11.sp
             )
         }
