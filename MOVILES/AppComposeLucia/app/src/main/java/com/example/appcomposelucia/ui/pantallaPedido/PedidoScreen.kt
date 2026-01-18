@@ -339,7 +339,7 @@ fun CampoEmail(
         singleLine = true,
         modifier = modifier
             .fillMaxWidth()
-            .then(if (isCompact) Modifier.height(50.dp) else Modifier)
+            .then(if (isCompact) Modifier.height(60.dp) else Modifier)
     )
 }
 @Composable
@@ -355,7 +355,7 @@ fun CampoTelefono(
         label = { Text(Constantes.Telefono) },
         leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
         singleLine = true,
-        modifier = modifier.then(if (isCompact) Modifier.height(50.dp) else Modifier)
+        modifier = modifier.then(if (isCompact) Modifier.height(60.dp) else Modifier)
     )
 }
 @Composable
@@ -371,7 +371,7 @@ fun CampoMarca(
         label = { Text(Constantes.MARCA) },
         leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
         singleLine = true,
-        modifier = modifier.then(if (isCompact) Modifier.height(50.dp) else Modifier)
+        modifier = modifier.then(if (isCompact) Modifier.height(60.dp) else Modifier)
     )
 }
 @Composable
