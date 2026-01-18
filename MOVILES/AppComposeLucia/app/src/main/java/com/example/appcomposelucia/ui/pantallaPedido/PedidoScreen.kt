@@ -1,5 +1,4 @@
-package com.example.appcomposelucia.ui.pantallaPedido
-
+﻿package com.example.appcomposelucia.ui.pantallaPedido
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
@@ -44,11 +44,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.appcomposelucia.common.Constantes
 import com.example.appcomposelucia.domain.model.Pedido
+import com.example.appcomposelucia.ui.common.DeviceConfiguration
 import com.example.appcomposelucia.ui.common.UiEvent
 import com.example.appcomposelucia.ui.componentes.BotonesActtion
 import com.example.appcomposelucia.ui.theme.ComposeAppTheme
 import com.example.appcomposelucia.ui.theme.Dimens
-
 @Composable
 fun PedidoScreenViewModel(
     viewModel: PedidoViewModel = hiltViewModel()
@@ -56,7 +56,6 @@ fun PedidoScreenViewModel(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
     val snackbarHostState = remember { SnackbarHostState() }
-
     LaunchedEffect(Unit) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.uiEvent.collect { event ->
@@ -67,12 +66,10 @@ fun PedidoScreenViewModel(
                             duration = SnackbarDuration.Short
                         )
                     }
-
                 }
             }
         }
     }
-
     PedidoFormScreen(uiState = uiState,
         snackbarHostState = snackbarHostState,
         onChangePedido = { pedido -> viewModel.actualizarPedido(pedido) },
@@ -84,139 +81,142 @@ fun PedidoScreenViewModel(
         onActualizar = { viewModel.guardarCambiosPedido() },
     )
 }
-
-
-
 @Composable
-fun PedidoFormScreen(modifier: Modifier = Modifier,
-                     uiState : PedidoState,
-                     snackbarHostState : SnackbarHostState = remember { SnackbarHostState() },
-                     onChangePedido: (Pedido) -> Unit = {},
-                     onLimpiarFormulario: () -> Unit = {},
-                     onNavegarSiguiente: () -> Unit = {},
-                     onNavegarAnterior: () -> Unit = {},
-                     onGuardar: () -> Unit = {},
-                     onBorrar: () -> Unit = {},
-                     onActualizar: () -> Unit = {},
+fun PedidoFormScreen(
+    modifier: Modifier = Modifier,
+    uiState: PedidoState,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onChangePedido: (Pedido) -> Unit = {},
+    onLimpiarFormulario: () -> Unit = {},
+    onNavegarSiguiente: () -> Unit = {},
+    onNavegarAnterior: () -> Unit = {},
+    onGuardar: () -> Unit = {},
+    onBorrar: () -> Unit = {},
+    onActualizar: () -> Unit = {},
+    isLandscapeView: Boolean? = null
 ) {
-
+    val deviceConfig = DeviceConfiguration.fromCurrentWindow()
+    val isLandscape = isLandscapeView ?: when(deviceConfig) {
+        DeviceConfiguration.MOBILE_LANDSCAPE,
+        DeviceConfiguration.TABLET_LANDSCAPE -> true
+        else -> false
+    }
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
+        if (isLandscape) {
+            PedidoFormLandscape(
+                modifier = modifier,
+                paddingValues = paddingValues,
+                uiState = uiState,
+                onChangePedido = onChangePedido,
+                onLimpiarFormulario = onLimpiarFormulario,
+                onNavegarSiguiente = onNavegarSiguiente,
+                onNavegarAnterior = onNavegarAnterior,
+                onGuardar = onGuardar,
+                onBorrar = onBorrar,
+                onActualizar = onActualizar
+            )
+        } else {
+            PedidoFormPortrait(
+                modifier = modifier,
+                paddingValues = paddingValues,
+                uiState = uiState,
+                onChangePedido = onChangePedido,
+                onLimpiarFormulario = onLimpiarFormulario,
+                onNavegarSiguiente = onNavegarSiguiente,
+                onNavegarAnterior = onNavegarAnterior,
+                onGuardar = onGuardar,
+                onBorrar = onBorrar,
+                onActualizar = onActualizar
+            )
+        }
+    }
+}
+@Composable
+fun PedidoFormPortrait(
+    modifier: Modifier = Modifier,
+    paddingValues: androidx.compose.foundation.layout.PaddingValues,
+    uiState: PedidoState,
+    onChangePedido: (Pedido) -> Unit,
+    onLimpiarFormulario: () -> Unit,
+    onNavegarSiguiente: () -> Unit,
+    onNavegarAnterior: () -> Unit,
+    onGuardar: () -> Unit,
+    onBorrar: () -> Unit,
+    onActualizar: () -> Unit
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(paddingValues)
+            .padding(Dimens.paddingMedium)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(Dimens.spacingLarge)
+    ) {
+        TituloPedido()
+        FormularioCampos(
+            uiState = uiState,
+            onChangePedido = onChangePedido
+        )
+        Botonera(
+            indiceActual = uiState.indiceActual,
+            size = uiState.totalPedidos,
+            isEmpty = uiState.totalPedidos == 0,
+            onLimpiarFormulario = onLimpiarFormulario,
+            onNavegarSiguiente = onNavegarSiguiente,
+            onNavegarAnterior = onNavegarAnterior,
+            onGuardar = onGuardar,
+            onBorrar = onBorrar,
+            onActualizar = onActualizar
+        )
+    }
+}
+@Composable
+fun PedidoFormLandscape(
+    modifier: Modifier = Modifier,
+    paddingValues: androidx.compose.foundation.layout.PaddingValues,
+    uiState: PedidoState,
+    onChangePedido: (Pedido) -> Unit,
+    onLimpiarFormulario: () -> Unit,
+    onNavegarSiguiente: () -> Unit,
+    onNavegarAnterior: () -> Unit,
+    onGuardar: () -> Unit,
+    onBorrar: () -> Unit,
+    onActualizar: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(paddingValues)
+            .padding(8.dp)
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
         Column(
-            modifier = modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(paddingValues)
-                .padding(Dimens.paddingMedium)
+            modifier = Modifier
+                .weight(1f)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(Dimens.spacingLarge)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-
-            Text(
-                text = Constantes.AyADIR_NUEVO_PEDIDO,
-                fontSize = Dimens.textSizeTitle,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            OutlinedTextField(
-                value = uiState.pedidoActual.nomape,
+            TituloPedido()
+            CampoNombreApellidos(
+                valor = uiState.pedidoActual.nomape,
                 onValueChange = { onChangePedido(uiState.pedidoActual.copy(nomape = it)) },
-                label = { Text(Constantes.NOMBRE_Y_APELLIDOS) },
-                leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                isCompact = true
             )
-
-            OutlinedTextField(
-                value = uiState.pedidoActual.correo,
+            CampoEmail(
+                valor = uiState.pedidoActual.correo,
                 onValueChange = { onChangePedido(uiState.pedidoActual.copy(correo = it)) },
-                label = { Text(Constantes.EMAIL) },
-                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                isCompact = true
             )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSmall)
-            ) {
-                OutlinedTextField(
-                    value = uiState.pedidoActual.telf,
-                    onValueChange = { onChangePedido(uiState.pedidoActual.copy(telf = it)) },
-                    label = { Text(Constantes.Telefono) },
-                    leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
-                    singleLine = true,
-                    modifier = Modifier.weight(1f)
-                )
-
-                OutlinedTextField(
-                    value = uiState.pedidoActual.marca,
-                    onValueChange = { onChangePedido(uiState.pedidoActual.copy(marca = it)) },
-                    label = { Text(Constantes.MARCA) },
-                    leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
-                    singleLine = true,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = Constantes.TALLA,
-                    fontSize = Dimens.textSizeMedium,
-                    color = Color.Black,
-                    modifier = Modifier.padding(end = Dimens.paddingSmall)
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = uiState.pedidoActual.talla == Constantes.L,
-                            onClick = { onChangePedido(uiState.pedidoActual.copy(talla = Constantes.L)) }
-                        )
-                        Text(Constantes.L, modifier = Modifier.padding(end = Dimens.paddingSmall))
-                    }
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = uiState.pedidoActual.talla == Constantes.M,
-                            onClick = { onChangePedido(uiState.pedidoActual.copy(talla = Constantes.M)) }
-                        )
-                        Text(Constantes.M, modifier = Modifier.padding(end = Dimens.paddingSmall))
-                    }
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = uiState.pedidoActual.talla == Constantes.S,
-                            onClick = { onChangePedido(uiState.pedidoActual.copy(talla = Constantes.S)) }
-                        )
-                        Text(Constantes.S)
-                    }
-                }
-            }
-
-            OutlinedTextField(
-                value = uiState.pedidoActual.comentario,
+            CampoComentarios(
+                valor = uiState.pedidoActual.comentario,
                 onValueChange = { onChangePedido(uiState.pedidoActual.copy(comentario = it)) },
-                label = { Text(Constantes.COMENTARIOS) },
-                leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(Dimens.textAreaHeight),
-                maxLines = 4
+                isCompact = true
             )
-
             Botonera(
                 indiceActual = uiState.indiceActual,
                 size = uiState.totalPedidos,
@@ -229,26 +229,229 @@ fun PedidoFormScreen(modifier: Modifier = Modifier,
                 onActualizar = onActualizar
             )
         }
+        Column(
+            modifier = Modifier
+                .weight(0.5f)
+                .padding(top = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            CampoTelefono(
+                valor = uiState.pedidoActual.telf,
+                onValueChange = { onChangePedido(uiState.pedidoActual.copy(telf = it)) },
+                modifier = Modifier.fillMaxWidth(),
+                isCompact = true
+            )
+            CampoMarca(
+                valor = uiState.pedidoActual.marca,
+                onValueChange = { onChangePedido(uiState.pedidoActual.copy(marca = it)) },
+                modifier = Modifier.fillMaxWidth(),
+                isCompact = true
+            )
+            SelectorTalla(
+                tallaSeleccionada = uiState.pedidoActual.talla,
+                onTallaChange = { onChangePedido(uiState.pedidoActual.copy(talla = it)) }
+            )
+        }
     }
-
 }
-
-
-
+@Composable
+fun TituloPedido() {
+    Text(
+        text = Constantes.AyADIR_NUEVO_PEDIDO,
+        fontSize = Dimens.textSizeTitle,
+        fontWeight = FontWeight.Bold,
+        color = Color.Black,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+@Composable
+fun FormularioCampos(
+    uiState: PedidoState,
+    onChangePedido: (Pedido) -> Unit
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(Dimens.spacingLarge)
+    ) {
+        CampoNombreApellidos(
+            valor = uiState.pedidoActual.nomape,
+            onValueChange = { onChangePedido(uiState.pedidoActual.copy(nomape = it)) }
+        )
+        CampoEmail(
+            valor = uiState.pedidoActual.correo,
+            onValueChange = { onChangePedido(uiState.pedidoActual.copy(correo = it)) }
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSmall)
+        ) {
+            CampoTelefono(
+                valor = uiState.pedidoActual.telf,
+                onValueChange = { onChangePedido(uiState.pedidoActual.copy(telf = it)) },
+                modifier = Modifier.weight(1f)
+            )
+            CampoMarca(
+                valor = uiState.pedidoActual.marca,
+                onValueChange = { onChangePedido(uiState.pedidoActual.copy(marca = it)) },
+                modifier = Modifier.weight(1f)
+            )
+        }
+        SelectorTalla(
+            tallaSeleccionada = uiState.pedidoActual.talla,
+            onTallaChange = { onChangePedido(uiState.pedidoActual.copy(talla = it)) }
+        )
+        CampoComentarios(
+            valor = uiState.pedidoActual.comentario,
+            onValueChange = { onChangePedido(uiState.pedidoActual.copy(comentario = it)) }
+        )
+    }
+}
+@Composable
+fun CampoNombreApellidos(
+    valor: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    isCompact: Boolean = false
+) {
+    OutlinedTextField(
+        value = valor,
+        onValueChange = onValueChange,
+        label = { Text(Constantes.NOMBRE_Y_APELLIDOS) },
+        leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
+        singleLine = true,
+        modifier = modifier
+            .fillMaxWidth()
+            .then(if (isCompact) Modifier.height(60.dp) else Modifier)
+    )
+}
+@Composable
+fun CampoEmail(
+    valor: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    isCompact: Boolean = false
+) {
+    OutlinedTextField(
+        value = valor,
+        onValueChange = onValueChange,
+        label = { Text(Constantes.EMAIL) },
+        leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+        singleLine = true,
+        modifier = modifier
+            .fillMaxWidth()
+            .then(if (isCompact) Modifier.height(50.dp) else Modifier)
+    )
+}
+@Composable
+fun CampoTelefono(
+    valor: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    isCompact: Boolean = false
+) {
+    OutlinedTextField(
+        value = valor,
+        onValueChange = onValueChange,
+        label = { Text(Constantes.Telefono) },
+        leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
+        singleLine = true,
+        modifier = modifier.then(if (isCompact) Modifier.height(50.dp) else Modifier)
+    )
+}
+@Composable
+fun CampoMarca(
+    valor: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    isCompact: Boolean = false
+) {
+    OutlinedTextField(
+        value = valor,
+        onValueChange = onValueChange,
+        label = { Text(Constantes.MARCA) },
+        leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
+        singleLine = true,
+        modifier = modifier.then(if (isCompact) Modifier.height(50.dp) else Modifier)
+    )
+}
+@Composable
+fun SelectorTalla(
+    tallaSeleccionada: String,
+    onTallaChange: (String) -> Unit
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = Constantes.TALLA,
+            fontSize = Dimens.textSizeMedium,
+            color = Color.Black,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = tallaSeleccionada == Constantes.L,
+                    onClick = { onTallaChange(Constantes.L) }
+                )
+                Text(
+                    Constantes.L,
+                    modifier = Modifier.padding(end = Dimens.paddingSmall)
+                )
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = tallaSeleccionada == Constantes.M,
+                    onClick = { onTallaChange(Constantes.M) }
+                )
+                Text(
+                    Constantes.M,
+                    modifier = Modifier.padding(end = Dimens.paddingSmall)
+                )
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = tallaSeleccionada == Constantes.S,
+                    onClick = { onTallaChange(Constantes.S) }
+                )
+                Text(Constantes.S)
+            }
+        }
+    }
+}
+@Composable
+fun CampoComentarios(
+    valor: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    isCompact: Boolean = false
+) {
+    OutlinedTextField(
+        value = valor,
+        onValueChange = onValueChange,
+        label = { Text(Constantes.COMENTARIOS) },
+        leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
+        modifier = modifier
+            .fillMaxWidth()
+            .height(if (isCompact) 80.dp else Dimens.textAreaHeight),
+        maxLines = if (isCompact) 3 else 4
+    )
+}
 @Composable
 fun Botonera(
-    indiceActual : Int,
-    size : Int,
-    isEmpty : Boolean,
+    indiceActual: Int,
+    size: Int,
+    isEmpty: Boolean,
     onLimpiarFormulario: () -> Unit,
     onNavegarSiguiente: () -> Unit,
     onNavegarAnterior: () -> Unit,
     onGuardar: () -> Unit,
     onBorrar: () -> Unit,
     onActualizar: () -> Unit
-){
-
-
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -265,7 +468,6 @@ fun Botonera(
         ) {
             Text(Constantes._ANT_, fontSize = Dimens.textSizeSmall)
         }
-
         Text(
             text = if (isEmpty) Constantes.EMPTY_STRING else "${indiceActual + 1}/${size}",
             fontSize = Dimens.textSizeMedium,
@@ -275,7 +477,6 @@ fun Botonera(
                 .padding(horizontal = Dimens.paddingSmall)
                 .widthIn(min = 40.dp)
         )
-
         Button(
             onClick = { onNavegarSiguiente() },
             enabled = indiceActual < size - 1,
@@ -297,18 +498,32 @@ fun Botonera(
         onActualizar = onActualizar,
     )
 }
-
-
-
-
 @Preview(showBackground = true)
 @Composable
-fun PedidoFormScreenPreview() {
+fun PedidoFormScreenPortraitPreview() {
     ComposeAppTheme {
-        PedidoFormScreen(uiState = PedidoState(
-            totalPedidos = 1,
-            indiceActual = 0,
-            pedidoActual = Pedido(nomape = Constantes.JUAN_PEREZ)
-        ))
+        PedidoFormScreen(
+            uiState = PedidoState(
+                totalPedidos = 1,
+                indiceActual = 0,
+                pedidoActual = Pedido(nomape = Constantes.JUAN_PEREZ)
+            )
+        )
     }
 }
+@Preview(showBackground = true, device = "spec:width=640dp,height=360dp,dpi=160,orientation=landscape")
+@Composable
+fun PedidoFormScreenLandScapePreview() {
+    ComposeAppTheme {
+        PedidoFormScreen(
+            uiState = PedidoState(
+                totalPedidos = 1,
+                indiceActual = 0,
+                pedidoActual = Pedido(nomape = Constantes.JUAN_PEREZ)
+            ),
+            isLandscapeView = true
+        )
+    }
+}
+
+
