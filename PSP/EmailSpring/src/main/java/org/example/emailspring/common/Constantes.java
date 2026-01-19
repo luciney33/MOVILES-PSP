@@ -25,6 +25,7 @@ public final class Constantes {
     public static final String AUTH_PUBLIC_REGISTER = "/api/auth/register";
     public static final String AUTH_PUBLIC_ACTIVAR = "/api/auth/activar";
     public static final String AUTH_PUBLIC_LOGOUT = "/api/auth/logout";
+    public static final String AUTH_PUBLIC_VERIFY_2FA = "/api/auth/verify-2fa";
     public static final String SWAGGER_UI = "/swagger-ui/**";
 
     public static final String SWAGGER_DOCS = "/v3/api-docs/**";
@@ -192,4 +193,15 @@ public final class Constantes {
     public static final String LOGIN_COMPLETADO_EXITOSAMENTE = "Login completado exitosamente";
     public static final String FA_STATUS = "/2fa/status";
 
+    public static final String CODIGO_2FA = "codigo2FA";
+    public static final String EMAIL_2FA = "email-2fa";
+    public static final String CODIGO_VERIFICACION_2FA = "Código de verificación 2FA - EmailSpring";
+    public static final String PENDING_2FA_CODE = "pending2FACode";
+    public static final String PENDING_2FA_USERNAME = "pending2FAUsername";
+    public static final String PENDING_2FA_EXPIRY = "pending2FAExpiry";
+    public static final int CODIGO_2FA_EXPIRY_MINUTES = 5;
+    public static final String MSG_2FA_REQUERIDO = "Se ha enviado un código de verificación a tu correo electrónico";
+    public static final String MSG_2FA_CODE_INVALIDO = "Código de verificación inválido o expirado";
+    public static final String AUTH_VERIFY_2FA = "/verify-2fa";
+    public static final String AUTH_TOGGLE_2FA = "/toggle-2fa";
 }

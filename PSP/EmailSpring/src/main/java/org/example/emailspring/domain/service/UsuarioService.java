@@ -33,11 +33,25 @@ public class UsuarioService {
 
     public Usuario login(String username, String password,HttpSession session) {
         UsuarioEntity entity = usuarioRepository.getByUsername(username);
-        session.setAttribute(Constantes.SESSION_USUARIO_ID, entity.getId());
-        session.setAttribute(Constantes.ROL, entity.getRol());
+
+        // Validar que el usuario existe
+        if (entity == null) {
+            throw new BadCredentialsException(Constantes.MSG_LOGIN_INVALID);
+        }
+
+        // Validar que la cuenta está activa
+        if (!entity.activo()) {
+            throw new BadCredentialsException(Constantes.MSG_LOGIN_INVALID);
+        }
+
+        // Validar contraseña
         if (!passwordEncoder.matches(password, entity.getPassword())) {
             throw new BadCredentialsException(Constantes.MSG_LOGIN_INVALID);
         }
+
+        // Guardar datos básicos en sesión (el usuario completo se guardará después del 2FA si corresponde)
+        session.setAttribute(Constantes.SESSION_USUARIO_ID, entity.getId());
+        session.setAttribute(Constantes.ROL, entity.getRol());
 
         return usuarioMapper.toDomain(entity);
     }

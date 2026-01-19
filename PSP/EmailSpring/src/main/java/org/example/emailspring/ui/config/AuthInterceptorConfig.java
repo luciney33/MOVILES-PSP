@@ -21,6 +21,7 @@ public class AuthInterceptorConfig implements WebMvcConfigurer {
                 .excludePathPatterns(Constantes.AUTH_PUBLIC_REGISTER)
                 .excludePathPatterns(Constantes.AUTH_PUBLIC_ACTIVAR)
                 .excludePathPatterns(Constantes.AUTH_PUBLIC_LOGOUT)
+                .excludePathPatterns(Constantes.AUTH_PUBLIC_VERIFY_2FA)
                 .excludePathPatterns(Constantes.SWAGGER_UI)
                 .excludePathPatterns(Constantes.SWAGGER_DOCS)
                 .excludePathPatterns(Constantes.SWAGGER_UI_HTML)

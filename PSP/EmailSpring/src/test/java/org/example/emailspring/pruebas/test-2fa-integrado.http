@@ -1,0 +1,133 @@
+##1. REGISTRO DE USUARIO
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "test123",
+  "email": "testuser@gmail.com",
+  "nombre": "Usuario de Prueba",
+  "rol": "USER"
+}
+
+###
+
+### 2. LOGIN SIN 2FA (usuario recién registrado)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user123"
+}
+
+###
+
+### 3. CONSULTAR ESTADO 2FA (requiere login previo)
+GET http://localhost:8080/api/auth/2fa/status
+Cookie: JSESSIONID={{sessionId}}
+
+###
+
+### 4. ACTIVAR 2FA (requiere login previo)
+POST http://localhost:8080/api/auth/toggle-2fa
+Content-Type: application/json
+Cookie: JSESSIONID={{sessionId}}
+
+{
+  "enabled": true
+}
+
+###
+
+### 5. LOGOUT
+POST http://localhost:8080/api/auth/logout
+Cookie: JSESSIONID={{sessionId}}
+
+###
+
+### 6. LOGIN CON 2FA ACTIVADO (genera código y envía email)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user123"
+}
+
+# Respuesta esperada:
+# {
+#   "requires2FA": true,
+#   "message": "Se ha enviado un código de verificación a tu correo electrónico"
+# }
+
+###
+
+### 7. VERIFICAR CÓDIGO 2FA (después de recibirlo por email)
+# Revisar MailDev en http://localhost:1080 para obtener el código
+POST http://localhost:8080/api/auth/verify-2fa
+Content-Type: application/json
+
+{
+  "username": "user",
+  "codigo": "123456"
+}
+
+# Respuesta esperada:
+# {
+#   "usuario": {
+#     "id": 2,
+#     "username": "user",
+#     "email": "usuario@gmail.com",
+#     "nombre": "Usuario",
+#     "rol": "USER"
+#   },
+#   "message": "Login completado exitosamente"
+# }
+
+###
+
+### 8. LOGIN ADMIN (para probar sin 2FA)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+###
+
+### 9. LISTAR ENTRENAMIENTOS (requiere autenticación)
+GET http://localhost:8080/api/entrenamientos
+Cookie: JSESSIONID={{sessionId}}
+
+###
+
+### 10. DESACTIVAR 2FA
+POST http://localhost:8080/api/auth/toggle-2fa
+Content-Type: application/json
+Cookie: JSESSIONID={{sessionId}}
+
+{
+  "enabled": false
+}
+
+###
+
+### VARIABLES DE SESIÓN
+# Nota: Reemplazar {{sessionId}} con el JSESSIONID obtenido del login
+# Ejemplo: JSESSIONID=A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6
+
+###
+
+### PRUEBA COMPLETA DEL FLUJO 2FA
+# 1. Login inicial (sin 2FA) -> Obtener sessionId
+# 2. Activar 2FA con sessionId
+# 3. Logout
+# 4. Login nuevamente -> Recibir "requires2FA: true"
+# 5. Revisar email en http://localhost:1080
+# 6. Copiar código de 6 dígitos
+# 7. Verificar código con /verify-2fa
+# 8. ¡Login completo!
+
