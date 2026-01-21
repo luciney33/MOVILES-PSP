@@ -1,5 +1,4 @@
 ### 🔐 Pruebas JWT - Autenticación con Tokens
-
 @baseUrl = http://localhost:8080
 @username = admin
 @password = admin123
@@ -41,10 +40,11 @@ Content-Type: application/json
 ###   "message": "Login exitoso"
 ### }
 
-### 📝 COPIA el accessToken para usarlo en los siguientes requests
+### 📝 IMPORTANTE: Después de ejecutar el login (paso 2️⃣), COPIA los tokens de la respuesta
+### y pégalos en las siguientes líneas:
 
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-@refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6ImFkbWluIiwiaWF0IjoxNzY5MDE5MjI0LCJleHAiOjE3NjkwMjAxMjR9.RQit5Epu269Mlnfjqfs_snTqfnUH6tTAn_PMD2aV7S1bxWFlQQM1MKehikzy9Ob8nh3fRh3xohjrMQ5j87lXuw
+@refreshToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc2OTAxOTA4NiwiZXhwIjoxNzY5NjIzODg2fQ.sNqqdMsDmrTHC5_Ewp-8p45e2osmlYrZ3E4KFyXNjx8APXrGQoF0rgv8c8UwPSbyxDDhVQDbPD9-AFwPbWRUNw
 
 ### ========================================
 ### 3️⃣ LISTAR ENTRENAMIENTOS (con JWT)
@@ -75,7 +75,7 @@ Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "code": "123456"
+  "code": "523590"
 }
 
 ### ⚠️ Reemplaza con el código ACTUAL de Google Authenticator
@@ -113,6 +113,8 @@ Authorization: Bearer {{accessToken}}
 ### ========================================
 ### 🔄 FLUJO COMPLETO CON 2FA ACTIVADO
 ### ========================================
+### ⚠️ IMPORTANTE: Este flujo SOLO funciona si ya ejecutaste los pasos 4️⃣ y 5️⃣
+### (Habilitar 2FA y Confirmar 2FA). Si no lo has hecho, hazlo primero.
 
 ### PASO A: Logout (invalida sesión temporal)
 POST {{baseUrl}}/api/auth/logout
@@ -129,11 +131,15 @@ Content-Type: application/json
   "password": "{{password}}"
 }
 
-### ✅ Respuesta esperada:
+### ✅ Respuesta esperada SI 2FA ESTÁ HABILITADO:
 ### {
 ###   "requires2FA": true,
 ###   "message": "Se requiere código de autenticación de dos factores"
 ### }
+
+### ⚠️ Si recibes tokens JWT en lugar de "requires2FA": true,
+### significa que el usuario NO TIENE 2FA HABILITADO.
+### Ve a los pasos 4️⃣ y 5️⃣ para habilitarlo primero.
 
 ###---
 
@@ -143,10 +149,13 @@ Content-Type: application/json
 
 {
   "username": "{{username}}",
-  "codigo": "789012"
+  "codigo": "577042"
 }
 
-### ⚠️ Reemplaza con código ACTUAL de Google Authenticator
+### ⚠️ Reemplaza "577042" con el código ACTUAL de Google Authenticator
+### ⚠️ Si obtienes 401 "No hay un login pendiente de verificación 2FA":
+###    - Asegúrate de ejecutar PASO B primero (login con username/password)
+###    - El código solo funciona DESPUÉS de que PASO B devuelva "requires2FA": true
 
 ### ✅ Respuesta esperada:
 ### {

@@ -1,5 +1,6 @@
 package org.example.emailspring.ui.service;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpSession;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.data.UsuarioRepository;
@@ -252,6 +253,27 @@ public class AuthService {
             throw new UnauthorizedException(Constantes.USUARIO_NO_ENCONTRADO);
         }
         return usuarioMapper.toDomain(usuarioEntity);
+    }
+
+    /**
+     * Obtiene el usuario por username (usado después de validar JWT en interceptor)
+     */
+    public Usuario getUserByUsername(String username) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(username);
+        if (usuarioEntity == null) {
+            throw new UnauthorizedException(Constantes.USUARIO_NO_ENCONTRADO);
+        }
+        return usuarioMapper.toDomain(usuarioEntity);
+    }
+
+    /**
+     * Valida un access token JWT y retorna sus Claims
+     * @param token Token JWT a validar
+     * @return Claims del token si es válido
+     * @throws io.jsonwebtoken.JwtException si el token es inválido o está expirado
+     */
+    public Claims validateAccessToken(String token) {
+        return jwtService.extractAllClaims(token);
     }
 
     /**

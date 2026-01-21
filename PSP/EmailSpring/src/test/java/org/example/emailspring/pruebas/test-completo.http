@@ -1,0 +1,594 @@
+### ========================================
+### 🧪 PRUEBAS COMPLETAS DEL PROYECTO
+### EmailSpring - Gestión de Entrenamientos con JWT y 2FA
+### ========================================
+###
+### 📋 ORDEN DE EJECUCIÓN:
+### 1. Registrar usuario
+### 2. Login (obtener tokens JWT)
+### 3. CRUD de entrenamientos (con JWT)
+### 4. Habilitar 2FA
+### 5. Confirmar 2FA
+### 6. Probar login con 2FA
+### 7. Refresh token
+### 8. Pruebas de error
+###
+### ⏱️ Tiempo estimado: 5-10 minutos
+### ========================================
+
+@baseUrl = http://localhost:8080
+@username = admin
+@password = admin123
+
+### ========================================
+### FASE 1: AUTENTICACIÓN BÁSICA (SIN 2FA)
+### ========================================
+
+### 📝 TEST 1: Registrar nuevo usuario (OPCIONAL - salta al TEST 2 si usas admin)
+### Descripción: Crea un usuario nuevo en el sistema
+### Resultado esperado: 201 Created con datos del usuario
+###
+### ⚠️ NOTA: Por defecto usamos el usuario "admin" que ya existe.
+### Si quieres probar el registro, cambia las variables arriba:
+###   @username = nuevo_usuario
+###   @password = nueva_contraseña
+
+# POST {{baseUrl}}/api/auth/register
+# Content-Type: application/json
+#
+# {
+#   "username": "nuevo_usuario",
+#   "password": "nueva_contraseña",
+#   "email": "correo.nuevo.com",
+#   "nombre": "Nuevo Usuario",
+#   "rol": "USER"
+# }
+
+### ✅ VERIFICAR (si ejecutaste el registro):
+### - Status: 201 Created
+### - Respuesta contiene: id, username, email, nombre, rol
+### - activo = false (requiere activación por email)
+###
+### ⚠️ Si activo = false, necesitas activar la cuenta antes de continuar:
+###    1. Revisa los logs del servidor para el enlace de activación
+###    2. O usa el usuario admin que ya está activo (recomendado)
+
+### 📝 TEST 2: Login sin 2FA (obtener tokens JWT)
+### Descripción: Login normal devuelve accessToken y refreshToken
+### Resultado esperado: 200 OK con tokens JWT
+###
+### ⚠️ USANDO: admin / admin123 (usuario ya activo en BD)
+
+# @name loginBasico
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta contiene:
+###   {
+###     "accessToken": "eyJhbGc...",
+###     "refreshToken": "eyJhbGc...",
+###     "tokenType": "Bearer",
+###     "usuario": { id, username, email, nombre, rol },
+###     "message": "Login exitoso"
+###   }
+###
+### 📝 IMPORTANTE: COPIA el accessToken COMPLETO de la respuesta
+###    y pégalo en la siguiente línea donde dice @accessToken
+###
+### 🔴 Si da 401 "Credenciales inválidas":
+###    - Verifica que el usuario admin existe en la BD
+###    - Verifica que activo = true
+###    - Si usaste otro usuario, verifica que esté activado
+
+###---
+
+### 📝 PEGA AQUÍ LOS TOKENS DEL TEST 2:
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6ImFkbWluIiwiaWF0IjoxNzY5MDIzMzI3LCJleHAiOjE3NjkwMjQyMjd9.eHLrCggh0sHXPF4A7xYv9PiApp0WufE_I-5wtmIutxv_jbxsGha_rdwDe38QgHi_PghiLDSDbZVelyQH7poFIA
+@refreshToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc2OTAyMzMyNywiZXhwIjoxNzY5NjI4MTI3fQ.b5KcnTLfr594dbhuTa7ZXhXq71l3FZwgZmxXhDiJ2-aEXZYZUuqc7Im9c_bZ_SPmb9BplixT6cijJBsOu9XqEQ
+
+###---
+
+### ========================================
+### FASE 2: CRUD DE ENTRENAMIENTOS (CON JWT)
+### ========================================
+
+### 📝 TEST 3: Listar entrenamientos del usuario
+### Descripción: Obtiene todos los entrenamientos del usuario autenticado
+### Resultado esperado: 200 OK con lista de entrenamientos
+
+GET {{baseUrl}}/api/entrenamientos
+Authorization: Bearer {{accessToken}}
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta: Array de entrenamientos []
+### - Si es usuario nuevo, el array estará vacío
+###
+### 🔴 Si da 401 Unauthorized:
+###    - El token no es válido o expiró (15 min)
+###    - Ejecuta TEST 2 nuevamente para obtener token fresco
+
+###---
+
+### 📝 TEST 4: Crear nuevo entrenamiento
+### Descripción: Crea un entrenamiento para el usuario autenticado
+### Resultado esperado: 201 Created con el entrenamiento creado
+
+POST {{baseUrl}}/api/entrenamientos
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "nombre": "Rutina de Fuerza",
+  "descripcion": "Entrenamiento de fuerza para principiantes"
+}
+
+### ✅ VERIFICAR:
+### - Status: 201 Created
+### - Respuesta contiene:
+###   {
+###     "id": 1,
+###     "nombre": "Rutina de Fuerza",
+###     "descripcion": "Entrenamiento de fuerza para principiantes",
+###     "usuarioId": <tu_usuario_id>
+###   }
+###
+### 📝 COPIA el "id" del entrenamiento para los siguientes tests
+
+###---
+
+### 📝 PEGA AQUÍ EL ID DEL ENTRENAMIENTO CREADO:
+@entrenamientoId = 3
+
+###---
+
+### 📝 TEST 5: Obtener entrenamiento por ID
+### Descripción: Obtiene un entrenamiento específico del usuario
+### Resultado esperado: 200 OK con el entrenamiento
+
+GET {{baseUrl}}/api/entrenamientos/{{entrenamientoId}}
+Authorization: Bearer {{accessToken}}
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta contiene el entrenamiento con ese ID
+###
+### 🔴 Si da 404 Not Found:
+###    - El ID no existe o no pertenece a tu usuario
+
+###---
+
+### 📝 TEST 6: Actualizar entrenamiento
+### Descripción: Actualiza un entrenamiento existente
+### Resultado esperado: 200 OK con el entrenamiento actualizado
+
+PUT {{baseUrl}}/api/entrenamientos/{{entrenamientoId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "nombre": "Rutina de Fuerza Avanzada",
+  "descripcion": "Entrenamiento de fuerza nivel avanzado con pesas"
+}
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - nombre y descripción están actualizados
+
+###---
+
+### 📝 TEST 7: Eliminar entrenamiento
+### Descripción: Elimina un entrenamiento del usuario
+### Resultado esperado: 204 No Content
+
+DELETE {{baseUrl}}/api/entrenamientos/{{entrenamientoId}}
+Authorization: Bearer {{accessToken}}
+
+### ✅ VERIFICAR:
+### - Status: 204 No Content (sin cuerpo de respuesta)
+###
+### 📝 Para verificar que se eliminó:
+###    - Ejecuta TEST 3 nuevamente
+###    - El entrenamiento NO debe aparecer en la lista
+
+###---
+
+### ========================================
+### FASE 3: AUTENTICACIÓN DE DOS FACTORES (2FA)
+### ========================================
+
+### 📝 TEST 8: Habilitar 2FA - Paso 1
+### Descripción: Genera secret y QR code para Google Authenticator
+### Resultado esperado: 200 OK con secret y QR
+
+POST {{baseUrl}}/api/auth/2fa/enable
+Authorization: Bearer {{accessToken}}
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta contiene:
+###   {
+###     "success": true,
+###     "data": {
+###       "secret": "JBSWY3DPEHPK3PXP",
+###       "qrCodeUrl": "data:image/png;base64,iVBOR..."
+###     }
+###   }
+###
+### 📱 ACCIÓN MANUAL REQUERIDA:
+### 1. Abre Google Authenticator en tu móvil
+### 2. Toca el botón "+" para agregar cuenta
+### 3. Opciones:
+###    a) Escanea el QR code (copia qrCodeUrl en navegador)
+###    b) O ingresa manualmente el "secret"
+### 4. Verás un código de 6 dígitos que cambia cada 30 segundos
+###
+### 📝 COPIA el secret para referencia:
+
+@twoFactorSecret = 4ZLAHM4SDDFKPH77LLC5RBFTNCCNC5IZ
+
+###---
+
+### 📝 TEST 9: Habilitar 2FA - Paso 2 (Confirmar)
+### Descripción: Confirma el 2FA con código de Google Authenticator
+### Resultado esperado: 200 OK - 2FA activado
+
+POST {{baseUrl}}/api/auth/2fa/confirm
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "code": "268079"
+}
+
+### ⚠️ IMPORTANTE: Reemplaza "123456" con el código ACTUAL que ves en Google Authenticator
+### (El código cambia cada 30 segundos)
+###
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta:
+###   {
+###     "success": true,
+###     "message": "Autenticación de dos factores activada exitosamente"
+###   }
+###
+### 🔴 Si da 400 "Código inválido":
+###    - El código expiró (espera uno nuevo)
+###    - Ingresaste el código incorrecto
+###    - Verifica que escaneaste el QR correcto
+
+###---
+
+### 📝 TEST 10: Verificar estado 2FA
+### Descripción: Confirma que el 2FA está habilitado
+### Resultado esperado: 200 OK con twoFactorEnabled = true
+
+GET {{baseUrl}}/api/auth/2fa/status
+Authorization: Bearer {{accessToken}}
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta:
+###   {
+###     "success": true,
+###     "twoFactorEnabled": true
+###   }
+
+###---
+
+### ========================================
+### FASE 4: LOGIN CON 2FA ACTIVADO
+### ========================================
+
+### 📝 TEST 11: Logout (cerrar sesión actual)
+### Descripción: Cierra la sesión para probar login con 2FA
+### Resultado esperado: 200 OK
+
+POST {{baseUrl}}/api/auth/logout
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Mensaje: "Sesión cerrada exitosamente"
+
+###---
+
+### 📝 TEST 12: Login con 2FA - Paso 1 (username + password)
+### Descripción: Login solicita código 2FA en lugar de devolver tokens
+### Resultado esperado: 200 OK con requires2FA = true
+
+# @name loginCon2FA
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta:
+###   {
+###     "requires2FA": true,
+###     "message": "Se requiere código de autenticación de dos factores"
+###   }
+###
+### ⚠️ IMPORTANTE: Si recibes tokens JWT en lugar de "requires2FA": true,
+###    significa que el 2FA NO se activó correctamente.
+###    Repite TEST 8 y TEST 9.
+
+###---
+
+### 📝 TEST 13: Login con 2FA - Paso 2 (verificar código TOTP)
+### Descripción: Completa el login enviando el código 2FA
+### Resultado esperado: 200 OK con tokens JWT
+
+POST {{baseUrl}}/api/auth/2fa/verify
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "codigo": "952269"
+}
+
+### ⚠️ IMPORTANTE: Reemplaza "654321" con el código ACTUAL de Google Authenticator
+###
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta contiene:
+###   {
+###     "accessToken": "eyJhbGc...",
+###     "refreshToken": "eyJhbGc...",
+###     "tokenType": "Bearer",
+###     "usuario": { ... },
+###     "message": "Login completado exitosamente"
+###   }
+###
+### 📝 COPIA el nuevo accessToken:
+
+@newAccessToken = eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6ImFkbWluIiwiaWF0IjoxNzY5MDIzNTcwLCJleHAiOjE3NjkwMjQ0NzB9.INTqWfzXg56-3JCcgsDnqS4MnMmJVy3IsNggFUm3L4oPECWO43yg4RVYR1Zs-DA_q_t63_vdbu-qbwJR25TduQ
+
+###---
+
+### 📝 TEST 14: Usar endpoint con nuevo token
+### Descripción: Verifica que el token obtenido con 2FA funciona
+### Resultado esperado: 200 OK con lista de entrenamientos
+
+GET {{baseUrl}}/api/entrenamientos
+Authorization: Bearer {{newAccessToken}}
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta: Lista de entrenamientos
+
+###---
+
+### ========================================
+### FASE 5: REFRESH TOKEN
+### ========================================
+
+### 📝 TEST 15: Refrescar access token
+### Descripción: Obtiene un nuevo par de tokens usando el refreshToken
+### Resultado esperado: 200 OK con nuevos tokens
+
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta contiene nuevo accessToken y refreshToken
+###
+### 📝 NOTA: Después de esto, el refreshToken anterior queda invalidado
+
+###---
+
+### ========================================
+### FASE 6: DESACTIVAR 2FA
+### ========================================
+
+### 📝 TEST 16: Desactivar 2FA
+### Descripción: Deshabilita la autenticación de dos factores
+### Resultado esperado: 200 OK
+
+POST {{baseUrl}}/api/auth/2fa/disable
+Authorization: Bearer {{newAccessToken}}
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta:
+###   {
+###     "success": true,
+###     "message": "Autenticación de dos factores desactivada exitosamente"
+###   }
+
+###---
+
+### 📝 TEST 17: Verificar que 2FA está deshabilitado
+### Descripción: Confirma que el 2FA fue deshabilitado
+### Resultado esperado: 200 OK con twoFactorEnabled = false
+
+GET {{baseUrl}}/api/auth/2fa/status
+Authorization: Bearer {{newAccessToken}}
+
+### ✅ VERIFICAR:
+### - twoFactorEnabled: false
+
+###---
+
+### 📝 TEST 18: Login después de desactivar 2FA
+### Descripción: Login vuelve a devolver tokens directamente
+### Resultado esperado: 200 OK con tokens JWT (sin solicitar 2FA)
+
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### ✅ VERIFICAR:
+### - Status: 200 OK
+### - Respuesta contiene tokens JWT directamente (NO "requires2FA": true)
+
+###---
+
+### ========================================
+### FASE 7: PRUEBAS DE ERROR Y SEGURIDAD
+### ========================================
+
+### 📝 TEST 19: Acceder sin token (debe fallar)
+### Descripción: Intenta acceder a endpoint protegido sin Authorization
+### Resultado esperado: 401 Unauthorized
+
+GET {{baseUrl}}/api/entrenamientos
+
+### ✅ VERIFICAR:
+### - Status: 401 Unauthorized
+### - Mensaje: "Usuario no autenticado" o similar
+
+###---
+
+### 📝 TEST 20: Token inválido (debe fallar)
+### Descripción: Usa un token malformado
+### Resultado esperado: 401 Unauthorized
+
+GET {{baseUrl}}/api/entrenamientos
+Authorization: Bearer token_invalido_xyz123
+
+### ✅ VERIFICAR:
+### - Status: 401 Unauthorized
+### - Mensaje: "Token inválido"
+
+###---
+
+### 📝 TEST 21: Refresh token inválido (debe fallar)
+### Descripción: Intenta refrescar con token inválido
+### Resultado esperado: 401 Unauthorized
+
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "token_refresh_invalido"
+}
+
+### ✅ VERIFICAR:
+### - Status: 401 Unauthorized
+### - Mensaje: "Refresh token inválido"
+
+###---
+
+### 📝 TEST 22: Login con credenciales incorrectas (debe fallar)
+### Descripción: Intenta login con contraseña incorrecta
+### Resultado esperado: 401 Unauthorized
+
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "password_incorrecta"
+}
+
+### ✅ VERIFICAR:
+### - Status: 401 Unauthorized
+### - Mensaje: "Credenciales inválidas"
+
+###---
+
+### 📝 TEST 23: Acceder a entrenamiento de otro usuario (debe fallar)
+### Descripción: Intenta acceder a un entrenamiento que no te pertenece
+### Resultado esperado: 403 Forbidden o 404 Not Found
+
+GET {{baseUrl}}/api/entrenamientos/999999
+Authorization: Bearer {{newAccessToken}}
+
+### ✅ VERIFICAR:
+### - Status: 403 Forbidden o 404 Not Found
+### - No debe devolver datos de otros usuarios
+
+###---
+
+### ========================================
+### 🎉 ¡PRUEBAS COMPLETAS!
+### ========================================
+
+### ✅ CHECKLIST FINAL:
+###
+### Autenticación Básica:
+### [ ] TEST 1: Registro exitoso
+### [ ] TEST 2: Login sin 2FA obtiene tokens
+###
+### CRUD Entrenamientos:
+### [ ] TEST 3: Listar entrenamientos
+### [ ] TEST 4: Crear entrenamiento
+### [ ] TEST 5: Obtener por ID
+### [ ] TEST 6: Actualizar entrenamiento
+### [ ] TEST 7: Eliminar entrenamiento
+###
+### 2FA:
+### [ ] TEST 8: Habilitar 2FA (secret + QR)
+### [ ] TEST 9: Confirmar 2FA
+### [ ] TEST 10: Verificar estado habilitado
+### [ ] TEST 11: Logout
+### [ ] TEST 12: Login requiere 2FA
+### [ ] TEST 13: Verificar código 2FA
+### [ ] TEST 14: Token funciona después de 2FA
+###
+### Refresh Token:
+### [ ] TEST 15: Refrescar token funciona
+###
+### Desactivar 2FA:
+### [ ] TEST 16: Desactivar 2FA
+### [ ] TEST 17: Verificar estado deshabilitado
+### [ ] TEST 18: Login sin 2FA nuevamente
+###
+### Seguridad:
+### [ ] TEST 19: Sin token devuelve 401
+### [ ] TEST 20: Token inválido devuelve 401
+### [ ] TEST 21: Refresh token inválido devuelve 401
+### [ ] TEST 22: Credenciales incorrectas devuelve 401
+### [ ] TEST 23: Acceso no autorizado devuelve 403/404
+###
+### 🎯 TOTAL: 23 PRUEBAS
+### ⏱️ Tiempo: ~10 minutos (incluyendo escanear QR)
+###
+### ========================================
+### 📝 NOTAS FINALES
+### ========================================
+###
+### 🔑 Sobre JWT:
+### - Access Token expira en 15 minutos
+### - Refresh Token expira en 7 días
+### - Se envía en header: Authorization: Bearer <token>
+###
+### 🔒 Sobre 2FA:
+### - Es OPCIONAL (el usuario lo habilita cuando quiere)
+### - Una vez habilitado, el login requiere 2 pasos
+### - El código TOTP cambia cada 30 segundos
+###
+### 🐛 Si algo falla:
+### 1. Verifica que el servidor esté corriendo (http://localhost:8080)
+### 2. Verifica que la base de datos esté inicializada
+### 3. Revisa los logs del servidor para ver errores detallados
+### 4. Asegúrate de copiar los tokens completos (sin espacios)
+###
+### 📚 Documentación adicional:
+### - GUIA_COMPLETA_2FA.md
+### - DIAGRAMA_FLUJO_2FA.md
+### - INSTRUCCIONES_JWT.md
+###
+### ¡Éxito en las pruebas! 🚀
+

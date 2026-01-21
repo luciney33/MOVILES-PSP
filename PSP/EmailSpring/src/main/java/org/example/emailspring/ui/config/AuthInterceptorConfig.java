@@ -22,6 +22,7 @@ public class AuthInterceptorConfig implements WebMvcConfigurer {
                 .excludePathPatterns(Constantes.AUTH_PUBLIC_ACTIVAR)
                 .excludePathPatterns(Constantes.AUTH_PUBLIC_LOGOUT)
                 .excludePathPatterns("/api/auth" + Constantes.AUTH_2FA_VERIFY) // Permitir verificación 2FA sin autenticación previa
+                .excludePathPatterns("/api/auth/refresh") // Permitir refresh token sin autenticación
                 .excludePathPatterns(Constantes.SWAGGER_UI)
                 .excludePathPatterns(Constantes.SWAGGER_DOCS)
                 .excludePathPatterns(Constantes.SWAGGER_UI_HTML)

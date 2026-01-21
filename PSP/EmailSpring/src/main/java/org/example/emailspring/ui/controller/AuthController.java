@@ -68,9 +68,9 @@ public class AuthController {
                description = Constantes.GENERA_UN_SECRETO_TOTP_Y_DEVUELVE_EL_QR_CODE_PARA_ESCANEAR_CON_GOOGLE_AUTHENTICATOR)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.SECRETO_Y_QR_CODE_GENERADOS)
     public ResponseEntity<Enable2FADataResponse> enable2FA(HttpSession session, HttpServletRequest request) {
-        // Obtener username del token JWT
+        // Obtener username del token JWT (ya validado por el interceptor)
         String username = (String) request.getAttribute("username");
-        Usuario usuario = authService.getUserFromToken(username);
+        Usuario usuario = authService.getUserByUsername(username);
 
         Enable2FAResponse data = authService.enable2FA(usuario.id(), session);
         return ResponseEntity.ok(new Enable2FADataResponse(true, data));
@@ -86,7 +86,7 @@ public class AuthController {
     })
     public ResponseEntity<ApiSuccessResponse> confirm2FA(@RequestBody Confirm2FARequest request, HttpSession session, HttpServletRequest httpRequest) {
         String username = (String) httpRequest.getAttribute("username");
-        Usuario usuario = authService.getUserFromToken(username);
+        Usuario usuario = authService.getUserByUsername(username);
         authService.confirm2FA(usuario.id(), request.code(), session);
         return ResponseEntity.ok(new ApiSuccessResponse(true, Constantes.MSG_2FA_ACTIVADA));
     }
@@ -98,7 +98,7 @@ public class AuthController {
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_2FA_DESACTIVADO)
     public ResponseEntity<ApiSuccessResponse> disable2FA(HttpServletRequest request) {
         String username = (String) request.getAttribute("username");
-        Usuario usuario = authService.getUserFromToken(username);
+        Usuario usuario = authService.getUserByUsername(username);
         authService.disable2FA(usuario.id());
         return ResponseEntity.ok(new ApiSuccessResponse(true, Constantes.MSG_2FA_DESACTIVADA));
     }
@@ -140,7 +140,7 @@ public class AuthController {
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ESTADO_2FA_OBTENIDO)
     public ResponseEntity<TwoFactorStatusResponse> get2FAStatus(HttpServletRequest request) {
         String username = (String) request.getAttribute("username");
-        Usuario usuario = authService.getUserFromToken(username);
+        Usuario usuario = authService.getUserByUsername(username);
         boolean twoFactorEnabled = authService.get2FAStatus(usuario.id());
         return ResponseEntity.ok(new TwoFactorStatusResponse(true, twoFactorEnabled));
     }

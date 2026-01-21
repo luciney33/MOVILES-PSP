@@ -31,7 +31,7 @@ public class UsuarioService {
     }
 
     public Usuario login(String username, String password) {
-        UsuarioEntity entity = usuarioRepository.getByUsername(username);
+        UsuarioEntity entity = usuarioRepository.findByUsername(username);
 
         // Validar que el usuario existe
         if (entity == null) {

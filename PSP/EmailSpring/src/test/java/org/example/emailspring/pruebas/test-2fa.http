@@ -1,4 +1,7 @@
 
+### ========================================
+### PASO 1: Login inicial para obtener token
+### ========================================
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
@@ -7,35 +10,79 @@ Content-Type: application/json
   "password": "admin123"
 }
 
+### ✅ Respuesta esperada:
+### {
+###   "accessToken": "eyJhbGciOiJIUzUxMiJ9...",  ← COPIA ESTE TOKEN
+###   "refreshToken": "eyJhbGciOiJIUzUxMiJ9...",
+###   "tokenType": "Bearer",
+###   "usuario": { ... },
+###   "message": "Login exitoso"
+### }
+###
+### 📝 COPIA el accessToken completo y pégalo en los pasos 2, 4 y 5
 
-
+###---
 
 ### ========================================
 ### PASO 2: Habilitar 2FA
 ### ========================================
+### ⚠️ IMPORTANTE: Copia el accessToken del PASO 1 y pégalo aquí
 POST http://localhost:8080/api/auth/2fa/enable
+Authorization: Bearer PEGAR_AQUI_EL_ACCESS_TOKEN_DEL_PASO_1
 
+### ✅ Respuesta esperada:
+### {
+###   "success": true,
+###   "data": {
+###     "secret": "JBSWY3DPEHPK3PXP",
+###     "qrCodeUrl": "data:image/png;base64,..."
+###   }
+### }
+
+###---
 
 ### ========================================
 ### PASO 3: Generar código TOTP
 ### ========================================
+### 📱 Escanea el QR code del PASO 2 con Google Authenticator
+### O ingresa manualmente el secret en la app
+### Verás un código de 6 dígitos que cambia cada 30 segundos
 
+###---
 
 ### ========================================
 ### PASO 4: Confirmar 2FA con código
 ### ========================================
+### ⚠️ IMPORTANTE: Reemplaza el código con el ACTUAL de Google Authenticator
 POST http://localhost:8080/api/auth/2fa/confirm
+Authorization: Bearer PEGAR_AQUI_EL_ACCESS_TOKEN_DEL_PASO_1
 Content-Type: application/json
 
 {
-  "code": "732520"
+  "code": "123456"
 }
 
+### ✅ Respuesta esperada:
+### {
+###   "success": true,
+###   "message": "Autenticación de dos factores activada exitosamente"
+### }
+
+###---
 
 ### ========================================
 ### PASO 5: Verificar que se guardó
 ### ========================================
-GET http://localhost:8080}/api/auth/2fa/status
+GET http://localhost:8080/api/auth/2fa/status
+Authorization: Bearer PEGAR_AQUI_EL_ACCESS_TOKEN_DEL_PASO_1
+
+### ✅ Respuesta esperada:
+### {
+###   "success": true,
+###   "twoFactorEnabled": true
+### }
+
+###---
 
 
 
@@ -68,6 +115,7 @@ Content-Type: application/json
   "username": "admin",
   "codigo": "488368"
 }
+
 
 
 
