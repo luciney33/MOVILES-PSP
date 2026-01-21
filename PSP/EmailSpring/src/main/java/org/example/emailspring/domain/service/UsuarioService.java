@@ -33,22 +33,17 @@ public class UsuarioService {
     public Usuario login(String username, String password) {
         UsuarioEntity entity = usuarioRepository.findByUsername(username);
 
-        // Validar que el usuario existe
         if (entity == null) {
             throw new BadCredentialsException(Constantes.MSG_LOGIN_INVALID);
         }
-
-        // Validar que la cuenta está activa
         if (!entity.activo()) {
             throw new BadCredentialsException(Constantes.MSG_LOGIN_INVALID);
         }
 
-        // Validar contraseña
         if (!passwordEncoder.matches(password, entity.getPassword())) {
             throw new BadCredentialsException(Constantes.MSG_LOGIN_INVALID);
         }
 
-        // NO establecer sesión aquí - se hará después de validar 2FA si corresponde
         return usuarioMapper.toDomain(entity);
     }
 
@@ -61,7 +56,7 @@ public class UsuarioService {
         }
 
         String codigoActivacion = UUID.randomUUID().toString();
-        LocalDateTime expiracionCodigo = LocalDateTime.now().plusHours(24);
+        LocalDateTime expiracionCodigo = LocalDateTime.now().plusHours(48);
         String hashedPassword = passwordEncoder.encode(request.password());
 
         Usuario nuevoUsuario = new Usuario(

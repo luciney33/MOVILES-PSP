@@ -17,10 +17,31 @@ public final class Constantes {
     public static final String HABILITAR_2_FA_PASO_2_CONFIRMAR_CODIGO = "Habilitar 2FA - Paso 2: Confirmar código";
     public static final String VERIFICA_EL_CODIGO_TOTP_GENERADO_POR_LA_APP_AUTENTICADORA_Y_ACTIVA_2_FA_PERMANENTEMENTE = "Verifica el código TOTP generado por la app autenticadora y activa 2FA permanentemente";
     public static final String FA_ACTIVADO_EXITOSAMENTE = "2FA activado exitosamente";
+    public static final String SHA_512 = "SHA-512";
+    public static final String AES = "AES";
+    public static final String ROL = "rol";
+    public static final String REFRESH_TOKEN_INVALIDO_O_EXPIRADO = "Refresh token inválido o expirado";
+    public static final String REFRESH = "/api/auth/refresh";
+    public static final String INDICA_SI_EL_USUARIO_TIENE_HABILITADA_LA_AUTENTICACION_DE_DOS_FACTORES = "Indica si el usuario tiene habilitada la autenticación de dos factores";
+    public static final String SECRETO_TOTP_PARA_AUTENTICACION_DE_DOS_FACTORES = "Secreto TOTP para autenticación de dos factores";
+    public static final String RESPUESTA_DE_AUTENTICACION_CON_TOKENS_JWT = "Respuesta de autenticación con tokens JWT";
+    public static final String TOKEN_DE_ACCESO_JWT = "Token de acceso JWT";
+    public static final String EY_JHB_GCI_OI_JIUZ_I_1_NI_IS_IN_R_5_C_CI_6_IKP_XVCJ_9 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+    public static final String TOKEN_DE_REFRESCO_JWT = "Token de refresco JWT";
+    public static final String TIPO_DE_TOKEN = "Tipo de token";
+    public static final String DATOS_DEL_USUARIO_AUTENTICADO = "Datos del usuario autenticado";
+    public static final String MENSAJE_DE_RESPUESTA = "Mensaje de respuesta";
+    public static final String RESPONSE_CUANDO_SE_REQUIERE_VERIFICACION_2_FA = "Response cuando se requiere verificación 2FA";
+    public static final String INDICA_QUE_SE_REQUIERE_2_FA = "Indica que se requiere 2FA";
+    public static final String TRUE = "true";
+    public static final String MENSAJE_INFORMATIVO = "Mensaje informativo";
+    public static final String ELECTRONICO = "Se ha enviado un código de verificación a tu correo electrónico";
+    public static final String REQUEST_PARA_REFRESCAR_EL_TOKEN_DE_ACCESO = "Request para refrescar el token de acceso";
+    public static final String REFRESH_TOKEN = "Refresh token";
 
     private Constantes() {}
     public static final String CODIGO = "codigo";
-
+    public static final String REFRESH_TOKEN_INVALIDO = "Refresh token inválido: ";
     public static final String ACTIVAR = "/activar";
     public static final String NOMBRE_USUARIO = "nombreUsuario";
     public static final String MENSAJE_ERROR = "mensajeError";
@@ -31,7 +52,6 @@ public final class Constantes {
     public static final String AUTH_PUBLIC_REGISTER = "/api/auth/register";
     public static final String AUTH_PUBLIC_ACTIVAR = "/api/auth/activar";
     public static final String AUTH_PUBLIC_LOGOUT = "/api/auth/logout";
-    public static final String AUTH_PUBLIC_VERIFY_2FA = "/api/auth/verify-2fa";
     public static final String SWAGGER_UI = "/swagger-ui/**";
 
     public static final String SWAGGER_DOCS = "/v3/api-docs/**";
@@ -52,7 +72,6 @@ public final class Constantes {
     public static final String USER = "USER";
     public static final String ALL = "*";
 
-    public static final String ROL = "rol";
 
     public static final String API_AUTH = "/api/auth";
     public static final String API_ENTRENAMIENTOS = "/api/entrenamientos";
@@ -190,8 +209,6 @@ public final class Constantes {
     public static final String HTTP_404 = "404";
     public static final String LOGIN_COMPLETADO_EXITOSAMENTE = "Login completado exitosamente";
 
-    public static final String EMAIL_2FA = "email-2fa";
-    public static final String CODIGO_VERIFICACION_2FA = "Código de verificación 2FA - EmailSpring";
     public static final String PENDING_2FA_USERNAME = "pending2FAUsername";
     public static final String PENDING_2FA_SECRET = "pending2FASecret";
     public static final String MSG_2FA_REQUERIDO = "Se requiere código de autenticación de dos factores";
@@ -214,4 +231,26 @@ public final class Constantes {
     public static final String OP_OBTENER_ESTADO_2FA = "Obtener estado del 2FA";
     public static final String OP_OBTENER_ESTADO_2FA_DESC = "Consulta si el usuario tiene activada la autenticación de dos factores";
     public static final String RESP_ESTADO_2FA_OBTENIDO = "Estado del 2FA obtenido";
+
+    public static final String AUTHORIZATION = "Authorization";
+    public static final String BEARER = "Bearer ";
+    public static final String BEARER_TYPE = "Bearer";
+    public static final int BEARER_PREFIX_LENGTH = 7;
+    public static final String AUTHENTICATED = "authenticated";
+    public static final String USERNAME = "username";
+    public static final String ADMIN = "ADMIN";
+    public static final String MSG_TOKEN_EXPIRADO = "Token expirado";
+    public static final String MSG_TOKEN_INVALIDO = "Token inválido";
+    public static final String MSG_ERROR_PROCESAR_TOKEN = "Error al procesar token: ";
+    public static final String REFRESH_ENDPOINT = "/refresh";
+    public static final String OP_REFRESCAR_ACCESS_TOKEN = "Refrescar access token";
+    public static final String OP_REFRESCAR_ACCESS_TOKEN_DESC = "Genera un nuevo access token usando un refresh token válido";
+    public static final String RESP_TOKENS_REFRESCADOS = "Tokens refrescados exitosamente";
+    public static final String MSG_TOKEN_REFRESCADO = "Token refrescado exitosamente";
+
+    public static final String SCHEMA_VERIFY_2FA_LOGIN_REQUEST_DESC = "Request para verificar código 2FA durante el login";
+    public static final String SCHEMA_NOMBRE_USUARIO_DESC = "Nombre de usuario";
+    public static final String SCHEMA_ADMIN_EXAMPLE = "admin";
+    public static final String SCHEMA_CODIGO_6_DIGITOS_DESC = "Código de 6 dígitos recibido por email";
+    public static final String SCHEMA_CODIGO_EXAMPLE = "123456";
 }

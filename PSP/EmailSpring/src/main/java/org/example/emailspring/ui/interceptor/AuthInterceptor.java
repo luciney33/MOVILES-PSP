@@ -37,28 +37,24 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // Extraer token JWT del header Authorization
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader(Constantes.AUTHORIZATION);
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith(Constantes.BEARER)) {
             throw new UnauthorizedException(Constantes.MSG_USER_NOT_AUTHENTICATED);
         }
 
-        String token = authHeader.substring(7); // Remover "Bearer "
+        String token = authHeader.substring(Constantes.BEARER_PREFIX_LENGTH);
 
         try {
-            // Validar y extraer información del token
             Claims claims = authService.validateAccessToken(token);
 
-            // Establecer información en el request para uso posterior
-            request.setAttribute("authenticated", true);
-            request.setAttribute("username", claims.getSubject());
-            request.setAttribute("rol", claims.get("rol", String.class));
+            request.setAttribute(Constantes.AUTHENTICATED, true);
+            request.setAttribute(Constantes.USERNAME, claims.getSubject());
+            request.setAttribute(Constantes.ROL, claims.get(Constantes.ROL, String.class));
 
-            // Verificar rol de admin si es requerido
             if (requiresAuth.admin()) {
-                String rol = claims.get("rol", String.class);
-                if (!"ADMIN".equals(rol)) {
+                String rol = claims.get(Constantes.ROL, String.class);
+                if (!Constantes.ADMIN.equals(rol)) {
                     throw new ForbiddenException(Constantes.MSG_LOGIN_INVALID);
                 }
             }
@@ -66,11 +62,11 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
 
         } catch (ExpiredJwtException e) {
-            throw new UnauthorizedException("Token expirado");
+            throw new UnauthorizedException(Constantes.MSG_TOKEN_EXPIRADO);
         } catch (SignatureException | MalformedJwtException | UnsupportedJwtException e) {
-            throw new UnauthorizedException("Token inválido");
+            throw new UnauthorizedException(Constantes.MSG_TOKEN_INVALIDO);
         } catch (Exception e) {
-            throw new UnauthorizedException("Error al procesar token: " + e.getMessage());
+            throw new UnauthorizedException(Constantes.MSG_ERROR_PROCESAR_TOKEN + e.getMessage());
         }
     }
 }

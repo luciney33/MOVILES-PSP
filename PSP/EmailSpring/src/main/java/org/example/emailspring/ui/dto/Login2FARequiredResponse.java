@@ -1,14 +1,15 @@
 package org.example.emailspring.ui.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.emailspring.common.Constantes;
 
-@Schema(description = "Response cuando se requiere verificación 2FA")
+@Schema(description = Constantes.RESPONSE_CUANDO_SE_REQUIERE_VERIFICACION_2_FA)
 public record Login2FARequiredResponse(
-        @Schema(description = "Indica que se requiere 2FA", example = "true")
+        @Schema(description = Constantes.INDICA_QUE_SE_REQUIERE_2_FA, example = Constantes.TRUE)
         boolean requires2FA,
-        @Schema(description = "Mensaje informativo", example = "Se ha enviado un código de verificación a tu correo electrónico")
+        @Schema(description = Constantes.MENSAJE_INFORMATIVO, example = Constantes.ELECTRONICO)
         String message
 ) {
-}
+    }
 
 

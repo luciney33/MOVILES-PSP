@@ -36,14 +36,10 @@ public class AuthController {
     })
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
         Usuario usuario = authService.login(request.username(), request.password(), session);
-
-        // Si usuario es null, significa que se requiere 2FA
         if (usuario == null) {
             return ResponseEntity.ok(new Login2FARequiredResponse(true, Constantes.MSG_2FA_REQUERIDO));
         }
-
-        // Login exitoso sin 2FA - Generar tokens JWT
-        AuthService.JwtTokenPair tokens = authService.generateTokens(usuario);
+        JwtTokenPair tokens = authService.generateTokens(usuario);
 
         UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
                 usuario.id(),
@@ -68,8 +64,7 @@ public class AuthController {
                description = Constantes.GENERA_UN_SECRETO_TOTP_Y_DEVUELVE_EL_QR_CODE_PARA_ESCANEAR_CON_GOOGLE_AUTHENTICATOR)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.SECRETO_Y_QR_CODE_GENERADOS)
     public ResponseEntity<Enable2FADataResponse> enable2FA(HttpSession session, HttpServletRequest request) {
-        // Obtener username del token JWT (ya validado por el interceptor)
-        String username = (String) request.getAttribute("username");
+        String username = (String) request.getAttribute(Constantes.USERNAME);
         Usuario usuario = authService.getUserByUsername(username);
 
         Enable2FAResponse data = authService.enable2FA(usuario.id(), session);
@@ -85,7 +80,7 @@ public class AuthController {
             @ApiResponse(responseCode = Constantes.HTTP_400, description = Constantes.CODIGO_INVALIDO)
     })
     public ResponseEntity<ApiSuccessResponse> confirm2FA(@RequestBody Confirm2FARequest request, HttpSession session, HttpServletRequest httpRequest) {
-        String username = (String) httpRequest.getAttribute("username");
+        String username = (String) httpRequest.getAttribute(Constantes.USERNAME);
         Usuario usuario = authService.getUserByUsername(username);
         authService.confirm2FA(usuario.id(), request.code(), session);
         return ResponseEntity.ok(new ApiSuccessResponse(true, Constantes.MSG_2FA_ACTIVADA));
@@ -97,7 +92,7 @@ public class AuthController {
                description = Constantes.OP_DESACTIVAR_2FA_DESC)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_2FA_DESACTIVADO)
     public ResponseEntity<ApiSuccessResponse> disable2FA(HttpServletRequest request) {
-        String username = (String) request.getAttribute("username");
+        String username = (String) request.getAttribute(Constantes.USERNAME);
         Usuario usuario = authService.getUserByUsername(username);
         authService.disable2FA(usuario.id());
         return ResponseEntity.ok(new ApiSuccessResponse(true, Constantes.MSG_2FA_DESACTIVADA));
@@ -112,9 +107,7 @@ public class AuthController {
     })
     public ResponseEntity<JwtAuthResponse> verify2FA(@RequestBody Verify2FALoginRequest request, HttpSession session) {
         Usuario usuario = authService.verify2FA(request.username(), request.codigo(), session);
-
-        // Generar tokens JWT
-        AuthService.JwtTokenPair tokens = authService.generateTokens(usuario);
+        JwtTokenPair tokens = authService.generateTokens(usuario);
 
         UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
                 usuario.id(),
@@ -139,7 +132,7 @@ public class AuthController {
                description = Constantes.OP_OBTENER_ESTADO_2FA_DESC)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ESTADO_2FA_OBTENIDO)
     public ResponseEntity<TwoFactorStatusResponse> get2FAStatus(HttpServletRequest request) {
-        String username = (String) request.getAttribute("username");
+        String username = (String) request.getAttribute(Constantes.USERNAME);
         Usuario usuario = authService.getUserByUsername(username);
         boolean twoFactorEnabled = authService.get2FAStatus(usuario.id());
         return ResponseEntity.ok(new TwoFactorStatusResponse(true, twoFactorEnabled));
@@ -160,15 +153,15 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(usuario));
     }
 
-    @PostMapping("/refresh")
-    @Operation(summary = "Refrescar access token",
-               description = "Genera un nuevo access token usando un refresh token válido")
+    @PostMapping(Constantes.REFRESH_ENDPOINT)
+    @Operation(summary = Constantes.OP_REFRESCAR_ACCESS_TOKEN,
+               description = Constantes.OP_REFRESCAR_ACCESS_TOKEN_DESC)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = Constantes.HTTP_200, description = "Tokens refrescados exitosamente"),
-            @ApiResponse(responseCode = Constantes.HTTP_401, description = "Refresh token inválido o expirado")
+            @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_TOKENS_REFRESCADOS),
+            @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.REFRESH_TOKEN_INVALIDO_O_EXPIRADO)
     })
     public ResponseEntity<JwtAuthResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
-        AuthService.JwtTokenPair tokens = authService.refreshAccessToken(request.refreshToken());
+        JwtTokenPair tokens = authService.refreshAccessToken(request.refreshToken());
         Usuario usuario = authService.getUserFromToken(tokens.accessToken());
 
         UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
@@ -183,7 +176,7 @@ public class AuthController {
                 tokens.accessToken(),
                 tokens.refreshToken(),
                 usuarioResponseDTO,
-                "Token refrescado exitosamente"
+                Constantes.MSG_TOKEN_REFRESCADO
         );
         return ResponseEntity.ok(response);
     }

@@ -1,11 +1,12 @@
 package org.example.emailspring.ui.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.emailspring.common.Constantes;
 
-@Schema(description = "Request para refrescar el token de acceso")
+@Schema(description = Constantes.REQUEST_PARA_REFRESCAR_EL_TOKEN_DE_ACCESO)
 public record RefreshTokenRequest(
-        @Schema(description = "Refresh token", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
+        @Schema(description = Constantes.REFRESH_TOKEN, example =Constantes.EY_JHB_GCI_OI_JIUZ_I_1_NI_IS_IN_R_5_C_CI_6_IKP_XVCJ_9)
         String refreshToken
 ) {
-}
+    }
 

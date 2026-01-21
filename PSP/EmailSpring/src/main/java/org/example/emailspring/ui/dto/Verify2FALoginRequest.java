@@ -1,12 +1,13 @@
 package org.example.emailspring.ui.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.emailspring.common.Constantes;
 
-@Schema(description = "Request para verificar código 2FA durante el login")
+@Schema(description = Constantes.SCHEMA_VERIFY_2FA_LOGIN_REQUEST_DESC)
 public record Verify2FALoginRequest(
-        @Schema(description = "Nombre de usuario", example = "admin")
+        @Schema(description = Constantes.SCHEMA_NOMBRE_USUARIO_DESC, example = Constantes.SCHEMA_ADMIN_EXAMPLE)
         String username,
-        @Schema(description = "Código de 6 dígitos recibido por email", example = "123456")
+        @Schema(description = Constantes.SCHEMA_CODIGO_6_DIGITOS_DESC, example = Constantes.SCHEMA_CODIGO_EXAMPLE)
         String codigo
 ) {
 }

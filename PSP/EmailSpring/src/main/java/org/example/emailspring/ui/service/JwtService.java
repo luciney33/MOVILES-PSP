@@ -3,6 +3,7 @@ package org.example.emailspring.ui.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.example.emailspring.common.Constantes;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -31,22 +32,12 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String extractRol(String token) {
-
-        String rol = extractClaim(token, claims -> (String)claims.get("auth"));
-        return rol;
-    }
-
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(String username) {
-
-        return generateToken(Map.of("auth","rol"), username);
-    }
 
     public String generateToken(
             Map<String, Object> extraClaims,
@@ -99,17 +90,14 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
     }
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(secretKey.getBytes());
-    }
     private Key getSignInKey() {
 
         final MessageDigest digest;
         try {
-            digest = MessageDigest.getInstance("SHA-512");
+            digest = MessageDigest.getInstance(Constantes.SHA_512);
             digest.update(secretKey.getBytes(StandardCharsets.UTF_8));
             final SecretKeySpec key2 = new SecretKeySpec(
-                    digest.digest(), 0, 64, "AES");
+                    digest.digest(), 0, 64, Constantes.AES);
             return Keys.hmacShaKeyFor(key2.getEncoded());
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);

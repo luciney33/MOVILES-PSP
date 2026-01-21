@@ -46,27 +46,5 @@ public class EmailService {
         context.setVariable(Constantes.CODIGO_ACTIVACION, codigoActivacion);
         return templateEngine.process(Constantes.EMAIL_ACTIVACION, context);
     }
-
-    public void enviarCodigo2FA(String destinatario, String nombreUsuario, String codigo) {
-        try {
-            MimeMessage mensaje = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, Constantes.UTF_8);
-
-            helper.setTo(destinatario);
-            helper.setSubject(Constantes.CODIGO_VERIFICACION_2FA);
-            helper.setText(construirMensaje2FA(nombreUsuario, codigo), true);
-            mailSender.send(mensaje);
-        } catch (Exception e) {
-            log.error(Constantes.ERROR_AL_ENVIAR_CORREO_A, destinatario, e);
-            System.err.println(Constantes.ERROR_AL_ENVIAR_CORREO + e.getMessage());
-        }
-    }
-
-    private String construirMensaje2FA(String nombreUsuario, String codigo) {
-        Context context = new Context();
-        context.setVariable(Constantes.NOMBRE_USUARIO, nombreUsuario);
-        context.setVariable(Constantes.CODIGO, codigo);
-        return templateEngine.process(Constantes.EMAIL_2FA, context);
-    }
 }
 
