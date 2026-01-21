@@ -3,14 +3,20 @@ package org.example.emailspring.common;
 public final class Constantes {
     public static final String USUARIO_NO_ENCONTRADO = "Usuario no encontrado";
     public static final String NOM_APP_GOOGLEAUTHTENTICATOR = "EmailSpring con Autenticacion de dos factores";
-    public static final String ESCANEA_CODIGOQR_Y_CONFIRMA = "Escanea el código QR con tu aplicación autenticadora (Google Authenticator, Authy, etc.) y confirma con un código";
     public static final String ERROR_GENERANDO_CODIGO_QR = "Error generando código QR: ";
     public static final String NO_HAY_UN_PROCESO_DE_HABILITACION_2_FA_PENDIENTE = "No hay un proceso de habilitación 2FA pendiente";
     public static final String CODIGO_INVALIDO_VERIFICA_QUE_TU_APP_ESTE_SINCRONIZADA_CORRECTAMENTE = "Código inválido. Verifica que tu app esté sincronizada correctamente.";
-    public static final String PENDING_TWO_FACTOR_USERNAME = "pendingTwoFactorUsername";
     public static final String NO_HAY_UN_LOGIN_PENDIENTE_DE_VERIFICACION_2_FA = "No hay un login pendiente de verificación 2FA";
     public static final String EL_USUARIO_NO_TIENE_2_FA_HABILITADO = "El usuario no tiene 2FA habilitado";
     public static final String CODIGO_DE_VERIFICACION_INVALIDO = "Código de verificación inválido";
+    public static final String AUTENTICA_A_UN_USUARIO_SI_TIENE_2_FA_ACTIVADO_RETORNA_REQUIRES_TWO_FACTOR_TRUE = "Autentica a un usuario. Si tiene 2FA activado, retorna requiresTwoFactor=true.";
+    public static final String LOGIN_EXITOSO_O_SE_REQUIERE_CODIGO_2_FA = "Login exitoso o se requiere código 2FA";
+    public static final String HABILITAR_2_FA_PASO_1_GENERAR_QR = "Habilitar 2FA - Paso 1: Generar QR";
+    public static final String GENERA_UN_SECRETO_TOTP_Y_DEVUELVE_EL_QR_CODE_PARA_ESCANEAR_CON_GOOGLE_AUTHENTICATOR = "Genera un secreto TOTP y devuelve el QR code para escanear con Google Authenticator";
+    public static final String SECRETO_Y_QR_CODE_GENERADOS = "Secreto y QR code generados";
+    public static final String HABILITAR_2_FA_PASO_2_CONFIRMAR_CODIGO = "Habilitar 2FA - Paso 2: Confirmar código";
+    public static final String VERIFICA_EL_CODIGO_TOTP_GENERADO_POR_LA_APP_AUTENTICADORA_Y_ACTIVA_2_FA_PERMANENTEMENTE = "Verifica el código TOTP generado por la app autenticadora y activa 2FA permanentemente";
+    public static final String FA_ACTIVADO_EXITOSAMENTE = "2FA activado exitosamente";
 
     private Constantes() {}
     public static final String CODIGO = "codigo";
@@ -75,7 +81,7 @@ public final class Constantes {
     public static final String SWAGGER_API_DESCRIPTION = "API para gestión de entrenamientos y autenticación";
     public static final String SWAGGER_CONTACT_NAME = "Lucia";
 
-
+    public static final String CODIGO_INVALIDO = "Código inválido";
     public static final String TAG_AUTENTICACION = "Autenticación";
     public static final String TAG_AUTENTICACION_DESC = "Operaciones de registro, login y logout de usuarios.";
     public static final String TAG_ACTIVACION_CUENTA = "Activación de Cuenta";
@@ -84,7 +90,6 @@ public final class Constantes {
     public static final String TAG_ENTRENAMIENTOS_DESC = "Gestión de entrenamientos y rutinas (requiere autenticación).";
 
     public static final String OP_INICIAR_SESION = "Iniciar sesión";
-    public static final String OP_INICIAR_SESION_DESC = "Autentica a un usuario y establece una sesión.";
     public static final String OP_CERRAR_SESION = "Cerrar sesión";
     public static final String OP_CERRAR_SESION_DESC = "Invalida la sesión actual del usuario.";
     public static final String OP_REGISTRAR_USUARIO = "Registrar nuevo usuario";
@@ -183,28 +188,13 @@ public final class Constantes {
     public static final String HTTP_401 = "401";
     public static final String HTTP_403 = "403";
     public static final String HTTP_404 = "404";
-
-    public static final String FA_ENABLE = "/2fa/enable";
-    public static final String FA_CONFIRM = "/2fa/confirm";
-    public static final String DE_DOS_FACTORES_ACTIVADA_CORRECTAMENTE = "Autenticación de dos factores activada correctamente";
-    public static final String FA_DISABLE = "/2fa/disable";
-    public static final String DE_DOS_FACTORES_DESACTIVADA = "Autenticación de dos factores desactivada";
-    public static final String FA_VERIFY = "/2fa/verify";
     public static final String LOGIN_COMPLETADO_EXITOSAMENTE = "Login completado exitosamente";
-    public static final String FA_STATUS = "/2fa/status";
 
-    public static final String CODIGO_2FA = "codigo2FA";
     public static final String EMAIL_2FA = "email-2fa";
     public static final String CODIGO_VERIFICACION_2FA = "Código de verificación 2FA - EmailSpring";
-    public static final String PENDING_2FA_CODE = "pending2FACode";
     public static final String PENDING_2FA_USERNAME = "pending2FAUsername";
-    public static final String PENDING_2FA_EXPIRY = "pending2FAExpiry";
     public static final String PENDING_2FA_SECRET = "pending2FASecret";
-    public static final int CODIGO_2FA_EXPIRY_MINUTES = 5;
     public static final String MSG_2FA_REQUERIDO = "Se requiere código de autenticación de dos factores";
-    public static final String MSG_2FA_CODE_INVALIDO = "Código de verificación inválido o expirado";
-    public static final String AUTH_VERIFY_2FA = "/verify-2fa";
-    public static final String AUTH_TOGGLE_2FA = "/toggle-2fa";
     public static final String AUTH_2FA_ENABLE = "/2fa/enable";
     public static final String AUTH_2FA_CONFIRM = "/2fa/confirm";
     public static final String AUTH_2FA_DISABLE = "/2fa/disable";
@@ -213,4 +203,15 @@ public final class Constantes {
     public static final String MSG_2FA_ACTIVADA = "Autenticación de dos factores activada correctamente";
     public static final String MSG_2FA_DESACTIVADA = "Autenticación de dos factores desactivada";
     public static final String MSG_ESCANEA_QR = "Escanea el código QR con tu aplicación autenticadora (Google Authenticator, Authy, etc.) y confirma con un código";
+
+    public static final String OP_DESACTIVAR_2FA = "Desactivar 2FA";
+    public static final String OP_DESACTIVAR_2FA_DESC = "Desactiva la autenticación de dos factores para el usuario actual";
+    public static final String RESP_2FA_DESACTIVADO = "2FA desactivado";
+    public static final String OP_LOGIN_PASO_2_VERIFICAR_CODIGO_TOTP = "Login - Paso 2: Verificar código TOTP";
+    public static final String OP_LOGIN_PASO_2_DESC = "Completa el login verificando el código TOTP de Google Authenticator";
+    public static final String RESP_CODIGO_VERIFICADO_LOGIN_COMPLETADO = "Código verificado, login completado";
+    public static final String RESP_CODIGO_INVALIDO_O_EXPIRADO = "Código inválido o expirado";
+    public static final String OP_OBTENER_ESTADO_2FA = "Obtener estado del 2FA";
+    public static final String OP_OBTENER_ESTADO_2FA_DESC = "Consulta si el usuario tiene activada la autenticación de dos factores";
+    public static final String RESP_ESTADO_2FA_OBTENIDO = "Estado del 2FA obtenido";
 }

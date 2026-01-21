@@ -7,28 +7,46 @@ Content-Type: application/json
   "password": "admin123"
 }
 
-### 2. Habilitar 2FA
+
+
+
+### ========================================
+### PASO 2: Habilitar 2FA
+### ========================================
 POST http://localhost:8080/api/auth/2fa/enable
 
-### 3. Confirmar 2FA con código de autenticador
+
+### ========================================
+### PASO 3: Generar código TOTP
+### ========================================
+
+
+### ========================================
+### PASO 4: Confirmar 2FA con código
+### ========================================
 POST http://localhost:8080/api/auth/2fa/confirm
 Content-Type: application/json
 
 {
-  "code": "071114"
+  "code": "732520"
 }
 
-### 4. Ver estado de 2FA
-GET http://localhost:8080/api/auth/2fa/status
 
-### 5. Deshabilitar 2FA
-POST http://localhost:8080/api/auth/2fa/disable
+### ========================================
+### PASO 5: Verificar que se guardó
+### ========================================
+GET http://localhost:8080}/api/auth/2fa/status
 
-### 6. Logout
+
+
+### ========================================
+### PASO 6: Logout
+### ========================================
 POST http://localhost:8080/api/auth/logout
 
-
-### 7. Login inicial
+### ========================================
+### PASO 7: Login con 2FA - Paso 1
+### ========================================
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
@@ -37,14 +55,19 @@ Content-Type: application/json
   "password": "admin123"
 }
 
-### 8. Verificar código 2FA durante login
+
+### ========================================
+### PASO 8: Login con 2FA - Paso 2
+### ========================================
+
+
 POST http://localhost:8080/api/auth/2fa/verify
 Content-Type: application/json
 
 {
   "username": "admin",
-  "code": "123456"
+  "codigo": "488368"
 }
 
-### 9. Logout
-POST http://localhost:8080/api/auth/logout
+
+

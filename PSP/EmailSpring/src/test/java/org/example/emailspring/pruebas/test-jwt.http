@@ -1,0 +1,241 @@
+### 🔐 Pruebas JWT - Autenticación con Tokens
+
+@baseUrl = http://localhost:8080
+@username = admin
+@password = admin123
+
+### ========================================
+### 1️⃣ REGISTRO (si no existe el usuario)
+### ========================================
+
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}",
+  "email": "admin@example.com",
+  "nombre": "Administrador",
+  "rol": "ADMIN"
+}
+
+### ========================================
+### 2️⃣ LOGIN SIN 2FA - Obtener JWT
+### ========================================
+
+# @name loginJWT
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### ✅ Respuesta esperada:
+### {
+###   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+###   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+###   "tokenType": "Bearer",
+###   "usuario": { ... },
+###   "message": "Login exitoso"
+### }
+
+### 📝 COPIA el accessToken para usarlo en los siguientes requests
+
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+@refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+### ========================================
+### 3️⃣ LISTAR ENTRENAMIENTOS (con JWT)
+### ========================================
+
+GET {{baseUrl}}/api/entrenamientos
+Authorization: Bearer {{accessToken}}
+
+### ✅ Debe devolver lista de entrenamientos (200 OK)
+### ❌ Sin Authorization header → 401 Unauthorized
+
+### ========================================
+### 4️⃣ HABILITAR 2FA (con JWT)
+### ========================================
+
+POST {{baseUrl}}/api/auth/2fa/enable
+Authorization: Bearer {{accessToken}}
+
+### ✅ Debe devolver secret y QR code
+### Copia el secret y escanea con Google Authenticator
+
+### ========================================
+### 5️⃣ CONFIRMAR 2FA
+### ========================================
+
+POST {{baseUrl}}/api/auth/2fa/confirm
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "code": "123456"
+}
+
+### ⚠️ Reemplaza con el código ACTUAL de Google Authenticator
+
+### ========================================
+### 6️⃣ VERIFICAR ESTADO 2FA
+### ========================================
+
+GET {{baseUrl}}/api/auth/2fa/status
+Authorization: Bearer {{accessToken}}
+
+### ✅ Debe devolver: { "success": true, "twoFactorEnabled": true }
+
+### ========================================
+### 7️⃣ REFRESCAR ACCESS TOKEN
+### ========================================
+
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### ✅ Devuelve un nuevo accessToken y refreshToken
+### 📝 Actualiza la variable @accessToken con el nuevo
+
+### ========================================
+### 8️⃣ DESACTIVAR 2FA
+### ========================================
+
+POST {{baseUrl}}/api/auth/2fa/disable
+Authorization: Bearer {{accessToken}}
+
+### ========================================
+### 🔄 FLUJO COMPLETO CON 2FA ACTIVADO
+### ========================================
+
+### PASO A: Logout (invalida sesión temporal)
+POST {{baseUrl}}/api/auth/logout
+
+###---
+
+### PASO B: Login - Paso 1 (username + password)
+# @name loginCon2FA
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+### ✅ Respuesta esperada:
+### {
+###   "requires2FA": true,
+###   "message": "Se requiere código de autenticación de dos factores"
+### }
+
+###---
+
+### PASO C: Login - Paso 2 (verificar TOTP)
+POST {{baseUrl}}/api/auth/2fa/verify
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "codigo": "789012"
+}
+
+### ⚠️ Reemplaza con código ACTUAL de Google Authenticator
+
+### ✅ Respuesta esperada:
+### {
+###   "accessToken": "...",
+###   "refreshToken": "...",
+###   "tokenType": "Bearer",
+###   "usuario": { ... },
+###   "message": "Login completado exitosamente"
+### }
+
+### ========================================
+### ❌ PRUEBAS DE ERROR
+### ========================================
+
+### ERROR 1: Acceder sin token
+GET {{baseUrl}}/api/entrenamientos
+
+### Debe devolver: 401 Unauthorized
+
+###---
+
+### ERROR 2: Token inválido
+GET {{baseUrl}}/api/entrenamientos
+Authorization: Bearer token_invalido_123
+
+### Debe devolver: 401 Unauthorized
+
+###---
+
+### ERROR 3: Refresh token inválido
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "token_invalido"
+}
+
+### Debe devolver: 401 Unauthorized
+
+###---
+
+### ERROR 4: Token expirado
+### (esperar 15 minutos con el mismo accessToken)
+GET {{baseUrl}}/api/entrenamientos
+Authorization: Bearer {{accessToken}}
+
+### Debe devolver: 401 Unauthorized
+
+### ========================================
+### 📝 NOTAS IMPORTANTES
+### ========================================
+
+### 🔑 JWT vs Sesiones:
+### - ❌ Ya NO se usa JSESSIONID (cookies)
+### - ✅ Se usa Authorization: Bearer <token>
+### - ✅ El token se envía en CADA request
+
+### ⏱️ Expiración de tokens:
+### - Access Token: 15 minutos (900000 ms)
+### - Refresh Token: 7 días (604800000 ms)
+
+### 🔄 Renovar token:
+### Cuando el accessToken expire:
+### 1. Llamar a /auth/refresh con el refreshToken
+### 2. Obtener nuevo accessToken y refreshToken
+### 3. Usar el nuevo accessToken en los siguientes requests
+
+### 🔒 Formato del token JWT:
+### Header.Payload.Signature
+### eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9. <- Header
+### eyJzdWIiOiJhZG1pbiIsInJvbCI6IkFETUlOIn0.  <- Payload (contiene username, rol)
+### SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c    <- Signature
+
+### 🛠️ Decodificar token:
+### Puedes ver el contenido del token en: https://jwt.io/
+### Pega el token y verás username y rol (sin password)
+
+### ========================================
+### ✅ CHECKLIST
+### ========================================
+
+### [ ] Login devuelve accessToken y refreshToken
+### [ ] Acceder a endpoint protegido con token funciona
+### [ ] Acceder sin token devuelve 401
+### [ ] Habilitar 2FA con token funciona
+### [ ] Confirmar 2FA funciona
+### [ ] Verificar estado 2FA funciona
+### [ ] Refresh token funciona
+### [ ] Login con 2FA requiere dos pasos
+### [ ] Verify 2FA devuelve tokens JWT
+### [ ] Token expirado devuelve 401
+

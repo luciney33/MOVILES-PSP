@@ -14,6 +14,9 @@ import org.example.emailspring.ui.dto.Enable2FAResponse;
 import org.example.emailspring.ui.dto.UsuarioDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Service
 public class AuthService {
@@ -21,12 +24,14 @@ public class AuthService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
     private final TotpService totpService;
+    private final JwtService jwtService;
 
-    public AuthService(UsuarioService usuarioService, UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper, TotpService totpService) {
+    public AuthService(UsuarioService usuarioService, UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper, TotpService totpService, JwtService jwtService) {
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
         this.usuarioMapper = usuarioMapper;
         this.totpService = totpService;
+        this.jwtService = jwtService;
     }
 
     /**
@@ -60,6 +65,7 @@ public class AuthService {
     public Usuario verify2FA(String username, String codigo, HttpSession session) {
         // Validar que hay un login pendiente
         String pendingUsername = (String) session.getAttribute(Constantes.PENDING_2FA_USERNAME);
+
         if (pendingUsername == null || !pendingUsername.equals(username)) {
             throw new UnauthorizedException(Constantes.NO_HAY_UN_LOGIN_PENDIENTE_DE_VERIFICACION_2_FA);
         }
@@ -70,6 +76,7 @@ public class AuthService {
             throw new UnauthorizedException(Constantes.USUARIO_NO_ENCONTRADO);
         }
 
+
         if (usuarioEntity.getTwoFactorSecret() == null) {
             throw new UnauthorizedException(Constantes.EL_USUARIO_NO_TIENE_2_FA_HABILITADO);
         }
@@ -78,6 +85,7 @@ public class AuthService {
         if (!totpService.verifyCode(usuarioEntity.getTwoFactorSecret(), codigo)) {
             throw new UnauthorizedException(Constantes.CODIGO_DE_VERIFICACION_INVALIDO);
         }
+
 
         // Código válido - completar login
         Usuario usuario = usuarioMapper.toDomain(usuarioEntity);
@@ -98,6 +106,7 @@ public class AuthService {
         UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
 
+
         // Generar nuevo secreto
         String secret = totpService.generateSecret();
 
@@ -115,10 +124,11 @@ public class AuthService {
     }
 
     /**
-     * Habilitar 2FA - Paso 1: Confirmar con código TOTP
+     * Habilitar 2FA - Paso 2: Confirmar con código TOTP
      * Valida el código y guarda el secreto permanentemente
      */
     public void confirm2FA(Long usuarioId, String codigo, HttpSession session) {
+
         // Obtener secreto temporal de la sesión
         String pendingSecret = (String) session.getAttribute(Constantes.PENDING_2FA_SECRET);
         if (pendingSecret == null) {
@@ -130,21 +140,21 @@ public class AuthService {
             throw new BadRequestException(Constantes.CODIGO_INVALIDO_VERIFICA_QUE_TU_APP_ESTE_SINCRONIZADA_CORRECTAMENTE);
         }
 
+
         // Código válido - guardar permanentemente en BD
         UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
 
         usuarioEntity.setTwoFactorEnabled(true);
         usuarioEntity.setTwoFactorSecret(pendingSecret);
-        usuarioRepository.save(usuarioEntity);
+
+        UsuarioEntity saved = usuarioRepository.save(usuarioEntity);
 
         // Limpiar sesión temporal
         session.removeAttribute(Constantes.PENDING_2FA_SECRET);
     }
 
-    /**
-     * Desactivar 2FA
-     */
+
     public void disable2FA(Long usuarioId) {
         UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
@@ -154,9 +164,7 @@ public class AuthService {
         usuarioRepository.save(usuarioEntity);
     }
 
-    /**
-     * Obtener estado de 2FA
-     */
+
     public boolean get2FAStatus(Long usuarioId) {
         UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
@@ -197,4 +205,57 @@ public class AuthService {
     public boolean isAdmin(HttpSession session) {
         return Rol.ADMIN.equals(getRolFromSession(session));
     }
+
+    // ==================== MÉTODOS JWT ====================
+
+    /**
+     * Genera tokens JWT (access + refresh) para un usuario
+     */
+    public JwtTokenPair generateTokens(Usuario usuario) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("rol", usuario.rol().toString());
+        String accessToken = jwtService.generateToken(claims, usuario.username());
+        String refreshToken = jwtService.generateRefreshToken(usuario.username());
+        return new JwtTokenPair(accessToken, refreshToken);
+    }
+
+    /**
+     * Refresca el access token usando un refresh token válido
+     */
+    public JwtTokenPair refreshAccessToken(String refreshToken) {
+        try {
+            String username = jwtService.extractUsername(refreshToken);
+
+            if (!jwtService.isTokenValid(refreshToken, username)) {
+                throw new UnauthorizedException("Refresh token inválido o expirado");
+            }
+
+            UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(username);
+            if (usuarioEntity == null) {
+                throw new UnauthorizedException(Constantes.USUARIO_NO_ENCONTRADO);
+            }
+
+            Usuario usuario = usuarioMapper.toDomain(usuarioEntity);
+            return generateTokens(usuario);
+        } catch (Exception e) {
+            throw new UnauthorizedException("Refresh token inválido: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Extrae el usuario del token JWT
+     */
+    public Usuario getUserFromToken(String token) {
+        String username = jwtService.extractUsername(token);
+        UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(username);
+        if (usuarioEntity == null) {
+            throw new UnauthorizedException(Constantes.USUARIO_NO_ENCONTRADO);
+        }
+        return usuarioMapper.toDomain(usuarioEntity);
+    }
+
+    /**
+     * Clase interna para retornar par de tokens
+     */
+    public record JwtTokenPair(String accessToken, String refreshToken) {}
 }
