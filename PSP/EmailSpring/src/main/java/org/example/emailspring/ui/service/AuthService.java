@@ -10,11 +10,9 @@ import org.example.emailspring.domain.mapper.UsuarioMapper;
 import org.example.emailspring.domain.model.Rol;
 import org.example.emailspring.domain.model.Usuario;
 import org.example.emailspring.domain.service.UsuarioService;
+import org.example.emailspring.ui.dto.Enable2FAResponse;
 import org.example.emailspring.ui.dto.UsuarioDTO;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Random;
 
 
 @Service
@@ -22,99 +20,147 @@ public class AuthService {
     private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
-    private final EmailService emailService;
+    private final TotpService totpService;
 
-    public AuthService(UsuarioService usuarioService, UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper, EmailService emailService) {
+    public AuthService(UsuarioService usuarioService, UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper, TotpService totpService) {
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
         this.usuarioMapper = usuarioMapper;
-        this.emailService = emailService;
+        this.totpService = totpService;
     }
 
+    /**
+     * Login - Paso 1: Validar username y password
+     * Si tiene 2FA activado, guarda en sesión temporal y retorna null
+     * Si no tiene 2FA, establece sesión completa y retorna usuario
+     */
     public Usuario login(String username, String password, HttpSession session) {
-        // Validar credenciales
-        Usuario usuario = usuarioService.login(username, password, session);
+        // Validar credenciales (sin establecer sesión aún)
+        Usuario usuario = usuarioService.login(username, password);
 
-        // Si el usuario tiene 2FA habilitado, generar y enviar código
+        // Si el usuario tiene 2FA habilitado, guardar en sesión temporal
         if (Boolean.TRUE.equals(usuario.twoFactorEnabled())) {
-            String codigo = generarCodigo2FA();
-
-            // Guardar código y datos en sesión temporal
-            session.setAttribute(Constantes.PENDING_2FA_CODE, codigo);
+            // Guardar username en sesión temporal (NO establecer sesión completa)
             session.setAttribute(Constantes.PENDING_2FA_USERNAME, usuario.username());
-            session.setAttribute(Constantes.PENDING_2FA_EXPIRY, LocalDateTime.now().plusMinutes(Constantes.CODIGO_2FA_EXPIRY_MINUTES));
 
-            // Enviar código por email
-            emailService.enviarCodigo2FA(usuario.email(), usuario.nombre(), codigo);
-
-            // NO establecer sesión completa aún
-            return null; // Indica que se requiere verificación 2FA
+            // NO establecer sesión completa - retornar null para indicar que se requiere 2FA
+            return null;
         }
 
-        // Si no tiene 2FA, login completo
+        // Si no tiene 2FA, establecer sesión completa y login exitoso
         session.setAttribute(Constantes.SESSION_USUARIO_ID, usuario);
+        session.setAttribute(Constantes.ROL, usuario.rol());
         return usuario;
     }
 
+    /**
+     * Login - Paso 2: Verificar código TOTP de Google Authenticator
+     * Completa el login si el código es válido
+     */
     public Usuario verify2FA(String username, String codigo, HttpSession session) {
+        // Validar que hay un login pendiente
         String pendingUsername = (String) session.getAttribute(Constantes.PENDING_2FA_USERNAME);
-        String pendingCode = (String) session.getAttribute(Constantes.PENDING_2FA_CODE);
-        LocalDateTime expiry = (LocalDateTime) session.getAttribute(Constantes.PENDING_2FA_EXPIRY);
-
-        // Validaciones
         if (pendingUsername == null || !pendingUsername.equals(username)) {
             throw new UnauthorizedException(Constantes.NO_HAY_UN_LOGIN_PENDIENTE_DE_VERIFICACION_2_FA);
         }
 
-        if (expiry == null || LocalDateTime.now().isAfter(expiry)) {
-            limpiarSesion2FA(session);
-            throw new BadRequestException(Constantes.MSG_2FA_CODE_INVALIDO);
-        }
-
-        if (!codigo.equals(pendingCode)) {
-            throw new UnauthorizedException(Constantes.CODIGO_DE_VERIFICACION_INVALIDO);
-        }
-
-        // Código válido, completar login
+        // Obtener usuario y su secreto TOTP
         UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(username);
         if (usuarioEntity == null) {
             throw new UnauthorizedException(Constantes.USUARIO_NO_ENCONTRADO);
         }
 
+        if (usuarioEntity.getTwoFactorSecret() == null) {
+            throw new UnauthorizedException(Constantes.EL_USUARIO_NO_TIENE_2_FA_HABILITADO);
+        }
+
+        // Verificar código TOTP contra el secreto
+        if (!totpService.verifyCode(usuarioEntity.getTwoFactorSecret(), codigo)) {
+            throw new UnauthorizedException(Constantes.CODIGO_DE_VERIFICACION_INVALIDO);
+        }
+
+        // Código válido - completar login
         Usuario usuario = usuarioMapper.toDomain(usuarioEntity);
 
         // Limpiar datos temporales y establecer sesión completa
-        limpiarSesion2FA(session);
+        session.removeAttribute(Constantes.PENDING_2FA_USERNAME);
         session.setAttribute(Constantes.SESSION_USUARIO_ID, usuario);
         session.setAttribute(Constantes.ROL, usuario.rol());
 
         return usuario;
     }
 
-    public void toggle2FA(Long usuarioId, boolean enabled) {
+    /**
+     * Habilitar 2FA - Paso 1: Generar secreto y QR code
+     * Guarda el secreto temporalmente en sesión hasta que se confirme
+     */
+    public Enable2FAResponse enable2FA(Long usuarioId, HttpSession session) {
         UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
 
-        usuarioEntity.setTwoFactorEnabled(enabled);
+        // Generar nuevo secreto
+        String secret = totpService.generateSecret();
+
+        // Generar QR code
+        String qrCodeUri = totpService.generateQrCode(secret, usuarioEntity.getUsername());
+
+        // Guardar secreto temporalmente en sesión (NO en BD aún)
+        session.setAttribute(Constantes.PENDING_2FA_SECRET, secret);
+
+        return new Enable2FAResponse(
+                secret,
+                qrCodeUri,
+                Constantes.MSG_ESCANEA_QR
+        );
+    }
+
+    /**
+     * Habilitar 2FA - Paso 1: Confirmar con código TOTP
+     * Valida el código y guarda el secreto permanentemente
+     */
+    public void confirm2FA(Long usuarioId, String codigo, HttpSession session) {
+        // Obtener secreto temporal de la sesión
+        String pendingSecret = (String) session.getAttribute(Constantes.PENDING_2FA_SECRET);
+        if (pendingSecret == null) {
+            throw new BadRequestException(Constantes.NO_HAY_UN_PROCESO_DE_HABILITACION_2_FA_PENDIENTE);
+        }
+
+        // Verificar código
+        if (!totpService.verifyCode(pendingSecret, codigo)) {
+            throw new BadRequestException(Constantes.CODIGO_INVALIDO_VERIFICA_QUE_TU_APP_ESTE_SINCRONIZADA_CORRECTAMENTE);
+        }
+
+        // Código válido - guardar permanentemente en BD
+        UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
+
+        usuarioEntity.setTwoFactorEnabled(true);
+        usuarioEntity.setTwoFactorSecret(pendingSecret);
+        usuarioRepository.save(usuarioEntity);
+
+        // Limpiar sesión temporal
+        session.removeAttribute(Constantes.PENDING_2FA_SECRET);
+    }
+
+    /**
+     * Desactivar 2FA
+     */
+    public void disable2FA(Long usuarioId) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
+
+        usuarioEntity.setTwoFactorEnabled(false);
+        usuarioEntity.setTwoFactorSecret(null);
         usuarioRepository.save(usuarioEntity);
     }
 
+    /**
+     * Obtener estado de 2FA
+     */
     public boolean get2FAStatus(Long usuarioId) {
         UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
         return Boolean.TRUE.equals(usuarioEntity.getTwoFactorEnabled());
-    }
-
-    private String generarCodigo2FA() {
-        Random random = new Random();
-        int codigo = 100000 + random.nextInt(900000); // Genera número de 6 dígitos
-        return String.valueOf(codigo);
-    }
-
-    private void limpiarSesion2FA(HttpSession session) {
-        session.removeAttribute(Constantes.PENDING_2FA_CODE);
-        session.removeAttribute(Constantes.PENDING_2FA_USERNAME);
-        session.removeAttribute(Constantes.PENDING_2FA_EXPIRY);
     }
 
     public void logout(HttpSession session) {
@@ -130,7 +176,8 @@ public class AuthService {
     }
 
     public boolean isAuthenticated(HttpSession session) {
-        return session.getAttribute(Constantes.SESSION_USUARIO_ID) != null;
+        Object usuario = session.getAttribute(Constantes.SESSION_USUARIO_ID);
+        return usuario instanceof Usuario;
     }
 
     public Long getUsuarioIdFromSession(HttpSession session) {

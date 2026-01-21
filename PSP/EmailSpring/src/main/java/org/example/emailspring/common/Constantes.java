@@ -199,9 +199,18 @@ public final class Constantes {
     public static final String PENDING_2FA_CODE = "pending2FACode";
     public static final String PENDING_2FA_USERNAME = "pending2FAUsername";
     public static final String PENDING_2FA_EXPIRY = "pending2FAExpiry";
+    public static final String PENDING_2FA_SECRET = "pending2FASecret";
     public static final int CODIGO_2FA_EXPIRY_MINUTES = 5;
-    public static final String MSG_2FA_REQUERIDO = "Se ha enviado un código de verificación a tu correo electrónico";
+    public static final String MSG_2FA_REQUERIDO = "Se requiere código de autenticación de dos factores";
     public static final String MSG_2FA_CODE_INVALIDO = "Código de verificación inválido o expirado";
     public static final String AUTH_VERIFY_2FA = "/verify-2fa";
     public static final String AUTH_TOGGLE_2FA = "/toggle-2fa";
+    public static final String AUTH_2FA_ENABLE = "/2fa/enable";
+    public static final String AUTH_2FA_CONFIRM = "/2fa/confirm";
+    public static final String AUTH_2FA_DISABLE = "/2fa/disable";
+    public static final String AUTH_2FA_VERIFY = "/2fa/verify";
+    public static final String AUTH_2FA_STATUS = "/2fa/status";
+    public static final String MSG_2FA_ACTIVADA = "Autenticación de dos factores activada correctamente";
+    public static final String MSG_2FA_DESACTIVADA = "Autenticación de dos factores desactivada";
+    public static final String MSG_ESCANEA_QR = "Escanea el código QR con tu aplicación autenticadora (Google Authenticator, Authy, etc.) y confirma con un código";
 }

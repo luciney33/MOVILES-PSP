@@ -1,6 +1,5 @@
 package org.example.emailspring.domain.service;
 
-import jakarta.servlet.http.HttpSession;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.data.UsuarioRepository;
 import org.example.emailspring.data.entity.UsuarioEntity;
@@ -31,7 +30,7 @@ public class UsuarioService {
         this.emailService = emailService;
     }
 
-    public Usuario login(String username, String password,HttpSession session) {
+    public Usuario login(String username, String password) {
         UsuarioEntity entity = usuarioRepository.getByUsername(username);
 
         // Validar que el usuario existe
@@ -49,10 +48,7 @@ public class UsuarioService {
             throw new BadCredentialsException(Constantes.MSG_LOGIN_INVALID);
         }
 
-        // Guardar datos básicos en sesión (el usuario completo se guardará después del 2FA si corresponde)
-        session.setAttribute(Constantes.SESSION_USUARIO_ID, entity.getId());
-        session.setAttribute(Constantes.ROL, entity.getRol());
-
+        // NO establecer sesión aquí - se hará después de validar 2FA si corresponde
         return usuarioMapper.toDomain(entity);
     }
 

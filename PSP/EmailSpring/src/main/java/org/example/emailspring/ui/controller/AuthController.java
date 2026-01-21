@@ -28,9 +28,9 @@ public class AuthController {
 
     @PostMapping(Constantes.AUTH_LOGIN)
     @Operation(summary = Constantes.OP_INICIAR_SESION,
-               description = "Autentica a un usuario. Si tiene 2FA activado, se enviará un código por email.")
+               description = "Autentica a un usuario. Si tiene 2FA activado, retorna requiresTwoFactor=true.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = Constantes.HTTP_200, description = "Login exitoso o código 2FA enviado"),
+            @ApiResponse(responseCode = Constantes.HTTP_200, description = "Login exitoso o se requiere código 2FA"),
             @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.MSG_LOGIN_INVALID)
     })
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
@@ -54,9 +54,45 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(Constantes.AUTH_VERIFY_2FA)
-    @Operation(summary = "Verificar código 2FA",
-               description = "Completa el login verificando el código enviado por email.")
+    @PostMapping(Constantes.AUTH_2FA_ENABLE)
+    @RequiresAuth
+    @Operation(summary = "Habilitar 2FA - Paso 1: Generar QR",
+               description = "Genera un secreto TOTP y devuelve el QR code para escanear con Google Authenticator/Authy")
+    @ApiResponse(responseCode = Constantes.HTTP_200, description = "Secreto y QR code generados")
+    public ResponseEntity<Enable2FADataResponse> enable2FA(HttpSession session) {
+        Long usuarioId = authService.getUsuarioIdFromSession(session);
+        Enable2FAResponse data = authService.enable2FA(usuarioId, session);
+        return ResponseEntity.ok(new Enable2FADataResponse(true, data));
+    }
+
+    @PostMapping(Constantes.AUTH_2FA_CONFIRM)
+    @RequiresAuth
+    @Operation(summary = "Habilitar 2FA - Paso 2: Confirmar código",
+               description = "Verifica el código TOTP generado por la app autenticadora y activa 2FA permanentemente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = Constantes.HTTP_200, description = "2FA activado exitosamente"),
+            @ApiResponse(responseCode = Constantes.HTTP_400, description = "Código inválido")
+    })
+    public ResponseEntity<ApiSuccessResponse> confirm2FA(@RequestBody Confirm2FARequest request, HttpSession session) {
+        Long usuarioId = authService.getUsuarioIdFromSession(session);
+        authService.confirm2FA(usuarioId, request.code(), session);
+        return ResponseEntity.ok(new ApiSuccessResponse(true, Constantes.MSG_2FA_ACTIVADA));
+    }
+
+    @PostMapping(Constantes.AUTH_2FA_DISABLE)
+    @RequiresAuth
+    @Operation(summary = "Desactivar 2FA",
+               description = "Desactiva la autenticación de dos factores para el usuario actual")
+    @ApiResponse(responseCode = Constantes.HTTP_200, description = "2FA desactivado")
+    public ResponseEntity<ApiSuccessResponse> disable2FA(HttpSession session) {
+        Long usuarioId = authService.getUsuarioIdFromSession(session);
+        authService.disable2FA(usuarioId);
+        return ResponseEntity.ok(new ApiSuccessResponse(true, Constantes.MSG_2FA_DESACTIVADA));
+    }
+
+    @PostMapping(Constantes.AUTH_2FA_VERIFY)
+    @Operation(summary = "Login - Paso 2: Verificar código TOTP",
+               description = "Completa el login verificando el código TOTP de Google Authenticator")
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = "Código verificado, login completado"),
             @ApiResponse(responseCode = Constantes.HTTP_401, description = "Código inválido o expirado")
@@ -76,26 +112,10 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping(Constantes.AUTH_2FA_STATUS)
     @RequiresAuth
-    @PostMapping(Constantes.AUTH_TOGGLE_2FA)
-    @Operation(summary = "Activar/Desactivar 2FA",
-               description = "Permite al usuario activar o desactivar la autenticación de dos factores por email.")
-    @ApiResponse(responseCode = Constantes.HTTP_200, description = "2FA actualizado exitosamente")
-    public ResponseEntity<ApiSuccessResponse> toggle2FA(@RequestBody Toggle2FARequest request, HttpSession session) {
-        Long usuarioId = authService.getUsuarioIdFromSession(session);
-        authService.toggle2FA(usuarioId, request.enabled());
-
-        String message = request.enabled()
-                ? Constantes.DE_DOS_FACTORES_ACTIVADA_CORRECTAMENTE
-                : Constantes.DE_DOS_FACTORES_DESACTIVADA;
-
-        return ResponseEntity.ok(new ApiSuccessResponse(true, message));
-    }
-
-    @RequiresAuth
-    @GetMapping(Constantes.FA_STATUS)
     @Operation(summary = "Obtener estado del 2FA",
-               description = "Consulta si el usuario tiene activada la autenticación de dos factores.")
+               description = "Consulta si el usuario tiene activada la autenticación de dos factores")
     @ApiResponse(responseCode = Constantes.HTTP_200, description = "Estado del 2FA obtenido")
     public ResponseEntity<TwoFactorStatusResponse> get2FAStatus(HttpSession session) {
         Long usuarioId = authService.getUsuarioIdFromSession(session);
