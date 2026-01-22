@@ -59,11 +59,9 @@ public class TotpService {
         }
     }
 
-
     public boolean verifyCode(String secret, String code) {
         return verifier.isValidCode(secret, code);
     }
-
 
 }
 

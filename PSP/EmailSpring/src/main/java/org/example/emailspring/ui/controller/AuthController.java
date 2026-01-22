@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.domain.model.Usuario;
 import org.example.emailspring.ui.dto.*;
@@ -34,8 +33,8 @@ public class AuthController {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.LOGIN_EXITOSO_O_SE_REQUIERE_CODIGO_2_FA),
             @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.MSG_LOGIN_INVALID)
     })
-    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
-        Usuario usuario = authService.login(request.username(), request.password(), session);
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        Usuario usuario = authService.login(request.username(), request.password());
         if (usuario == null) {
             return ResponseEntity.ok(new Login2FARequiredResponse(true, Constantes.MSG_2FA_REQUERIDO));
         }
@@ -63,11 +62,9 @@ public class AuthController {
     @Operation(summary = Constantes.HABILITAR_2_FA_PASO_1_GENERAR_QR,
                description = Constantes.GENERA_UN_SECRETO_TOTP_Y_DEVUELVE_EL_QR_CODE_PARA_ESCANEAR_CON_GOOGLE_AUTHENTICATOR)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.SECRETO_Y_QR_CODE_GENERADOS)
-    public ResponseEntity<Enable2FADataResponse> enable2FA(HttpSession session, HttpServletRequest request) {
+    public ResponseEntity<Enable2FADataResponse> enable2FA(HttpServletRequest request) {
         String username = (String) request.getAttribute(Constantes.USERNAME);
-        Usuario usuario = authService.getUserByUsername(username);
-
-        Enable2FAResponse data = authService.enable2FA(usuario.id(), session);
+        Enable2FAResponse data = authService.enable2FA(username);
         return ResponseEntity.ok(new Enable2FADataResponse(true, data));
     }
 
@@ -79,10 +76,9 @@ public class AuthController {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.FA_ACTIVADO_EXITOSAMENTE),
             @ApiResponse(responseCode = Constantes.HTTP_400, description = Constantes.CODIGO_INVALIDO)
     })
-    public ResponseEntity<ApiSuccessResponse> confirm2FA(@RequestBody Confirm2FARequest request, HttpSession session, HttpServletRequest httpRequest) {
+    public ResponseEntity<ApiSuccessResponse> confirm2FA(@RequestBody Confirm2FARequest request, HttpServletRequest httpRequest) {
         String username = (String) httpRequest.getAttribute(Constantes.USERNAME);
-        Usuario usuario = authService.getUserByUsername(username);
-        authService.confirm2FA(usuario.id(), request.code(), session);
+        authService.confirm2FA(username, request.code());
         return ResponseEntity.ok(new ApiSuccessResponse(true, Constantes.MSG_2FA_ACTIVADA));
     }
 
@@ -93,8 +89,7 @@ public class AuthController {
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_2FA_DESACTIVADO)
     public ResponseEntity<ApiSuccessResponse> disable2FA(HttpServletRequest request) {
         String username = (String) request.getAttribute(Constantes.USERNAME);
-        Usuario usuario = authService.getUserByUsername(username);
-        authService.disable2FA(usuario.id());
+        authService.disable2FA(username);
         return ResponseEntity.ok(new ApiSuccessResponse(true, Constantes.MSG_2FA_DESACTIVADA));
     }
 
@@ -105,8 +100,8 @@ public class AuthController {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_CODIGO_VERIFICADO_LOGIN_COMPLETADO),
             @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.RESP_CODIGO_INVALIDO_O_EXPIRADO)
     })
-    public ResponseEntity<JwtAuthResponse> verify2FA(@RequestBody Verify2FALoginRequest request, HttpSession session) {
-        Usuario usuario = authService.verify2FA(request.username(), request.codigo(), session);
+    public ResponseEntity<JwtAuthResponse> verify2FA(@RequestBody Verify2FALoginRequest request) {
+        Usuario usuario = authService.verify2FA(request.username(), request.codigo());
         JwtTokenPair tokens = authService.generateTokens(usuario);
 
         UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
@@ -133,16 +128,20 @@ public class AuthController {
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ESTADO_2FA_OBTENIDO)
     public ResponseEntity<TwoFactorStatusResponse> get2FAStatus(HttpServletRequest request) {
         String username = (String) request.getAttribute(Constantes.USERNAME);
-        Usuario usuario = authService.getUserByUsername(username);
-        boolean twoFactorEnabled = authService.get2FAStatus(usuario.id());
+        boolean twoFactorEnabled = authService.get2FAStatus(username);
         return ResponseEntity.ok(new TwoFactorStatusResponse(true, twoFactorEnabled));
     }
 
     @PostMapping(Constantes.AUTH_LOGOUT)
+    @RequiresAuth
     @Operation(summary = Constantes.OP_CERRAR_SESION, description = Constantes.OP_CERRAR_SESION_DESC)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.MSG_LOGOUT_SUCCESS)
-    public ResponseEntity<String> logout(HttpSession session) {
-        authService.logout(session);
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        String authHeader = request.getHeader(Constantes.AUTHORIZATION);
+        if (authHeader != null && authHeader.startsWith(Constantes.BEARER)) {
+            String token = authHeader.substring(Constantes.BEARER_PREFIX_LENGTH);
+            authService.logout(token);
+        }
         return ResponseEntity.ok(Constantes.MSG_LOGOUT_SUCCESS);
     }
 

@@ -1,0 +1,125 @@
+### DEBE FUNCIONAR
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "tesEEtuser",
+  "password": "TesEEt123456",
+  "email": "testuserEE@example.com",
+  "nombre": "Usuario de Prueba",
+  "rol": "USER"
+}
+
+
+### DEBE FUNCIONAR
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "tesEEtuser",
+  "password": "TesEEt123456"
+}
+
+
+### DEBE FUNCIONAR
+GET http://localhost:8080/api/entrenamientos
+Authorization: Bearer TOKEN
+
+
+### DEBE FUNCIONAR
+POST http://localhost:8080/api/entrenamientos
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "nombre": "Rutina de Fuerza",
+  "descripcion": "Entrenamiento de fuerza para principiantes"
+}
+
+
+### DEBE FUNCIONAR
+POST http://localhost:8080/api/auth/2fa/enable
+Authorization: Bearer TOKEN
+
+
+### DEBE FUNCIONAR
+POST http://localhost:8080/api/auth/2fa/confirm
+Authorization: Bearer TOKEN
+Content-Type: application/json
+
+{
+  "code": "123456"
+}
+
+
+### DEBE FUNCIONAR
+GET http://localhost:8080/api/auth/2fa/status
+Authorization: Bearer TOKEN
+
+
+### DEBE FUNCIONAR
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "tesEEtuser",
+  "password": "TesEEt123456"
+}
+
+
+###  DEBE FUNCIONAR
+POST http://localhost:8080/api/auth/2fa/verify
+Content-Type: application/json
+
+{
+  "username": "tesEEtuser",
+  "codigo": "123456"
+}
+
+
+### DEBE FUNCIONAR
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "TU_REFRESH_TOKEN_AQUI"
+}
+
+
+
+###  DEBE FUNCIONAR
+POST http://localhost:8080/api/auth/logout
+Authorization: Bearer TOKEN
+
+
+
+### DEBE FALLAR
+GET http://localhost:8080/api/entrenamientos
+Authorization: Bearer TOKEN_REVOCADO_AQUI
+
+
+### DEBE FUNCIONAR
+POST http://localhost:8080/api/auth/2fa/disable
+Authorization: Bearer TOKEN
+
+
+### DEBE FALLAR
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "tesEEtuser",
+  "password": "password_incorrecta"
+}
+
+
+###  DEBE FALLAR
+GET http://localhost:8080/api/entrenamientos
+
+
+### DEBE FALLAR
+GET http://localhost:8080/api/entrenamientos
+Authorization: Bearer TOKEN_invalido
+
+
+

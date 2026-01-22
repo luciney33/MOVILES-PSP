@@ -38,6 +38,7 @@ public final class Constantes {
     public static final String ELECTRONICO = "Se ha enviado un código de verificación a tu correo electrónico";
     public static final String REQUEST_PARA_REFRESCAR_EL_TOKEN_DE_ACCESO = "Request para refrescar el token de acceso";
     public static final String REFRESH_TOKEN = "Refresh token";
+    public static final String ERROR_REVOCANDO_TOKEN = "Expirado";
 
     private Constantes() {}
     public static final String CODIGO = "codigo";
@@ -253,4 +254,12 @@ public final class Constantes {
     public static final String SCHEMA_ADMIN_EXAMPLE = "admin";
     public static final String SCHEMA_CODIGO_6_DIGITOS_DESC = "Código de 6 dígitos recibido por email";
     public static final String SCHEMA_CODIGO_EXAMPLE = "123456";
+
+    // Redis y Blacklist de Tokens
+    public static final String REDIS_BLACKLIST_PREFIX = "blacklist:token:";
+    public static final String REVOKED = "REVOKED";
+    public static final String REDIS_2FA_PENDING_PREFIX = "2fa:pending:";
+    public static final String REDIS_2FA_SECRET_PREFIX = "2fa:secret:";
+    public static final long REDIS_2FA_TTL_MINUTES = 10;
+    public static final String MSG_TOKEN_REVOCADO = "El token ha sido revocado";
 }

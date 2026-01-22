@@ -1,7 +1,6 @@
 package org.example.emailspring.ui.service;
 
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpSession;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.data.UsuarioRepository;
 import org.example.emailspring.data.entity.UsuarioEntity;
@@ -26,32 +25,34 @@ public class AuthService {
     private final UsuarioMapper usuarioMapper;
     private final TotpService totpService;
     private final JwtService jwtService;
+    private final TokenBlacklistService tokenBlacklistService;
+    private final TwoFactorService twoFactorService;
 
-    public AuthService(UsuarioService usuarioService, UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper, TotpService totpService, JwtService jwtService) {
+    public AuthService(UsuarioService usuarioService, UsuarioRepository usuarioRepository,
+                      UsuarioMapper usuarioMapper, TotpService totpService, JwtService jwtService,
+                      TokenBlacklistService tokenBlacklistService, TwoFactorService twoFactorService) {
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
         this.usuarioMapper = usuarioMapper;
         this.totpService = totpService;
         this.jwtService = jwtService;
+        this.tokenBlacklistService = tokenBlacklistService;
+        this.twoFactorService = twoFactorService;
     }
 
 
-    public Usuario login(String username, String password, HttpSession session) {
+    public Usuario login(String username, String password) {
         Usuario usuario = usuarioService.login(username, password);
         if (Boolean.TRUE.equals(usuario.twoFactorEnabled())) {
-            session.setAttribute(Constantes.PENDING_2FA_USERNAME, usuario.username());
+            twoFactorService.setPending2FAUsername(usuario.username());
             return null;
         }
-        session.setAttribute(Constantes.SESSION_USUARIO_ID, usuario);
-        session.setAttribute(Constantes.ROL, usuario.rol());
         return usuario;
     }
 
 
-    public Usuario verify2FA(String username, String codigo, HttpSession session) {
-        String pendingUsername = (String) session.getAttribute(Constantes.PENDING_2FA_USERNAME);
-
-        if (pendingUsername == null || !pendingUsername.equals(username)) {
+    public Usuario verify2FA(String username, String codigo) {
+        if (!twoFactorService.hasPending2FA(username)) {
             throw new UnauthorizedException(Constantes.NO_HAY_UN_LOGIN_PENDIENTE_DE_VERIFICACION_2_FA);
         }
 
@@ -68,22 +69,22 @@ public class AuthService {
             throw new UnauthorizedException(Constantes.CODIGO_DE_VERIFICACION_INVALIDO);
         }
 
-        Usuario usuario = usuarioMapper.toDomain(usuarioEntity);
-        session.removeAttribute(Constantes.PENDING_2FA_USERNAME);
-        session.setAttribute(Constantes.SESSION_USUARIO_ID, usuario);
-        session.setAttribute(Constantes.ROL, usuario.rol());
+        twoFactorService.removePending2FA(username);
 
-        return usuario;
+        return usuarioMapper.toDomain(usuarioEntity);
     }
 
 
-    public Enable2FAResponse enable2FA(Long usuarioId, HttpSession session) {
-        UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
+    public Enable2FAResponse enable2FA(String username) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(username);
+        if (usuarioEntity == null) {
+            throw new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO);
+        }
 
         String secret = totpService.generateSecret();
         String qrCodeUri = totpService.generateQrCode(secret, usuarioEntity.getUsername());
-        session.setAttribute(Constantes.PENDING_2FA_SECRET, secret);
+
+        twoFactorService.setPending2FASecret(username, secret);
 
         return new Enable2FAResponse(
                 secret,
@@ -93,8 +94,8 @@ public class AuthService {
     }
 
 
-    public void confirm2FA(Long usuarioId, String codigo, HttpSession session) {
-        String pendingSecret = (String) session.getAttribute(Constantes.PENDING_2FA_SECRET);
+    public void confirm2FA(String username, String codigo) {
+        String pendingSecret = twoFactorService.getPending2FASecret(username);
         if (pendingSecret == null) {
             throw new BadRequestException(Constantes.NO_HAY_UN_PROCESO_DE_HABILITACION_2_FA_PENDIENTE);
         }
@@ -103,22 +104,24 @@ public class AuthService {
             throw new BadRequestException(Constantes.CODIGO_INVALIDO_VERIFICA_QUE_TU_APP_ESTE_SINCRONIZADA_CORRECTAMENTE);
         }
 
-        UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
+        UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(username);
+        if (usuarioEntity == null) {
+            throw new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO);
+        }
 
         usuarioEntity.setTwoFactorEnabled(true);
         usuarioEntity.setTwoFactorSecret(pendingSecret);
-
         usuarioRepository.save(usuarioEntity);
 
-        session.removeAttribute(Constantes.PENDING_2FA_SECRET);
-        session.removeAttribute(Constantes.PENDING_2FA_SECRET);
+        twoFactorService.removePending2FASecret(username);
     }
 
 
-    public void disable2FA(Long usuarioId) {
-        UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
+    public void disable2FA(String username) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(username);
+        if (usuarioEntity == null) {
+            throw new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO);
+        }
 
         usuarioEntity.setTwoFactorEnabled(false);
         usuarioEntity.setTwoFactorSecret(null);
@@ -126,14 +129,16 @@ public class AuthService {
     }
 
 
-    public boolean get2FAStatus(Long usuarioId) {
-        UsuarioEntity usuarioEntity = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO));
+    public boolean get2FAStatus(String username) {
+        UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(username);
+        if (usuarioEntity == null) {
+            throw new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO);
+        }
         return Boolean.TRUE.equals(usuarioEntity.getTwoFactorEnabled());
     }
 
-    public void logout(HttpSession session) {
-        session.invalidate();
+    public void logout(String token) {
+        tokenBlacklistService.revokeToken(token);
     }
 
     public Usuario register(UsuarioDTO usuario) {
@@ -176,15 +181,6 @@ public class AuthService {
 
     public Usuario getUserFromToken(String token) {
         String username = jwtService.extractUsername(token);
-        UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(username);
-        if (usuarioEntity == null) {
-            throw new UnauthorizedException(Constantes.USUARIO_NO_ENCONTRADO);
-        }
-        return usuarioMapper.toDomain(usuarioEntity);
-    }
-
-
-    public Usuario getUserByUsername(String username) {
         UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(username);
         if (usuarioEntity == null) {
             throw new UnauthorizedException(Constantes.USUARIO_NO_ENCONTRADO);
