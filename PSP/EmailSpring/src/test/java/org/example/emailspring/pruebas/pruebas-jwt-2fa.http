@@ -88,7 +88,7 @@ Content-Type: application/json
   "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5NjU4MzcsImV4cCI6MTc2OTk2OTQzN30.uenZZ9VZlmmtQqh4GXrQu07ndZPi3ocorvmJZJ9-Hz2iioKZ-fEVxYQLPRGraWZbJseWQ0qQHmrfHTIJJ9SmtA"
 }
 
-### DEBE FUNCIONAR - Logout (invalida ambos tokens)
+### DEBE FUNCIONAR - Logout
 POST http://localhost:8080/api/auth/logout
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5NjYwOTIsImV4cCI6MTc2OTk2OTY5Mn0.-a5h7bBbqhSvNWVCIjPk7SZxfeFoRyDjbxLlwOOnEXvngor7IuUOTQJ3h9h1ncvtISL0AnVmtNTsf2jaTS1-mA
 Content-Type: application/json

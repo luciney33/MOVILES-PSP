@@ -39,6 +39,11 @@ public final class Constantes {
     public static final String REQUEST_PARA_REFRESCAR_EL_TOKEN_DE_ACCESO = "Request para refrescar el token de acceso";
     public static final String REFRESH_TOKEN = "Refresh token";
     public static final String ERROR_REVOCANDO_TOKEN = "Expirado";
+    public static final String AUTHORIZATION = "Authorization";
+    public static final String TOKEN_REVOCADO_INTENTANDO_ACCEDER = "Token revocado intentando acceder";
+    public static final String ERROR_AL_PROCESAR_EL_TOKEN_JWT = "Error al procesar el token JWT: ";
+    public static final String FALLO_DE_AUTENTICACION_PARA_USUARIO = "Fallo de autenticación para usuario: {}";
+    public static final String ERROR_AL_REFRESCAR_TOKENS = "Error al refrescar tokens: {}";
 
     private Constantes() {}
     public static final String CODIGO = "codigo";
@@ -234,7 +239,6 @@ public final class Constantes {
     public static final String OP_OBTENER_ESTADO_2FA_DESC = "Consulta si el usuario tiene activada la autenticación de dos factores";
     public static final String RESP_ESTADO_2FA_OBTENIDO = "Estado del 2FA obtenido";
 
-    public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer ";
     public static final String BEARER_TYPE = "Bearer";
     public static final int BEARER_PREFIX_LENGTH = 7;
@@ -256,7 +260,6 @@ public final class Constantes {
     public static final String SCHEMA_CODIGO_6_DIGITOS_DESC = "Código de 6 dígitos recibido por email";
     public static final String SCHEMA_CODIGO_EXAMPLE = "123456";
 
-    // Redis y Blacklist de Tokens
     public static final String REDIS_BLACKLIST_PREFIX = "blacklist:token:";
     public static final String REVOKED = "REVOKED";
     public static final String REDIS_2FA_PENDING_PREFIX = "2fa:pending:";

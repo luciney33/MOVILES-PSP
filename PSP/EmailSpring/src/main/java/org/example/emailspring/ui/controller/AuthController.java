@@ -8,10 +8,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.domain.model.Usuario;
 import org.example.emailspring.ui.dto.*;
-import org.example.emailspring.ui.interceptor.RequiresAuth;
 import org.example.emailspring.ui.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -61,37 +63,40 @@ public class AuthController {
     }
 
     @PostMapping(Constantes.AUTH_2FA_ENABLE)
-    @RequiresAuth
+    @PreAuthorize("isAuthenticated()")
     @Operation(summary = Constantes.HABILITAR_2_FA_PASO_1_GENERAR_QR,
                description = Constantes.GENERA_UN_SECRETO_TOTP_Y_DEVUELVE_EL_QR_CODE_PARA_ESCANEAR_CON_GOOGLE_AUTHENTICATOR)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.SECRETO_Y_QR_CODE_GENERADOS)
-    public ResponseEntity<Enable2FADataResponse> enable2FA(HttpServletRequest request) {
-        String username = (String) request.getAttribute(Constantes.USERNAME);
+    public ResponseEntity<Enable2FADataResponse> enable2FA() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         Enable2FAResponse data = authService.enable2FA(username);
         return ResponseEntity.ok(new Enable2FADataResponse(true, data));
     }
 
     @PostMapping(Constantes.AUTH_2FA_CONFIRM)
-    @RequiresAuth
+    @PreAuthorize("isAuthenticated()")
     @Operation(summary = Constantes.HABILITAR_2_FA_PASO_2_CONFIRMAR_CODIGO,
                description = Constantes.VERIFICA_EL_CODIGO_TOTP_GENERADO_POR_LA_APP_AUTENTICADORA_Y_ACTIVA_2_FA_PERMANENTEMENTE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.FA_ACTIVADO_EXITOSAMENTE),
             @ApiResponse(responseCode = Constantes.HTTP_400, description = Constantes.CODIGO_INVALIDO)
     })
-    public ResponseEntity<ApiSuccessResponse> confirm2FA(@RequestBody Confirm2FARequest request, HttpServletRequest httpRequest) {
-        String username = (String) httpRequest.getAttribute(Constantes.USERNAME);
+    public ResponseEntity<ApiSuccessResponse> confirm2FA(@RequestBody Confirm2FARequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         authService.confirm2FA(username, request.code());
         return ResponseEntity.ok(new ApiSuccessResponse(true, Constantes.MSG_2FA_ACTIVADA));
     }
 
     @PostMapping(Constantes.AUTH_2FA_DISABLE)
-    @RequiresAuth
+    @PreAuthorize("isAuthenticated()")
     @Operation(summary = Constantes.OP_DESACTIVAR_2FA,
                description = Constantes.OP_DESACTIVAR_2FA_DESC)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_2FA_DESACTIVADO)
-    public ResponseEntity<ApiSuccessResponse> disable2FA(HttpServletRequest request) {
-        String username = (String) request.getAttribute(Constantes.USERNAME);
+    public ResponseEntity<ApiSuccessResponse> disable2FA() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         authService.disable2FA(username);
         return ResponseEntity.ok(new ApiSuccessResponse(true, Constantes.MSG_2FA_DESACTIVADA));
     }
@@ -125,18 +130,19 @@ public class AuthController {
     }
 
     @GetMapping(Constantes.AUTH_2FA_STATUS)
-    @RequiresAuth
+    @PreAuthorize("isAuthenticated()")
     @Operation(summary = Constantes.OP_OBTENER_ESTADO_2FA,
                description = Constantes.OP_OBTENER_ESTADO_2FA_DESC)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ESTADO_2FA_OBTENIDO)
-    public ResponseEntity<TwoFactorStatusResponse> get2FAStatus(HttpServletRequest request) {
-        String username = (String) request.getAttribute(Constantes.USERNAME);
+    public ResponseEntity<TwoFactorStatusResponse> get2FAStatus() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         boolean twoFactorEnabled = authService.get2FAStatus(username);
         return ResponseEntity.ok(new TwoFactorStatusResponse(true, twoFactorEnabled));
     }
 
     @PostMapping(Constantes.AUTH_LOGOUT)
-    @RequiresAuth
+    @PreAuthorize("isAuthenticated()")
     @Operation(summary = Constantes.OP_CERRAR_SESION, description = Constantes.OP_CERRAR_SESION_DESC)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.MSG_LOGOUT_SUCCESS)
     public ResponseEntity<ApiSuccessResponse> logout(HttpServletRequest request) {
