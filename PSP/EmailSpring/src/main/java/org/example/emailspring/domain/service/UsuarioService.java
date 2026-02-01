@@ -6,7 +6,6 @@ import org.example.emailspring.data.entity.UsuarioEntity;
 import org.example.emailspring.domain.error.BadRequestException;
 import org.example.emailspring.domain.mapper.UsuarioMapper;
 import org.example.emailspring.domain.model.Usuario;
-import org.example.emailspring.domain.error.BadCredentialsException;
 import org.example.emailspring.ui.dto.UsuarioDTO;
 import org.example.emailspring.ui.service.EmailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,22 +29,6 @@ public class UsuarioService {
         this.emailService = emailService;
     }
 
-    public Usuario login(String username, String password) {
-        UsuarioEntity entity = usuarioRepository.findByUsername(username);
-
-        if (entity == null) {
-            throw new BadCredentialsException(Constantes.MSG_LOGIN_INVALID);
-        }
-        if (!entity.activo()) {
-            throw new BadCredentialsException(Constantes.MSG_LOGIN_INVALID);
-        }
-
-        if (!passwordEncoder.matches(password, entity.getPassword())) {
-            throw new BadCredentialsException(Constantes.MSG_LOGIN_INVALID);
-        }
-
-        return usuarioMapper.toDomain(entity);
-    }
 
     public Usuario register(UsuarioDTO request) {
         if (usuarioRepository.existsByUsername(request.username())) {

@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.ui.service.JwtService;
 import org.example.emailspring.ui.service.TokenBlacklistService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +26,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final TokenBlacklistService tokenBlacklistService;
 
-    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService, TokenBlacklistService tokenBlacklistService) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService,
+                                   @Autowired(required = false) TokenBlacklistService tokenBlacklistService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
         this.tokenBlacklistService = tokenBlacklistService;
@@ -47,8 +49,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(7);
+            if (jwt.isEmpty() || jwt.split("\\.").length < 2) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-            if (tokenBlacklistService.isTokenRevoked(jwt)) {
+            if (tokenBlacklistService != null && tokenBlacklistService.isTokenRevoked(jwt)) {
                 logger.warn(Constantes.TOKEN_REVOCADO_INTENTANDO_ACCEDER);
                 filterChain.doFilter(request, response);
                 return;

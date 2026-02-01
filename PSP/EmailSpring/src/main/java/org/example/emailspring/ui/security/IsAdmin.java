@@ -1,5 +1,6 @@
 package org.example.emailspring.ui.security;
 
+import org.example.emailspring.common.Constantes;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.ElementType;
@@ -9,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize(Constantes.SECURITY_ROLE_ADMIN)
 public @interface IsAdmin {
 }
 

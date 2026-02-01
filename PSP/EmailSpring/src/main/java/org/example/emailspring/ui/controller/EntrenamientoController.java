@@ -33,7 +33,7 @@ public class EntrenamientoController {
     }
 
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize(Constantes.SECURITY_IS_AUTHENTICATED)
     @Operation(summary = Constantes.OP_LISTAR_ENTRENAMIENTOS, description = Constantes.OP_LISTAR_ENTRENAMIENTOS_DESC)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_LISTA_ENTRENAMIENTOS_RECUPERADA)
     @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.RESP_NO_AUTORIZADO, content = @Content(schema = @Schema(hidden = true)))
@@ -42,7 +42,7 @@ public class EntrenamientoController {
     }
 
     @GetMapping(Constantes.PATH_ID)
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize(Constantes.SECURITY_IS_AUTHENTICATED)
     @Operation(summary = Constantes.OP_OBTENER_ENTRENAMIENTO, description = Constantes.OP_OBTENER_ENTRENAMIENTO_DESC)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ENTRENAMIENTO_ENCONTRADO),
@@ -55,7 +55,7 @@ public class EntrenamientoController {
 
     @PostMapping
     @IsAdmin
-    @Operation(summary = Constantes.OP_CREAR_ENTRENAMIENTO, description = "Usar anotación personalizada @IsAdmin")
+    @Operation(summary = Constantes.OP_CREAR_ENTRENAMIENTO, description = Constantes.OP_USAR_ANOTACION_IS_ADMIN)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constantes.HTTP_201, description = Constantes.RESP_ENTRENAMIENTO_CREADO),
             @ApiResponse(responseCode = Constantes.HTTP_400, description = Constantes.RESP_DATOS_INVALIDOS, content = @Content(schema = @Schema(hidden = true))),
@@ -66,8 +66,8 @@ public class EntrenamientoController {
     }
 
     @PutMapping(Constantes.PATH_ID)
-    @Secured("ROLE_ADMIN")
-    @Operation(summary = Constantes.OP_ACTUALIZAR_ENTRENAMIENTO, description = "Usar anotación @Secured de Spring")
+    @Secured(Constantes.SECURITY_ROLE_ADMIN_VALUE)
+    @Operation(summary = Constantes.OP_ACTUALIZAR_ENTRENAMIENTO, description = Constantes.OP_USAR_ANOTACION_SECURED)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ENTRENAMIENTO_ACTUALIZADO),
             @ApiResponse(responseCode = Constantes.HTTP_403, description = Constantes.RESP_ACCESO_DENEGADO_NO_ADMIN, content = @Content(schema = @Schema(hidden = true))),
@@ -78,8 +78,8 @@ public class EntrenamientoController {
     }
 
     @DeleteMapping(Constantes.PATH_ID)
-    @RolesAllowed("ADMIN")
-    @Operation(summary = Constantes.OP_ELIMINAR_ENTRENAMIENTO, description = "Usar anotación @RolesAllowed (JSR-250)")
+    @RolesAllowed(Constantes.ADMIN)
+    @Operation(summary = Constantes.OP_ELIMINAR_ENTRENAMIENTO, description = Constantes.OP_USAR_ANOTACION_ROLES_ALLOWED)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constantes.HTTP_204, description = Constantes.RESP_ENTRENAMIENTO_ELIMINADO),
             @ApiResponse(responseCode = Constantes.HTTP_403, description = Constantes.RESP_ACCESO_DENEGADO_NO_ADMIN, content = @Content(schema = @Schema(hidden = true))),

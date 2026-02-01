@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import org.example.emailspring.common.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@ConditionalOnProperty(name = Constantes.SPRING_DATA_REDIS_ENABLED, havingValue = Constantes.TRUE, matchIfMissing = false)
 public class TokenBlacklistService {
     private final Logger logger = LoggerFactory.getLogger(TokenBlacklistService.class);
     private final RedisTemplate<String, String> redisTemplate;

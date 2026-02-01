@@ -15,6 +15,7 @@ import org.example.emailspring.ui.dto.JwtTokenPair;
 import org.example.emailspring.ui.dto.UsuarioDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -38,7 +39,8 @@ public class AuthService {
 
     public AuthService(UsuarioService usuarioService, UsuarioRepository usuarioRepository,
                       UsuarioMapper usuarioMapper, TotpService totpService, JwtService jwtService,
-                      TokenBlacklistService tokenBlacklistService, TwoFactorService twoFactorService,
+                      @Autowired(required = false) TokenBlacklistService tokenBlacklistService,
+                      @Autowired(required = false) TwoFactorService twoFactorService,
                       AuthenticationManager authenticationManager) {
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
@@ -70,7 +72,7 @@ public class AuthService {
 
         Usuario usuario = usuarioMapper.toDomain(usuarioEntity);
 
-        if (Boolean.TRUE.equals(usuario.twoFactorEnabled())) {
+        if (Boolean.TRUE.equals(usuario.twoFactorEnabled()) && twoFactorService != null) {
             twoFactorService.setPending2FAUsername(usuario.username());
             return new LoginResult(usuario, true);
         }
@@ -79,7 +81,7 @@ public class AuthService {
 
     public Usuario verify2FA(String username, String codigo) {
 
-        if (!twoFactorService.hasPending2FA(username)) {
+        if (twoFactorService == null || !twoFactorService.hasPending2FA(username)) {
             throw new UnauthorizedException(Constantes.NO_HAY_UN_LOGIN_PENDIENTE_DE_VERIFICACION_2_FA);
         }
 
@@ -101,6 +103,10 @@ public class AuthService {
     }
 
     public Enable2FAResponse enable2FA(String username) {
+        if (twoFactorService == null) {
+            throw new BadRequestException(Constantes.MSG_2FA_SERVICE_NOT_AVAILABLE);
+        }
+
         UsuarioEntity usuarioEntity = usuarioRepository.findByUsername(username);
         if (usuarioEntity == null) {
             throw new BadRequestException(Constantes.USUARIO_NO_ENCONTRADO);
@@ -118,6 +124,10 @@ public class AuthService {
     }
 
     public void confirm2FA(String username, String codigo) {
+        if (twoFactorService == null) {
+            throw new BadRequestException(Constantes.MSG_2FA_SERVICE_NOT_AVAILABLE);
+        }
+
         String pendingSecret = twoFactorService.getPending2FASecret(username);
         if (pendingSecret == null) {
             throw new BadRequestException(Constantes.NO_HAY_UN_PROCESO_DE_HABILITACION_2_FA_PENDIENTE);
@@ -159,7 +169,9 @@ public class AuthService {
     }
 
     public void logout(String token) {
-        tokenBlacklistService.revokeToken(token);
+        if (tokenBlacklistService != null) {
+            tokenBlacklistService.revokeToken(token);
+        }
     }
 
     public Usuario register(UsuarioDTO usuario) {
@@ -188,7 +200,7 @@ public class AuthService {
             if (usuarioEntity == null) {
                 throw new UnauthorizedException(Constantes.USUARIO_NO_ENCONTRADO);
             }
-            if (oldAccessToken != null && !oldAccessToken.isEmpty()) {
+            if (oldAccessToken != null && !oldAccessToken.isEmpty() && tokenBlacklistService != null) {
                 tokenBlacklistService.revokeToken(oldAccessToken);
             }
 

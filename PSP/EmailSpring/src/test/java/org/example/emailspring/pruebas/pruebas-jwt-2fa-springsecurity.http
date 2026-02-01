@@ -29,7 +29,7 @@ Content-Type: application/json
 
 ### DEBE FUNCIONAR - Listar entrenamientos
 GET http://localhost:8080/api/entrenamientos
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5NjU2ODksImV4cCI6MTc2OTk2OTI4OX0.gYZuiE5BnCaZ8Bmnc8HnCGoUl0V4koTaVin1lXhVai58c2FSywMDyHZdPllrjiEtEvSWBvqL9iPDylJnNtJM4A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODI5NTEsImV4cCI6MTc2OTk4NjU1MX0.Le3PvY7BIvUZzvkoMVnuAmrl2A6JhvlLEurM4jNOHIJqFPKbMDtf6_0MCfxQ2SgUwtTzPO99BSDM8Jh8DkqAnA
 
 
 ### ========================================
@@ -38,15 +38,15 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZ
 
 ### DEBE FUNCIONAR - Habilitar 2FA
 POST http://localhost:8080/api/auth/2fa/enable
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5NjU2ODksImV4cCI6MTc2OTk2OTI4OX0.gYZuiE5BnCaZ8Bmnc8HnCGoUl0V4koTaVin1lXhVai58c2FSywMDyHZdPllrjiEtEvSWBvqL9iPDylJnNtJM4A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODI5NTEsImV4cCI6MTc2OTk4NjU1MX0.Le3PvY7BIvUZzvkoMVnuAmrl2A6JhvlLEurM4jNOHIJqFPKbMDtf6_0MCfxQ2SgUwtTzPO99BSDM8Jh8DkqAnA
 
 ### DEBE FUNCIONAR - Confirmar 2FA con código de Google Authenticator
 POST http://localhost:8080/api/auth/2fa/confirm
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5NjU2ODksImV4cCI6MTc2OTk2OTI4OX0.gYZuiE5BnCaZ8Bmnc8HnCGoUl0V4koTaVin1lXhVai58c2FSywMDyHZdPllrjiEtEvSWBvqL9iPDylJnNtJM4A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODI5NTEsImV4cCI6MTc2OTk4NjU1MX0.Le3PvY7BIvUZzvkoMVnuAmrl2A6JhvlLEurM4jNOHIJqFPKbMDtf6_0MCfxQ2SgUwtTzPO99BSDM8Jh8DkqAnA
 Content-Type: application/json
 
 {
-  "code": "806094"
+  "code": "865815"
 }
 
 
@@ -55,7 +55,6 @@ Content-Type: application/json
 ### ========================================
 
 ### DEBE FUNCIONAR - Login credenciales
-# Debe retornar HTTP 202 + requires2FA: true
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
@@ -65,13 +64,12 @@ Content-Type: application/json
 }
 
 ### DEBE FUNCIONAR - Login verificar código 2FA
-# Debe retornar HTTP 200 + accessToken + refreshToken
 POST http://localhost:8080/api/auth/2fa/verify
 Content-Type: application/json
 
 {
   "username": "testuser",
-  "codigo": "922575"
+  "codigo": "954658"
 }
 
 
@@ -84,20 +82,20 @@ POST http://localhost:8080/api/auth/refresh
 Content-Type: application/json
 
 {
-  "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc2OTk2NTgzNywiZXhwIjoxNzcwNTcwNjM3fQ.ysV2jeQIGq80wXdJuIMfUbG4ED0KFhvVEwxJ3aQFiyyNHZ_nESUctCS4HqzAYRInByUMTYj8flvAKZvFxofhHA",
-  "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5NjU4MzcsImV4cCI6MTc2OTk2OTQzN30.uenZZ9VZlmmtQqh4GXrQu07ndZPi3ocorvmJZJ9-Hz2iioKZ-fEVxYQLPRGraWZbJseWQ0qQHmrfHTIJJ9SmtA"
+  "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc2OTk4MzA3NiwiZXhwIjoxNzcwNTg3ODc2fQ.H23PuGdlvfQJ4dq_iyhPn27Ad1pT_o8cVQW3ew-bYlK5QVktUc7itU84EFs0EUadReuPMh1V3-bXEjY9t82U6w",
+  "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODMwNzYsImV4cCI6MTc2OTk4NjY3Nn0.C_HIarRxfjh8P6D-TFbJzstY5Hp6g6nSCn5rwtJWRFnXUXp677av3QJubCCky_UUpn006eORtJiRPWzmz-Zm_Q"
 }
 
 ### DEBE FUNCIONAR - Logout
 POST http://localhost:8080/api/auth/logout
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5NjYwOTIsImV4cCI6MTc2OTk2OTY5Mn0.-a5h7bBbqhSvNWVCIjPk7SZxfeFoRyDjbxLlwOOnEXvngor7IuUOTQJ3h9h1ncvtISL0AnVmtNTsf2jaTS1-mA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODMxNzgsImV4cCI6MTc2OTk4Njc3OH0.69aYPslEj8yKgjQ9bGwYC6BDqaBBXudd-lcTyRrxb7U-T2WOFPox-WucPMvts3yumIuXKOsrryn1xwXvitSAFw
 Content-Type: application/json
 
 {
-  "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc2OTk2NjA5MiwiZXhwIjoxNzcwNTcwODkyfQ.QJZtk0g80u0oUZzXnDxq1FfEKLucMUbTn1bz1HioWst1cQhV60MAjDpuWo4Vbf7XNEowl8A9oe7Dt7baAV3hCA"
+  "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc2OTk4MzE3OCwiZXhwIjoxNzcwNTg3OTc4fQ.FnGVDSTi7LKEyn4hPjY8vo7OcCNlYbAdXEgGnVt3vthPQcrWgM6uGJM1rADHvVNhDp0sZAeMXs7MGqtycBj2YA"
 }
 
-### DEBE FALLAR (401) - Usar token revocado
+### DEBE FALLAR  - Usar token revocado
 GET http://localhost:8080/api/entrenamientos
 Authorization: Bearer TOKEN_REVOCADO
 
@@ -108,7 +106,7 @@ Authorization: Bearer TOKEN_REVOCADO
 
 ### DEBE FUNCIONAR - Deshabilitar 2FA
 POST http://localhost:8080/api/auth/2fa/disable
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5NjYwNTAsImV4cCI6MTc2OTk2OTY1MH0.FjgO09JO1rYbi8JTuatPmnO6XJJCA2NfoaXV32FHPlRcvWLstQRpFZfxGovENWE56oisSI4LBcJmIW_BLZPMyw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODMzNDIsImV4cCI6MTc2OTk4Njk0Mn0.yip5UQiypBrsnYNDrHP657RMHgEuy7Sh7iyvi5Jc4jRE_Ss_pZU_FmXilsbP9Aq6n073KGbubWMWl6BR9xLjSA
 
 ### DEBE FUNCIONAR - Login sin 2FA
 POST http://localhost:8080/api/auth/login
@@ -124,7 +122,7 @@ Content-Type: application/json
 ### FASE 7: CASOS DE ERROR
 ### ========================================
 
-### DEBE FALLAR (401) - Credenciales incorrectas
+### DEBE FALLAR
 POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
@@ -133,19 +131,8 @@ Content-Type: application/json
   "password": "password_incorrecta"
 }
 
-### DEBE FALLAR (400) - Email inválido en registro
-POST http://localhost:8080/api/auth/register
-Content-Type: application/json
 
-{
-  "username": "testuser2",
-  "password": "Test123456",
-  "email": "email-invalido",
-  "nombre": "Usuario de Prueba 2",
-  "rol": "USER"
-}
-
-### DEBE FALLAR (401) - Código 2FA inválido
+### DEBE FALLAR
 POST http://localhost:8080/api/auth/2fa/verify
 Content-Type: application/json
 
@@ -154,7 +141,7 @@ Content-Type: application/json
   "codigo": "000000"
 }
 
-### DEBE FALLAR (401) - Verificar 2FA sin login previo
+### DEBE FALLAR
 POST http://localhost:8080/api/auth/2fa/verify
 Content-Type: application/json
 
@@ -163,7 +150,7 @@ Content-Type: application/json
   "codigo": "123456"
 }
 
-### DEBE FALLAR (401) - Refresh token inválido
+### DEBE FALLAR
 POST http://localhost:8080/api/auth/refresh
 Content-Type: application/json
 

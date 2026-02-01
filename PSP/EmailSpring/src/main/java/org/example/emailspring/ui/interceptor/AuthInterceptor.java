@@ -13,6 +13,7 @@ import org.example.emailspring.domain.error.UnauthorizedException;
 import org.example.emailspring.ui.service.AuthService;
 import org.example.emailspring.ui.service.TokenBlacklistService;
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,7 +24,8 @@ public class AuthInterceptor implements HandlerInterceptor {
     private final AuthService authService;
     private final TokenBlacklistService tokenBlacklistService;
 
-    public AuthInterceptor(AuthService authService, TokenBlacklistService tokenBlacklistService) {
+    public AuthInterceptor(AuthService authService,
+                          @Autowired(required = false) TokenBlacklistService tokenBlacklistService) {
         this.authService = authService;
         this.tokenBlacklistService = tokenBlacklistService;
     }
@@ -47,9 +49,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         String token = authHeader.substring(Constantes.BEARER_PREFIX_LENGTH);
-
-        // Verificar si el token está en la blacklist
-        if (tokenBlacklistService.isTokenRevoked(token)) {
+        if (tokenBlacklistService != null && tokenBlacklistService.isTokenRevoked(token)) {
             throw new UnauthorizedException(Constantes.MSG_TOKEN_REVOCADO);
         }
 

@@ -24,18 +24,8 @@ public final class Constantes {
     public static final String REFRESH = "/api/auth/refresh";
     public static final String INDICA_SI_EL_USUARIO_TIENE_HABILITADA_LA_AUTENTICACION_DE_DOS_FACTORES = "Indica si el usuario tiene habilitada la autenticación de dos factores";
     public static final String SECRETO_TOTP_PARA_AUTENTICACION_DE_DOS_FACTORES = "Secreto TOTP para autenticación de dos factores";
-    public static final String RESPUESTA_DE_AUTENTICACION_CON_TOKENS_JWT = "Respuesta de autenticación con tokens JWT";
-    public static final String TOKEN_DE_ACCESO_JWT = "Token de acceso JWT";
     public static final String EY_JHB_GCI_OI_JIUZ_I_1_NI_IS_IN_R_5_C_CI_6_IKP_XVCJ_9 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-    public static final String TOKEN_DE_REFRESCO_JWT = "Token de refresco JWT";
-    public static final String TIPO_DE_TOKEN = "Tipo de token";
-    public static final String DATOS_DEL_USUARIO_AUTENTICADO = "Datos del usuario autenticado";
-    public static final String MENSAJE_DE_RESPUESTA = "Mensaje de respuesta";
-    public static final String RESPONSE_CUANDO_SE_REQUIERE_VERIFICACION_2_FA = "Response cuando se requiere verificación 2FA";
-    public static final String INDICA_QUE_SE_REQUIERE_2_FA = "Indica que se requiere 2FA";
     public static final String TRUE = "true";
-    public static final String MENSAJE_INFORMATIVO = "Mensaje informativo";
-    public static final String ELECTRONICO = "Se ha enviado un código de verificación a tu correo electrónico";
     public static final String REQUEST_PARA_REFRESCAR_EL_TOKEN_DE_ACCESO = "Request para refrescar el token de acceso";
     public static final String REFRESH_TOKEN = "Refresh token";
     public static final String ERROR_REVOCANDO_TOKEN = "Expirado";
@@ -44,6 +34,39 @@ public final class Constantes {
     public static final String ERROR_AL_PROCESAR_EL_TOKEN_JWT = "Error al procesar el token JWT: ";
     public static final String FALLO_DE_AUTENTICACION_PARA_USUARIO = "Fallo de autenticación para usuario: {}";
     public static final String ERROR_AL_REFRESCAR_TOKENS = "Error al refrescar tokens: {}";
+    public static final String SPRING_DATA_REDIS_ENABLED = "spring.data.redis.enabled";
+    public static final String MSG_2FA_SERVICE_NOT_AVAILABLE = "Servicio 2FA no disponible. Redis debe estar configurado.";
+    public static final String BEARER_TYPE = "Bearer";
+
+    public static final String MSG_NO_USUARIO_AUTENTICADO = "No hay usuario autenticado";
+    public static final String MSG_USUARIO_NO_ENCONTRADO_CON_NOMBRE = "Usuario no encontrado: ";
+
+    public static final String SCHEMA_LOGIN_RESPONSE_DESC_COMPLETO = "Respuesta del endpoint de login que puede ser exitoso o requerir 2FA";
+    public static final String SCHEMA_LOGIN_SUCCESS_2FA_DESC = "Indica si el login fue exitoso o se requiere 2FA";
+    public static final String SCHEMA_LOGIN_MENSAJE_DESC = "Mensaje descriptivo del resultado";
+    public static final String SCHEMA_LOGIN_REQUIRES_2FA_DESC = "Indica si se requiere verificación 2FA";
+    public static final String SCHEMA_LOGIN_REQUIRES_2FA_EXAMPLE = "false";
+    public static final String SCHEMA_LOGIN_ACCESS_TOKEN_DESC = "Token de acceso JWT (solo si login exitoso)";
+    public static final String SCHEMA_LOGIN_REFRESH_TOKEN_DESC = "Token de refresco JWT (solo si login exitoso)";
+    public static final String SCHEMA_LOGIN_TOKEN_TYPE_DESC = "Tipo de token";
+    public static final String SCHEMA_LOGIN_TOKEN_TYPE_EXAMPLE = "Bearer";
+    public static final String SCHEMA_LOGIN_USUARIO_AUTH_DESC = "Datos del usuario autenticado (solo si login exitoso)";
+
+    public static final String SECURITY_ROLE_USER = "hasRole('USER')";
+    public static final String SECURITY_ROLE_ADMIN = "hasRole('ADMIN')";
+    public static final String SECURITY_ROLE_ADMIN_OR_SELF = "hasRole('ADMIN') or #username == authentication.name";
+    public static final String SECURITY_IS_AUTHENTICATED = "isAuthenticated()";
+    public static final String SECURITY_ROLE_ADMIN_VALUE = "ROLE_ADMIN";
+
+    public static final String OP_USAR_ANOTACION_IS_ADMIN = "Usar anotación personalizada @IsAdmin";
+    public static final String ROLE = "ROLE_";
+
+
+    public static final String SCHEMA_REFRESH_ACCESS_TOKEN_DESC = "Access token anterior a revocar";
+    public static final String SCHEMA_REFRESH_ACCESS_TOKEN_EXAMPLE = "eyJhbGciOiJIUzUxMiJ9...";
+    public static final String PATTERN = "/**";
+    public static final String STRING = "*";
+    public static final String H_2_CONSOLE = "/h2-console/**";
 
     private Constantes() {}
     public static final String CODIGO = "codigo";
@@ -58,8 +81,9 @@ public final class Constantes {
     public static final String AUTH_PUBLIC_REGISTER = "/api/auth/register";
     public static final String AUTH_PUBLIC_ACTIVAR = "/api/auth/activar";
     public static final String AUTH_PUBLIC_LOGOUT = "/api/auth/logout";
+    public static final String AUTH_PUBLIC_REFRESH = "/api/auth/refresh";
+    public static final String AUTH_PUBLIC_2FA_VERIFY = "/api/auth/2fa/verify";
     public static final String SWAGGER_UI = "/swagger-ui/**";
-
     public static final String SWAGGER_DOCS = "/v3/api-docs/**";
     public static final String WEBJARS = "/webjars/**";
     public static final String SWAGGER_UI_HTML = "/swagger-ui.html";
@@ -153,11 +177,8 @@ public final class Constantes {
     public static final String OP_OBTENER_ENTRENAMIENTO = "Obtener entrenamiento por ID";
     public static final String OP_OBTENER_ENTRENAMIENTO_DESC = "Recupera un entrenamiento específico. Solo accesible para administradores.";
     public static final String OP_CREAR_ENTRENAMIENTO = "Crear un nuevo entrenamiento";
-    public static final String OP_CREAR_ENTRENAMIENTO_DESC = "Crea un nuevo registro de entrenamiento. Solo accesible para administradores.";
     public static final String OP_ACTUALIZAR_ENTRENAMIENTO = "Actualizar entrenamiento existente";
-    public static final String OP_ACTUALIZAR_ENTRENAMIENTO_DESC = "Actualiza los detalles de un entrenamiento por su ID. Solo accesible para administradores.";
     public static final String OP_ELIMINAR_ENTRENAMIENTO = "Eliminar entrenamiento";
-    public static final String OP_ELIMINAR_ENTRENAMIENTO_DESC = "Elimina un entrenamiento por su ID. Solo accesible para administradores.";
 
     public static final String RESP_USUARIO_REGISTRADO_EXITOSAMENTE = "Usuario registrado exitosamente";
     public static final String RESP_LISTA_ENTRENAMIENTOS_RECUPERADA = "Lista de entrenamientos recuperada con éxito";
@@ -185,13 +206,6 @@ public final class Constantes {
     public static final String SCHEMA_LOGIN_PASSWORD_DESC = "Contraseña del usuario.";
     public static final String SCHEMA_LOGIN_PASSWORD_EXAMPLE = "unaContraseñaSegura123";
 
-    public static final String SCHEMA_LOGIN_RESPONSE_DESC = "Respuesta devuelta tras un intento de login exitoso.";
-    public static final String SCHEMA_LOGIN_SUCCESS_DESC = "Indica si la operación fue exitosa (siempre true en esta respuesta).";
-    public static final String SCHEMA_LOGIN_SUCCESS_EXAMPLE = "true";
-    public static final String SCHEMA_LOGIN_MESSAGE_DESC = "Mensaje descriptivo del resultado.";
-    public static final String SCHEMA_LOGIN_MESSAGE_EXAMPLE = "Login exitoso";
-    public static final String SCHEMA_LOGIN_USUARIO_DESC = "Detalles del usuario autenticado.";
-
     public static final String SCHEMA_USUARIO_RESPONSE_DESC = "Representación pública y segura de los datos de un usuario.";
     public static final String SCHEMA_ID_DESC = "ID del usuario.";
     public static final String SCHEMA_ID_EXAMPLE = "1";
@@ -216,8 +230,6 @@ public final class Constantes {
     public static final String HTTP_404 = "404";
     public static final String LOGIN_COMPLETADO_EXITOSAMENTE = "Login completado exitosamente";
 
-    public static final String PENDING_2FA_USERNAME = "pending2FAUsername";
-    public static final String PENDING_2FA_SECRET = "pending2FASecret";
     public static final String MSG_2FA_REQUERIDO = "Se requiere código de autenticación de dos factores";
     public static final String AUTH_2FA_ENABLE = "/2fa/enable";
     public static final String AUTH_2FA_CONFIRM = "/2fa/confirm";
@@ -240,7 +252,6 @@ public final class Constantes {
     public static final String RESP_ESTADO_2FA_OBTENIDO = "Estado del 2FA obtenido";
 
     public static final String BEARER = "Bearer ";
-    public static final String BEARER_TYPE = "Bearer";
     public static final int BEARER_PREFIX_LENGTH = 7;
     public static final String AUTHENTICATED = "authenticated";
     public static final String USERNAME = "username";
@@ -266,4 +277,7 @@ public final class Constantes {
     public static final String REDIS_2FA_SECRET_PREFIX = "2fa:secret:";
     public static final long REDIS_2FA_TTL_MINUTES = 10;
     public static final String MSG_TOKEN_REVOCADO = "El token ha sido revocado";
+
+    public static final String OP_USAR_ANOTACION_SECURED = "Usar anotación @Secured de Spring";
+    public static final String OP_USAR_ANOTACION_ROLES_ALLOWED = "Usar anotación @RolesAllowed (JSR-250)";
 }

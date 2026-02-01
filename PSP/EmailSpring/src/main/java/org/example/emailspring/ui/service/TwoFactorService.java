@@ -1,12 +1,14 @@
 package org.example.emailspring.ui.service;
 
 import org.example.emailspring.common.Constantes;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
 @Service
+@ConditionalOnProperty(name = Constantes.SPRING_DATA_REDIS_ENABLED, havingValue = Constantes.TRUE, matchIfMissing = false)
 public class TwoFactorService {
 
     private final RedisTemplate<String, String> redisTemplate;
