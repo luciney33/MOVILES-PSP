@@ -14,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-
 @RestController
 @RequestMapping(Constantes.API_AUTH)
 @Tag(name = Constantes.TAG_AUTENTICACION, description = Constantes.TAG_AUTENTICACION_DESC)
@@ -31,13 +29,18 @@ public class AuthController {
                description = Constantes.AUTENTICA_A_UN_USUARIO_SI_TIENE_2_FA_ACTIVADO_RETORNA_REQUIRES_TWO_FACTOR_TRUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.LOGIN_EXITOSO_O_SE_REQUIERE_CODIGO_2_FA),
+            @ApiResponse(responseCode = Constantes.HTTP_202, description = Constantes.MSG_2FA_REQUERIDO),
             @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.MSG_LOGIN_INVALID)
     })
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        Usuario usuario = authService.login(request.username(), request.password());
-        if (usuario == null) {
-            return ResponseEntity.ok(new Login2FARequiredResponse(true, Constantes.MSG_2FA_REQUERIDO));
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        AuthService.LoginResult loginResult = authService.login(request.username(), request.password());
+
+        if (loginResult.requires2FA()) {
+            LoginResponse response = new LoginResponse(Constantes.MSG_2FA_REQUERIDO, true);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
         }
+
+        Usuario usuario = loginResult.usuario();
         JwtTokenPair tokens = authService.generateTokens(usuario);
 
         UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
@@ -48,7 +51,7 @@ public class AuthController {
                 usuario.rol()
         );
 
-        JwtAuthResponse response = new JwtAuthResponse(
+        LoginResponse response = new LoginResponse(
                 tokens.accessToken(),
                 tokens.refreshToken(),
                 usuarioResponseDTO,
@@ -100,7 +103,7 @@ public class AuthController {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_CODIGO_VERIFICADO_LOGIN_COMPLETADO),
             @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.RESP_CODIGO_INVALIDO_O_EXPIRADO)
     })
-    public ResponseEntity<JwtAuthResponse> verify2FA(@RequestBody Verify2FALoginRequest request) {
+    public ResponseEntity<LoginResponse> verify2FA(@RequestBody Verify2FALoginRequest request) {
         Usuario usuario = authService.verify2FA(request.username(), request.codigo());
         JwtTokenPair tokens = authService.generateTokens(usuario);
 
@@ -112,7 +115,7 @@ public class AuthController {
                 usuario.rol()
         );
 
-        JwtAuthResponse response = new JwtAuthResponse(
+        LoginResponse response = new LoginResponse(
                 tokens.accessToken(),
                 tokens.refreshToken(),
                 usuarioResponseDTO,
@@ -136,20 +139,28 @@ public class AuthController {
     @RequiresAuth
     @Operation(summary = Constantes.OP_CERRAR_SESION, description = Constantes.OP_CERRAR_SESION_DESC)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.MSG_LOGOUT_SUCCESS)
-    public ResponseEntity<String> logout(HttpServletRequest request) {
+    public ResponseEntity<ApiSuccessResponse> logout(HttpServletRequest request) {
         String authHeader = request.getHeader(Constantes.AUTHORIZATION);
         if (authHeader != null && authHeader.startsWith(Constantes.BEARER)) {
             String token = authHeader.substring(Constantes.BEARER_PREFIX_LENGTH);
             authService.logout(token);
         }
-        return ResponseEntity.ok(Constantes.MSG_LOGOUT_SUCCESS);
+        return ResponseEntity.ok(new ApiSuccessResponse(true, Constantes.MSG_LOGOUT_SUCCESS));
     }
 
     @PostMapping(Constantes.AUTH_REGISTER)
     @Operation(summary = Constantes.OP_REGISTRAR_USUARIO, description = Constantes.OP_REGISTRAR_USUARIO_DESC)
     @ApiResponse(responseCode = Constantes.HTTP_201, description = Constantes.RESP_USUARIO_REGISTRADO_EXITOSAMENTE)
-    public ResponseEntity<Usuario> register(@RequestBody UsuarioDTO usuario) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(usuario));
+    public ResponseEntity<UsuarioResponseDTO> register(@RequestBody UsuarioDTO usuario) {
+        Usuario registrado = authService.register(usuario);
+        UsuarioResponseDTO response = new UsuarioResponseDTO(
+                registrado.id(),
+                registrado.username(),
+                registrado.email(),
+                registrado.nombre(),
+                registrado.rol()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping(Constantes.REFRESH_ENDPOINT)
@@ -159,8 +170,8 @@ public class AuthController {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_TOKENS_REFRESCADOS),
             @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.REFRESH_TOKEN_INVALIDO_O_EXPIRADO)
     })
-    public ResponseEntity<JwtAuthResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
-        JwtTokenPair tokens = authService.refreshAccessToken(request.refreshToken());
+    public ResponseEntity<LoginResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+        JwtTokenPair tokens = authService.refreshAccessToken(request.refreshToken(), request.accessToken());
         Usuario usuario = authService.getUserFromToken(tokens.accessToken());
 
         UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
@@ -171,7 +182,7 @@ public class AuthController {
                 usuario.rol()
         );
 
-        JwtAuthResponse response = new JwtAuthResponse(
+        LoginResponse response = new LoginResponse(
                 tokens.accessToken(),
                 tokens.refreshToken(),
                 usuarioResponseDTO,
@@ -180,3 +191,4 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 }
+

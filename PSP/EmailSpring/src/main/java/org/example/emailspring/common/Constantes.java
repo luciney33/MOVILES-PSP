@@ -203,6 +203,7 @@ public final class Constantes {
 
     public static final String HTTP_200 = "200";
     public static final String HTTP_201 = "201";
+    public static final String HTTP_202 = "202";
     public static final String HTTP_204 = "204";
     public static final String HTTP_400 = "400";
     public static final String HTTP_401 = "401";
