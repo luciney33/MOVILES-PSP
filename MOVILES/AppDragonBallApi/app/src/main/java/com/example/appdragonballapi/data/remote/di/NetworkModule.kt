@@ -2,7 +2,7 @@ package com.example.appdragonballapi.data.remote.di
 
 import com.example.appdragonballapi.BuildConfig
 import com.example.appdragonballapi.common.Constantes
-import com.example.appdragonballapi.data.remote.api.DragonBallApiService
+import com.example.appdragonballapi.data.remote.api.GymApiService
 import com.example.appdragonballapi.data.remote.api.PlaceholderApiService
 import dagger.Module
 import dagger.Provides
@@ -55,8 +55,8 @@ object NetworkModule {
     }
     @Provides
     @Singleton
-    fun provideDragongBallApiService(@Named(Constantes.RETROFIT_DBAPI) retrofit: Retrofit): DragonBallApiService {
-        return retrofit.create(DragonBallApiService::class.java)
+    fun provideDragongBallApiService(@Named(Constantes.RETROFIT_DBAPI) retrofit: Retrofit): GymApiService {
+        return retrofit.create(GymApiService::class.java)
     }
 
     @Provides

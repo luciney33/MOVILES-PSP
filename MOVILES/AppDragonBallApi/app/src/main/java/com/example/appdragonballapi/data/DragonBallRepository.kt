@@ -1,7 +1,7 @@
 package com.example.appdragonballapi.data
 
 import com.example.appdragonballapi.common.Constantes
-import com.example.appdragonballapi.data.remote.api.DragonBallApiService
+import com.example.appdragonballapi.data.remote.api.GymApiService
 import com.example.appdragonballapi.data.remote.api.PlaceholderApiService
 import com.example.appdragonballapi.data.remote.entity.toDomain
 import com.example.appdragonballapi.data.remote.entity.toEntity
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Singleton
 class DragonBallRepository @Inject constructor(
-    private val apiService: DragonBallApiService,
+    private val apiService: GymApiService,
     private val placeholderApi: PlaceholderApiService
 ) {
 
