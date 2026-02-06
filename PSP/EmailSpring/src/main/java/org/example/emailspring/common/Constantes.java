@@ -106,6 +106,8 @@ public final class Constantes {
     public static final String API_AUTH = "/api/auth";
     public static final String API_ENTRENAMIENTOS = "/api/entrenamientos";
     public static final String TABLE_ENTRENAMIENTO= "entrenamientos";
+    public static final String TABLE_Ejercicios= "ejercicios";
+
     public static final String TABLE_USUARIOS = "usuarios";
     public static final String API_ACTIVAR = "/api/auth/activar";
 

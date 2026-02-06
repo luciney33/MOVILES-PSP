@@ -22,4 +22,21 @@ CREATE TABLE entrenamientos (
     descripcion VARCHAR(500),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+CREATE TABLE ejercicios (
+                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                            nombre VARCHAR(255) NOT NULL,
+                            tipo_entrenamiento VARCHAR(100) NOT NULL,
+                            imagen_url VARCHAR(500),
+                            descripcion TEXT
+);
 
+CREATE TABLE entrenamiento_ejercicios (
+                                          entrenamiento_id BIGINT NOT NULL,
+                                          ejercicio_id BIGINT NOT NULL,
+                                          orden INT DEFAULT 0,
+                                          series INT,
+                                          repeticiones INT,
+                                          PRIMARY KEY (entrenamiento_id, ejercicio_id),
+                                          FOREIGN KEY (entrenamiento_id) REFERENCES entrenamientos(id) ON DELETE CASCADE,
+                                          FOREIGN KEY (ejercicio_id) REFERENCES ejercicios(id) ON DELETE CASCADE
+);

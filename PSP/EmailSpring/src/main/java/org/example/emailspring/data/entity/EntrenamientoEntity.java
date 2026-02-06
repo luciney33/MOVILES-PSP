@@ -1,10 +1,19 @@
 package org.example.emailspring.data.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.example.emailspring.common.Constantes;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = Constantes.TABLE_ENTRENAMIENTO)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EntrenamientoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,33 +25,11 @@ public class EntrenamientoEntity {
     @Column
     private String descripcion;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getUsuarioId() {
-        return usuarioId;
-    }
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
-    }
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "entrenamiento_ejercicios",
+            joinColumns = @JoinColumn(name = "entrenamiento_id"),
+            inverseJoinColumns = @JoinColumn(name = "ejercicio_id")
+    )
+    private Set<EjercicioEntity> ejercicios = new HashSet<>();
 }
