@@ -2,7 +2,6 @@ package org.example.emailspring.domain.mapper;
 
 
 import org.example.emailspring.data.entity.UsuarioEntity;
-import org.example.emailspring.domain.model.Rol;
 import org.example.emailspring.domain.model.Usuario;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +15,7 @@ public class UsuarioMapper {
                 entity.getPassword(),
                 entity.getEmail(),
                 entity.getNombre(),
-                Rol.valueOf(String.valueOf(entity.getRol())),
+                entity.getRol(),
                 entity.isActivo(),
                 entity.getCodigoActivacion(),
                 entity.getExpiracionCodigo(),

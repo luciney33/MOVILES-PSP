@@ -105,6 +105,8 @@ public final class Constantes {
 
     public static final String API_AUTH = "/api/auth";
     public static final String API_ENTRENAMIENTOS = "/api/entrenamientos";
+    public static final String API_EJERCICIOS = "/api/ejercicios";
+
     public static final String TABLE_ENTRENAMIENTO= "entrenamientos";
     public static final String TABLE_Ejercicios= "ejercicios";
 
@@ -138,6 +140,9 @@ public final class Constantes {
     public static final String TAG_ACTIVACION_CUENTA = "Activación de Cuenta";
     public static final String TAG_ACTIVACION_CUENTA_DESC = "Endpoints para la activación de cuentas de usuario por correo.";
     public static final String TAG_ENTRENAMIENTOS = "Entrenamientos";
+    public static final String TAG_EJERCICIOS = "Ejercicios";
+    public static final String TAG_EJERCICIOS_DESC = "Ejercicios de los entrenamientos.";
+
     public static final String TAG_ENTRENAMIENTOS_DESC = "Gestión de entrenamientos y rutinas (requiere autenticación).";
 
     public static final String OP_INICIAR_SESION = "Iniciar sesión";
@@ -148,6 +153,8 @@ public final class Constantes {
     public static final String OP_ACTIVAR_CUENTA = "Activar cuenta de usuario";
     public static final String OP_ACTIVAR_CUENTA_DESC = "Valida un código de activación y activa la cuenta del usuario.";
     public static final String OP_LISTAR_ENTRENAMIENTOS = "Listar todos los entrenamientos";
+    public static final String OP_LISTAR_EJERCICIOS = "Listar todos los ejercicios";
+
 
     public static final String SCHEMA_ENTRENAMIENTO = "Representa una rutina de entrenamiento asignada a un usuario.";
     public static final String SCHEMA_ENTRENAMIENTO_ID = "Identificador único del entrenamiento";
@@ -176,6 +183,8 @@ public final class Constantes {
     public static final String SCHEMA_USUARIO_CODIGO_ACTIVACION = "Código de activación (oculto en respuestas públicas)";
     public static final String SCHEMA_USUARIO_EXPIRACION_CODIGO = "Fecha/hora de expiración del código de activación";
     public static final String OP_LISTAR_ENTRENAMIENTOS_DESC = "Permite a usuarios autenticados ver todos los entrenamientos disponibles.";
+    public static final String OP_LISTAR_EJERCICIOS_DESC = "Permite a usuarios autenticados ver todos los ejercicios disponibles.";
+
     public static final String OP_OBTENER_ENTRENAMIENTO = "Obtener entrenamiento por ID";
     public static final String OP_OBTENER_ENTRENAMIENTO_DESC = "Recupera un entrenamiento específico. Solo accesible para administradores.";
     public static final String OP_CREAR_ENTRENAMIENTO = "Crear un nuevo entrenamiento";

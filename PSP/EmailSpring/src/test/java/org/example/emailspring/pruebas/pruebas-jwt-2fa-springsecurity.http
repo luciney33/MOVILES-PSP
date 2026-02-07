@@ -23,13 +23,13 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "testuser",
-  "password": "Test123456"
+  "username": "admin",
+  "password": "admin123"
 }
 
 ### DEBE FUNCIONAR - Listar entrenamientos
 GET http://localhost:8080/api/entrenamientos
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODI5NTEsImV4cCI6MTc2OTk4NjU1MX0.Le3PvY7BIvUZzvkoMVnuAmrl2A6JhvlLEurM4jNOHIJqFPKbMDtf6_0MCfxQ2SgUwtTzPO99BSDM8Jh8DkqAnA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6ImFkbWluIiwiaWF0IjoxNzcwNDI4NjkzLCJleHAiOjE3NzA0MzIyOTN9.f8X7OONCDNRF8d-wOnBBCrxHsAKo0e-6nPxlnYeHkbyrU9cVv2fibu_QJ-0CBwPLMZ0H9hkULxEhnjfn6vuYtA
 
 
 ### ========================================

@@ -25,7 +25,7 @@ public class EntrenamientoEntity {
     @Column
     private String descripcion;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "entrenamiento_ejercicios",
             joinColumns = @JoinColumn(name = "entrenamiento_id"),

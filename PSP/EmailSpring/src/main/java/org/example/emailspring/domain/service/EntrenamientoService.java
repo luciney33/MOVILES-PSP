@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,17 +31,20 @@ public class EntrenamientoService {
     }
 
 
+    @Transactional(readOnly = true)
     public List<Entrenamiento> getAll() {
-     return entrenamientoRepository.findAll()
-             .stream().map(entrenamientoMapper::toDomain).toList();
+        return entrenamientoRepository.findAllWithEjercicios()
+                .stream().map(entrenamientoMapper::toDomain).toList();
     }
 
+    @Transactional(readOnly = true)
     public Entrenamiento getById(Long id) {
-        return entrenamientoRepository.findById(id)
+        return entrenamientoRepository.findByIdWithEjercicios(id)
                 .map(entrenamientoMapper::toDomain)
                 .orElseThrow(() -> new EntityNotFoundException(Constantes.NO_ENCONTRADO));
     }
 
+    @Transactional
     public Entrenamiento save(Entrenamiento entrenamiento) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -59,6 +63,8 @@ public class EntrenamientoService {
         EntrenamientoEntity saved = entrenamientoRepository.save(entity);
         return entrenamientoMapper.toDomain(saved);
     }
+
+    @Transactional
     public Entrenamiento update(Long id, Entrenamiento entrenamiento) {
         return entrenamientoRepository.findById(id)
                 .map(existing -> {
@@ -70,6 +76,7 @@ public class EntrenamientoService {
                 .orElseThrow(() -> new EntityNotFoundException(Constantes.NO_ENCONTRADO));
     }
 
+    @Transactional
     public void delete(Long id) {
         if (entrenamientoRepository.existsById(id)) {
             entrenamientoRepository.deleteById(id);
