@@ -2,6 +2,7 @@ package org.example.emailspring.domain.mapper;
 
 
 import org.example.emailspring.data.entity.UsuarioEntity;
+import org.example.emailspring.domain.model.Rol;
 import org.example.emailspring.domain.model.Usuario;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +16,8 @@ public class UsuarioMapper {
                 entity.getPassword(),
                 entity.getEmail(),
                 entity.getNombre(),
-                entity.getRol(),
-                entity.activo(),
+                Rol.valueOf(String.valueOf(entity.getRol())),
+                entity.isActivo(),
                 entity.getCodigoActivacion(),
                 entity.getExpiracionCodigo(),
                 entity.getTwoFactorEnabled(),
@@ -32,12 +33,12 @@ public class UsuarioMapper {
                 u.password(),
                 u.email(),
                 u.nombre(),
-                u.rol(),
                 u.activo(),
                 u.codigoActivacion(),
                 u.expiracionCodigo(),
+                u.rol(),
                 u.twoFactorEnabled(),
                 u.twoFactorSecret()
-                );
+        );
     }
 }

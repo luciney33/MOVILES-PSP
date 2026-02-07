@@ -6,6 +6,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EntrenamientoMapper {
+
+    private final EjercicioMapper ejercicioMapper;
+
+    public EntrenamientoMapper(EjercicioMapper ejercicioMapper) {
+        this.ejercicioMapper = ejercicioMapper;
+    }
+
     public EntrenamientoEntity toEntity(Entrenamiento domain) {
         if (domain == null) return null;
         EntrenamientoEntity entity = new EntrenamientoEntity();
@@ -25,7 +32,8 @@ public class EntrenamientoMapper {
                 entity.getId(),
                 entity.getUsuarioId(),
                 entity.getNombre(),
-                entity.getDescripcion()
+                entity.getDescripcion(),
+                ejercicioMapper.toDomainList(entity.getEjercicios())
         );
     }
 }
