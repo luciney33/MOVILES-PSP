@@ -13,8 +13,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "ejercicios")
-@ToString(exclude = "ejercicios")
+@EqualsAndHashCode(exclude = Constantes.EJERCICIOS)
+@ToString(exclude = Constantes.EJERCICIOS)
 public class EntrenamientoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +28,9 @@ public class EntrenamientoEntity {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "entrenamiento_ejercicios",
-            joinColumns = @JoinColumn(name = "entrenamiento_id"),
-            inverseJoinColumns = @JoinColumn(name = "ejercicio_id")
+            name = Constantes.TABLE_ENTRENAMIENTO_EJERCICIOS,
+            joinColumns = @JoinColumn(name = Constantes.ENTRENAMIENTO_ID),
+            inverseJoinColumns = @JoinColumn(name = Constantes.EJERCICIO_ID)
     )
     private Set<EjercicioEntity> ejercicios = new HashSet<>();
 }

@@ -1,10 +1,8 @@
--- Eliminar tablas en orden correcto (primero las dependientes)
 DROP TABLE IF EXISTS entrenamiento_ejercicios CASCADE;
 DROP TABLE IF EXISTS ejercicios CASCADE;
 DROP TABLE IF EXISTS entrenamientos CASCADE;
 DROP TABLE IF EXISTS usuarios CASCADE;
 
--- Tabla de usuarios
 CREATE TABLE usuarios (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -17,11 +15,12 @@ CREATE TABLE usuarios (
     expiracion_codigo TIMESTAMP,
     two_factor_enabled BOOLEAN DEFAULT FALSE,
     two_factor_secret VARCHAR(255),
-    clave_publica BLOB NOT NULL, -- Clave RSA pública (formato X.509)
-    clave_privada_cifrada BLOB NOT NULL -- Clave RSA privada cifrada con AES
+    iv varbinary(255) not null,
+    salt varbinary(255) not null,
+    clave_publica BLOB NOT NULL,
+    clave_privada_cifrada BLOB NOT NULL
 );
 
--- Tabla de entrenamientos
 CREATE TABLE entrenamientos (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     usuario_id BIGINT NOT NULL,
@@ -30,7 +29,6 @@ CREATE TABLE entrenamientos (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
--- Tabla de ejercicios
 CREATE TABLE ejercicios (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
@@ -52,6 +50,8 @@ CREATE TABLE entrenamiento_ejercicios (
 CREATE TABLE secretos (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     autor_id BIGINT NOT NULL,
+    iv varbinary(255) not null,
+    salt varbinary(255) not null,
     contenido_cifrado BLOB NOT NULL,
     clave_simetrica_cifrada BLOB NOT NULL,
     firma BLOB NOT NULL,
@@ -64,8 +64,7 @@ CREATE TABLE secretos_compartidos (
     destinatario_id BIGINT NOT NULL,
     clave_simetrica_cifrada_destinatario BLOB NOT NULL,
     FOREIGN KEY (secreto_id) REFERENCES secretos(id) ON DELETE CASCADE,
-    FOREIGN KEY (autor_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (destinatario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
-    UNIQUE KEY unique_compartido (secreto_id, destinatario_id)
+    CONSTRAINT unique_compartido UNIQUE (secreto_id, destinatario_id)
 );
 

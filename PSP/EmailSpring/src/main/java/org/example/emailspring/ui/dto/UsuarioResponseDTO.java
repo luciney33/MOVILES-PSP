@@ -14,6 +14,8 @@ public record UsuarioResponseDTO(
         String email,
         @Schema(description = Constantes.SCHEMA_NOMBRE_RESPONSE_DESC, example = Constantes.SCHEMA_NOMBRE_RESPONSE_EXAMPLE)
         String nombre,
+
+        String publicKey,
         @Schema(description = Constantes.SCHEMA_ROL_DESC, example = Constantes.SCHEMA_ROL_EXAMPLE)
         Rol rol) {
 }

@@ -7,15 +7,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.security.RolesAllowed;
 import org.example.emailspring.common.Constantes;
 import org.example.emailspring.domain.model.Entrenamiento;
 import org.example.emailspring.domain.service.EntrenamientoService;
 import org.example.emailspring.ui.security.IsAdmin;
+import org.example.emailspring.ui.security.IsUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +31,7 @@ public class EntrenamientoController {
     }
 
     @GetMapping
-    @PreAuthorize(Constantes.SECURITY_IS_AUTHENTICATED)
+    @IsUser
     @Operation(summary = Constantes.OP_LISTAR_ENTRENAMIENTOS, description = Constantes.OP_LISTAR_ENTRENAMIENTOS_DESC)
     @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_LISTA_ENTRENAMIENTOS_RECUPERADA)
     @ApiResponse(responseCode = Constantes.HTTP_401, description = Constantes.RESP_NO_AUTORIZADO, content = @Content(schema = @Schema(hidden = true)))
@@ -42,7 +40,7 @@ public class EntrenamientoController {
     }
 
     @GetMapping(Constantes.PATH_ID)
-    @PreAuthorize(Constantes.SECURITY_IS_AUTHENTICATED)
+    @IsUser
     @Operation(summary = Constantes.OP_OBTENER_ENTRENAMIENTO, description = Constantes.OP_OBTENER_ENTRENAMIENTO_DESC)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ENTRENAMIENTO_ENCONTRADO),
@@ -66,7 +64,7 @@ public class EntrenamientoController {
     }
 
     @PutMapping(Constantes.PATH_ID)
-    @Secured(Constantes.SECURITY_ROLE_ADMIN_VALUE)
+    @IsAdmin
     @Operation(summary = Constantes.OP_ACTUALIZAR_ENTRENAMIENTO, description = Constantes.OP_USAR_ANOTACION_SECURED)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constantes.HTTP_200, description = Constantes.RESP_ENTRENAMIENTO_ACTUALIZADO),
@@ -78,7 +76,7 @@ public class EntrenamientoController {
     }
 
     @DeleteMapping(Constantes.PATH_ID)
-    @RolesAllowed(Constantes.ADMIN)
+    @IsAdmin
     @Operation(summary = Constantes.OP_ELIMINAR_ENTRENAMIENTO, description = Constantes.OP_USAR_ANOTACION_ROLES_ALLOWED)
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constantes.HTTP_204, description = Constantes.RESP_ENTRENAMIENTO_ELIMINADO),

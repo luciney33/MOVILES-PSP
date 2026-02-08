@@ -48,12 +48,20 @@ public class UsuarioEntity {
     @Column
     private String twoFactorSecret;
 
-    @Column
-    private byte[] publicKey;
+    @Lob
+    private byte[] salt;
 
-    @Column
-    private byte[] privateKeyEncrypted;
+    @Lob
+    private byte[] iv;
 
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+    @Lob
+    @Column(name = Constantes.CLAVE_PUBLICA, nullable = false)
+    private byte[] clavePublica;
+
+    @Lob
+    @Column(name = Constantes.CLAVE_PRIVADA_CIFRADA, nullable = false)
+    private byte[] clavePrivada;
+
+    @OneToMany(mappedBy = Constantes.AUTOR, cascade = CascadeType.ALL)
     private List<SecretoEntity> secretos = new ArrayList<>();
 }

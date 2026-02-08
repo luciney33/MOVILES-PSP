@@ -1,18 +1,19 @@
 package org.example.emailspring.domain.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.emailspring.common.Constantes;
 
-@Schema(description = "Modelo de ejercicio")
+@Schema(description = Constantes.SCHEMA_EJERCICIO_DESC)
 public record Ejercicio(
-        @Schema(description = "ID del ejercicio", example = "1")
+        @Schema(description = Constantes.SCHEMA_EJERCICIO_ID_DESC, example = Constantes.SCHEMA_EJERCICIO_ID_EXAMPLE)
         Long id,
-        @Schema(description = "Nombre del ejercicio", example = "Press de Banca")
+        @Schema(description = Constantes.SCHEMA_EJERCICIO_NOMBRE_DESC, example = Constantes.SCHEMA_EJERCICIO_NOMBRE_EXAMPLE)
         String nombre,
-        @Schema(description = "Tipo de entrenamiento", example = "Pecho")
+        @Schema(description = Constantes.SCHEMA_EJERCICIO_TIPO_DESC, example = Constantes.SCHEMA_EJERCICIO_TIPO_EXAMPLE)
         String tipoEntrenamiento,
-        @Schema(description = "URL de la imagen del ejercicio", example = "/images/ejercicios/PressBanca.gif")
+        @Schema(description = Constantes.SCHEMA_EJERCICIO_IMAGEN_URL_DESC, example = Constantes.SCHEMA_EJERCICIO_IMAGEN_URL_EXAMPLE)
         String imagenUrl,
-        @Schema(description = "Descripción del ejercicio", example = "Ejercicio básico para pectoral")
+        @Schema(description = Constantes.SCHEMA_EJERCICIO_DESCRIPCION_DESC, example = Constantes.SCHEMA_EJERCICIO_DESCRIPCION_EXAMPLE)
         String descripcion
 ) {
 }

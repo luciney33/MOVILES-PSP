@@ -174,7 +174,7 @@ public class AuthService {
         }
     }
 
-    public Usuario register(UsuarioDTO usuario) {
+    public Usuario register(UsuarioDTO usuario) throws Exception {
         return usuarioService.register(usuario);
     }
 
@@ -221,8 +221,5 @@ public class AuthService {
         return usuarioMapper.toDomain(usuarioEntity);
     }
 
-    public Claims validateAccessToken(String token) {
-        return jwtService.extractAllClaims(token);
-    }
 }
 

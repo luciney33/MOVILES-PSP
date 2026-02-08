@@ -15,6 +15,6 @@ public record Entrenamiento(
         String nombre,
         @Schema(description = Constantes.SCHEMA_ENTRENAMIENTO_DESCRIPCION, example = Constantes.SCHEMA_ENTRENAMIENTO_DESCRIPCION_EXAMPLE)
         String descripcion,
-        @Schema(description = "Lista de ejercicios del entrenamiento")
+        @Schema(description = Constantes.SCHEMA_EJERCICIO_LISTA_DESC)
         List<Ejercicio> ejercicios) {
 }

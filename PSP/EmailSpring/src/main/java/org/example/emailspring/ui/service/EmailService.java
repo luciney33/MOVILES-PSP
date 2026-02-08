@@ -35,8 +35,6 @@ public class EmailService {
             mailSender.send(mensaje);
         } catch (Exception e) {
             log.error(Constantes.ERROR_AL_ENVIAR_CORREO_A, destinatario, e);
-            System.err.println(Constantes.ERROR_AL_ENVIAR_CORREO + e.getMessage());
-
         }
     }
 

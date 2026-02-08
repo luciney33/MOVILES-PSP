@@ -23,7 +23,6 @@ public final class Constantes {
     public static final String AES = "AES";
     public static final String ROL = "rol";
     public static final String REFRESH_TOKEN_INVALIDO_O_EXPIRADO = "Refresh token inválido o expirado";
-    public static final String REFRESH = "/api/auth/refresh";
     public static final String INDICA_SI_EL_USUARIO_TIENE_HABILITADA_LA_AUTENTICACION_DE_DOS_FACTORES = "Indica si el usuario tiene habilitada la autenticación de dos factores";
     public static final String SECRETO_TOTP_PARA_AUTENTICACION_DE_DOS_FACTORES = "Secreto TOTP para autenticación de dos factores";
     public static final String EY_JHB_GCI_OI_JIUZ_I_1_NI_IS_IN_R_5_C_CI_6_IKP_XVCJ_9 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
@@ -56,9 +55,7 @@ public final class Constantes {
 
     public static final String SECURITY_ROLE_USER = "hasRole('USER')";
     public static final String SECURITY_ROLE_ADMIN = "hasRole('ADMIN')";
-    public static final String SECURITY_ROLE_ADMIN_OR_SELF = "hasRole('ADMIN') or #username == authentication.name";
-    public static final String SECURITY_IS_AUTHENTICATED = "isAuthenticated()";
-    public static final String SECURITY_ROLE_ADMIN_VALUE = "ROLE_ADMIN";
+
 
     public static final String OP_USAR_ANOTACION_IS_ADMIN = "Usar anotación personalizada @IsAdmin";
     public static final String ROLE = "ROLE_";
@@ -69,6 +66,28 @@ public final class Constantes {
     public static final String PATTERN = "/**";
     public static final String STRING = "*";
     public static final String H_2_CONSOLE = "/h2-console/**";
+    public static final String SECRETO_NO_ENCONTRADO = "Secreto no encontrado";
+    public static final String ACCESO_DENEGADO = "Acceso denegado";
+    public static final String LA_FIRMA_ES_INVÁLIDA = "La firma es inválida";
+    public static final String EJERCICIOS = "ejercicios";
+    public static final String EJERCICIO_ID = "ejercicio_id";
+    public static final String ENTRENAMIENTO_ID = "entrenamiento_id";
+    public static final String ENTRENAMIENTOS = "entrenamientos";
+    public static final String TIPO_ENTRENAMIENTO = "tipo_entrenamiento";
+    public static final String IMAGEN_URL = "imagen_url";
+    public static final String SECRETO_ID = "secreto_id";
+    public static final String DESTINATARIO_ID = "destinatario_id";
+    public static final String CLAVE_SIMETRICA_CIFRADA_DESTINATARIO = "clave_simetrica_cifrada_destinatario";
+    public static final String AUTOR_ID = "autor_id";
+    public static final String CONTENIDO_CIFRADO = "contenido_cifrado";
+    public static final String CLAVE_SIMETRICA_CIFRADA = "clave_simetrica_cifrada";
+    public static final String SECRETO = "secreto";
+    public static final String CLAVE_PUBLICA = "clave_publica";
+    public static final String CLAVE_PRIVADA_CIFRADA = "clave_privada_cifrada";
+    public static final String AUTOR = "autor";
+    public static final String ERROR_PROCESANDO_LAS_CLAVES_DE_SEGURIDAD = "Error procesando las claves de seguridad.";
+    public static final String LA_FIRMA_DIGITAL_NO_ES_VALIDA_EL_MENSAJE_HA_SIDO_MANIPULADO = "La firma digital no es válida. El mensaje ha sido manipulado.";
+    public static final String CONTRASEÑA_DE_CIFRADO_INCORRECTA_O_CLAVE_CORRUPTA = "Contraseña de cifrado incorrecta o clave corrupta.";
 
     private Constantes() {}
     public static final String CODIGO = "codigo";
@@ -97,22 +116,22 @@ public final class Constantes {
     public static final String UTF_8 = "UTF-8";
     public static final String ACTIVACION_DE_CUENTA_SISTEMA = "Activación de cuenta - Sistema";
     public static final String ERROR_AL_ENVIAR_CORREO_A = "Error al enviar correo a {}";
-    public static final String ERROR_AL_ENVIAR_CORREO = "Error al enviar correo: ";
     public static final String CODIGO_ACTIVACION = "codigoActivacion";
     public static final String EMAIL_ACTIVACION = "email-activacion";
     public static final String ROL_ASIGNADO_AL_USUARIO_OPCIONAL_SI_EL_REGISTRO_PERMITE_ELEGIR_ROL = "Rol asignado al usuario (opcional, si el registro permite elegir rol).";
     public static final String USER = "USER";
-    public static final String ALL = "*";
 
 
     public static final String API_AUTH = "/api/auth";
     public static final String API_ENTRENAMIENTOS = "/api/entrenamientos";
     public static final String API_EJERCICIOS = "/api/ejercicios";
 
-    public static final String TABLE_ENTRENAMIENTO= "entrenamientos";
-    public static final String TABLE_Ejercicios= "ejercicios";
-
+    public static final String TABLE_ENTRENAMIENTO = "entrenamientos";
+    public static final String TABLE_EJERCICIOS = "ejercicios";
     public static final String TABLE_USUARIOS = "usuarios";
+    public static final String TABLE_ENTRENAMIENTO_EJERCICIOS = "entrenamiento_ejercicios";
+    public static final String TABLE_SECRETOS = "secretos";
+    public static final String TABLE_SECRETOS_COMPARTIDOS = "secretos_compartidos";
     public static final String API_ACTIVAR = "/api/auth/activar";
 
     public static final String AUTH_LOGIN = "/login";
@@ -125,7 +144,6 @@ public final class Constantes {
     public static final String MSG_LOGIN_SUCCESS = "Login exitoso";
     public static final String MSG_LOGIN_INVALID = "Credenciales inválidas";
     public static final String MSG_LOGOUT_SUCCESS = "Logout exitoso";
-    public static final String MSG_USER_NOT_AUTHENTICATED = "No autenticado";
     public static final String NO_ENCONTRADO = "Entrenamiento no encontrado";
     public static final String SESSION_USUARIO_ID = "usuario_id";
 
@@ -167,6 +185,19 @@ public final class Constantes {
     public static final String SCHEMA_ENTRENAMIENTO_NOMBRE_EXAMPLE = "Rutina de Piernas Avanzada";
     public static final String SCHEMA_ENTRENAMIENTO_DESCRIPCION = "Descripción detallada de la rutina y ejercicios";
     public static final String SCHEMA_ENTRENAMIENTO_DESCRIPCION_EXAMPLE = "Incluye sentadillas, peso muerto y zancadas.";
+
+    public static final String SCHEMA_EJERCICIO_DESC = "Modelo de ejercicio";
+    public static final String SCHEMA_EJERCICIO_ID_DESC = "ID del ejercicio";
+    public static final String SCHEMA_EJERCICIO_ID_EXAMPLE = "1";
+    public static final String SCHEMA_EJERCICIO_NOMBRE_DESC = "Nombre del ejercicio";
+    public static final String SCHEMA_EJERCICIO_NOMBRE_EXAMPLE = "Press de Banca";
+    public static final String SCHEMA_EJERCICIO_TIPO_DESC = "Tipo de entrenamiento";
+    public static final String SCHEMA_EJERCICIO_TIPO_EXAMPLE = "Pecho";
+    public static final String SCHEMA_EJERCICIO_IMAGEN_URL_DESC = "URL de la imagen del ejercicio";
+    public static final String SCHEMA_EJERCICIO_IMAGEN_URL_EXAMPLE = "/images/ejercicios/PressBanca.gif";
+    public static final String SCHEMA_EJERCICIO_DESCRIPCION_DESC = "Descripción del ejercicio";
+    public static final String SCHEMA_EJERCICIO_DESCRIPCION_EXAMPLE = "Ejercicio básico para pectoral";
+    public static final String SCHEMA_EJERCICIO_LISTA_DESC = "Lista de ejercicios del entrenamiento";
 
     public static final String SCHEMA_USUARIO = "Detalles completos de un usuario del sistema.";
     public static final String SCHEMA_USUARIO_ID = "Identificador único del usuario";
@@ -266,12 +297,6 @@ public final class Constantes {
 
     public static final String BEARER = "Bearer ";
     public static final int BEARER_PREFIX_LENGTH = 7;
-    public static final String AUTHENTICATED = "authenticated";
-    public static final String USERNAME = "username";
-    public static final String ADMIN = "ADMIN";
-    public static final String MSG_TOKEN_EXPIRADO = "Token expirado";
-    public static final String MSG_TOKEN_INVALIDO = "Token inválido";
-    public static final String MSG_ERROR_PROCESAR_TOKEN = "Error al procesar token: ";
     public static final String REFRESH_ENDPOINT = "/refresh";
     public static final String OP_REFRESCAR_ACCESS_TOKEN = "Refrescar access token";
     public static final String OP_REFRESCAR_ACCESS_TOKEN_DESC = "Genera un nuevo access token usando un refresh token válido";
@@ -289,8 +314,46 @@ public final class Constantes {
     public static final String REDIS_2FA_PENDING_PREFIX = "2fa:pending:";
     public static final String REDIS_2FA_SECRET_PREFIX = "2fa:secret:";
     public static final long REDIS_2FA_TTL_MINUTES = 10;
-    public static final String MSG_TOKEN_REVOCADO = "El token ha sido revocado";
 
     public static final String OP_USAR_ANOTACION_SECURED = "Usar anotación @Secured de Spring";
     public static final String OP_USAR_ANOTACION_ROLES_ALLOWED = "Usar anotación @RolesAllowed (JSR-250)";
+
+
+    public static final String API_SECRETOS = "/api/secretos";
+    public static final String TAG_SECRETOS = "Secretos";
+    public static final String TAG_SECRETOS_DESC = "Operaciones de cifrado, firma y compartición de secretos";
+
+    public static final String OP_CREAR_SECRETO = "Crea un secreto, lo cifra simétricamente y lo firma";
+    public static final String OP_VER_SECRETO = "Descifra un secreto (propio o compartido) y verifica la firma del autor";
+    public static final String OP_COMPARTIR_SECRETO = "Comparte un secreto realizando un re-wrapping de la clave simétrica";
+    public static final String OP_REVOCAR_ACCESO_SECRETO = "Revoca el acceso de un usuario a un secreto";
+
+    public static final String PATH_SECRETO_VER = "/{id}/ver";
+    public static final String PATH_SECRETO_COMPARTIR = "/{id}/compartir";
+    public static final String PATH_SECRETO_REVOCAR = "/{id}/compartir/{receptorId}";
+
+    public static final String MSG_AUTOR_VERIFICADO = "Autor verificado";
+    public static final String MSG_SECRETO_COMPARTIDO_EXITO = "Secreto compartido con éxito";
+
+    public static final String SCHEMA_SECRETO_RESPONSE_DESC = "Respuesta con información de un secreto descifrado";
+    public static final String SCHEMA_SECRETO_ID_DESC = "ID del secreto";
+    public static final String SCHEMA_SECRETO_CONTENIDO_DESC = "Contenido descifrado del secreto";
+    public static final String SCHEMA_SECRETO_AUTOR_NAME_DESC = "Nombre del autor del secreto";
+    public static final String SCHEMA_SECRETO_FIRMA_DESC = "Firma del autor";
+    public static final String SCHEMA_SECRETO_USERNAME_DESTINATARIO_DESC = "Username del usuario con quien compartir";
+    public static final String SCHEMA_SECRETO_ES_COMPARTIDO_DESC = "Indica si el secreto está compartido conmigo";
+
+    public static final String CIPHER_AES_ALGORITHM = "AES";
+    public static final String CIPHER_AES_GCM_TRANSFORMATION = "AES/GCM/NoPadding";
+    public static final int CIPHER_AES_KEY_SIZE = 256;
+    public static final int CIPHER_GCM_TAG_LENGTH = 128;
+    public static final int CIPHER_GCM_IV_LENGTH = 12;
+    public static final int CIPHER_PBKDF2_ITERATIONS = 65536;
+    public static final String CIPHER_PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA256";
+    public static final int CIPHER_SALT_LENGTH = 16;
+
+    public static final String CIPHER_RSA_ALGORITHM = "RSA";
+    public static final String CIPHER_RSA_TRANSFORMATION = "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
+    public static final int CIPHER_RSA_KEY_SIZE = 2048;
+    public static final String CIPHER_RSA_SIGNATURE_ALGORITHM = "SHA256withRSA";
 }

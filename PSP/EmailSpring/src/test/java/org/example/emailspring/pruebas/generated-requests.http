@@ -1,0 +1,107 @@
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "lucia_amiga",
+  "password": "lucia_amiga1234"
+}
+
+<> 2026-02-08T225715.200.json
+<> 2026-02-08T224333.200.json
+<> 2026-02-08T223502.200.json
+<> 2026-02-08T223226.200.json
+<> 2026-02-08T220117.200.json
+<> 2026-02-08T215154.200.json
+<> 2026-02-08T214429.200.json
+<> 2026-02-08T213915.200.json
+<> 2026-02-07T024453.200.json
+
+###
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "lucia_amiga",
+  "password": "lucia_amiga1234",
+  "email": "kdsjsc@dakds.com",
+  "nombre": "siuuuuuuu",
+  "rol": "ADMIN"
+}
+
+<> 2026-02-08T224006.201.json
+
+
+###
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "luciaaaaaaaaaa",
+  "password": "luciaaaaa1231",
+  "email": "luci1aaaa@gmail.com",
+  "nombre": "luciaaaaaaaaaa",
+  "rol": "ADMIN"
+}
+
+<> 2026-02-08T215132.201.json
+<> 2026-02-08T214344.201.json
+<> 2026-02-08T213556.201.json
+<> 2026-02-08T213450.500.json
+<> 2026-02-08T213312.201.json
+
+###
+POST http://localhost:8080/api/secretos
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhYWFhYWFhYWFhIiwiaWF0IjoxNzcwNTg2NTAyLCJleHAiOjE3NzA1OTAxMDJ9.BJG-OnH1zAG90yxDipB0bTS-qgxlMLKJvfOp_mUUaoojVtmzqD-OGXWIF0Ic4tLUYKJ6mODtBPx3MDOP_D9p9g
+Content-Type: application/json
+
+{
+  "contenido": "klkkkk",
+  "password": "luciaaaaa1231"
+}
+
+<> 2026-02-08T223526.201.json
+<> 2026-02-08T223306.500.json
+<> 2026-02-08T215222.201.txt
+<> 2026-02-08T214814.500.json
+<> 2026-02-08T214504.401.txt
+<> 2026-02-08T214227.401.txt
+<> 2026-02-08T214148.401.txt
+
+###
+POST http://localhost:8080/api/secretos/97/ver
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhX2FtaWdhIiwiaWF0IjoxNzcwNTg3ODM1LCJleHAiOjE3NzA1OTE0MzV9.St50sBPx4-eRYQ1UTozPqJVS0nynLDdn87fJd2HTZhry368el1fYXCWTsyUR5K9nBFnfHgsX0TZ2YWVSXUxBqw
+Content-Type: application/json
+
+{
+  "password": "lucia_amiga1234"
+}
+
+<> 2026-02-08T230117.500.json
+<> 2026-02-08T225804.200.json
+<> 2026-02-08T224438.200.json
+<> 2026-02-08T223555.200.json
+<> 2026-02-08T223312.500.json
+<> 2026-02-08T220141.500.json
+<> 2026-02-08T215358.500.json
+<> 2026-02-08T215325.403.json
+
+###
+POST http://localhost:8080/api/secretos/97/compartir
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhYWFhYWFhYWFhIiwiaWF0IjoxNzcwNTg2NTAyLCJleHAiOjE3NzA1OTAxMDJ9.BJG-OnH1zAG90yxDipB0bTS-qgxlMLKJvfOp_mUUaoojVtmzqD-OGXWIF0Ic4tLUYKJ6mODtBPx3MDOP_D9p9g
+Content-Type: application/json
+
+{
+  "receptorId": 129,
+  "password": "luciaaaaa1231"
+}
+
+<> 2026-02-08T224215.200.txt
+
+###
+DELETE http://localhost:8080/api/secretos/97/compartir/129
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhYWFhYWFhYWFhIiwiaWF0IjoxNzcwNTg2NTAyLCJleHAiOjE3NzA1OTAxMDJ9.BJG-OnH1zAG90yxDipB0bTS-qgxlMLKJvfOp_mUUaoojVtmzqD-OGXWIF0Ic4tLUYKJ6mODtBPx3MDOP_D9p9g
+
+
+<> 2026-02-08T225928.403.json

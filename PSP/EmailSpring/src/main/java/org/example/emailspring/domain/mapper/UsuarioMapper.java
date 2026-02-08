@@ -3,7 +3,10 @@ package org.example.emailspring.domain.mapper;
 
 import org.example.emailspring.data.entity.UsuarioEntity;
 import org.example.emailspring.domain.model.Usuario;
+import org.example.emailspring.ui.dto.UsuarioResponseDTO;
 import org.springframework.stereotype.Component;
+
+import java.util.Base64;
 
 @Component
 public class UsuarioMapper {
@@ -21,10 +24,25 @@ public class UsuarioMapper {
                 entity.getExpiracionCodigo(),
                 entity.getTwoFactorEnabled(),
                 entity.getTwoFactorSecret(),
-                entity.getPublicKey(),
-                entity.getPrivateKeyEncrypted()
+                entity.getSalt(),
+                entity.getIv(),
+                entity.getClavePublica(),
+                entity.getClavePrivada()
         );
     }
+
+
+    public UsuarioResponseDTO toResponse(Usuario usuario) {
+        return new UsuarioResponseDTO(
+                usuario.id(),
+                usuario.username(),
+                usuario.email(),
+                usuario.nombre(),
+                Base64.getEncoder().encodeToString(usuario.publicKey()),
+                usuario.rol()
+        );
+    }
+
 
     public UsuarioEntity toEntity(Usuario u) {
         if (u == null) return null;
@@ -40,6 +58,8 @@ public class UsuarioMapper {
                 u.rol(),
                 u.twoFactorEnabled(),
                 u.twoFactorSecret(),
+                u.salt(),
+                u.iv(),
                 u.publicKey(),
                 u.privateKeyEncrypted(),
                 null

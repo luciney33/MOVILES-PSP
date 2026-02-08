@@ -22,7 +22,7 @@ public class SecretoCompartidoMapper {
                 entity.getId(),
                 secreto,
                 usuario,
-                entity.getClaveSimétricaCifradaDestinatario()
+                entity.getClaveSimetricaCifradaDestinatario()
                 );
     }
 

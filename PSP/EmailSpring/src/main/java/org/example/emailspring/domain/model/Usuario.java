@@ -30,6 +30,8 @@ public record Usuario(
         Boolean twoFactorEnabled,
         @Schema(description = Constantes.SECRETO_TOTP_PARA_AUTENTICACION_DE_DOS_FACTORES, accessMode = Schema.AccessMode.READ_ONLY)
         String twoFactorSecret,
+        byte[] salt,
+        byte[] iv,
         @Schema(description = Constantes.CLAVE_RSA_PUBLICA, accessMode = Schema.AccessMode.READ_ONLY)
         byte[] publicKey,
         @Schema(description = Constantes.CLAVE_RSA_PRIVADA_CIFRADA, accessMode = Schema.AccessMode.READ_ONLY)

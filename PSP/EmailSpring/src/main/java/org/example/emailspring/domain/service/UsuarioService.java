@@ -11,6 +11,9 @@ import org.example.emailspring.ui.service.EmailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
+import java.security.KeyPair;
+import java.security.PrivateKey;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -19,18 +22,30 @@ import java.util.UUID;
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AsymmetricEncryptionService asymmetricService;
+    private final SymmetricEncryptionService symmetricService;
     private final UsuarioMapper usuarioMapper;
     private final EmailService emailService;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, UsuarioMapper usuarioMapper, EmailService emailService) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, AsymmetricEncryptionService asymmetricService, SymmetricEncryptionService symmetricService, UsuarioMapper usuarioMapper, EmailService emailService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.asymmetricService = asymmetricService;
+        this.symmetricService = symmetricService;
         this.usuarioMapper = usuarioMapper;
         this.emailService = emailService;
     }
 
 
-    public Usuario register(UsuarioDTO request) {
+    public Usuario register(UsuarioDTO request) throws Exception {
+        KeyPair keyPair = asymmetricService.generateKeyPair();
+        byte[] salt = symmetricService.generateSalt();
+        byte[] iv = symmetricService.generateIV();
+        SecretKey keyDerivada = symmetricService.generateKeyFromPassword(request.password(), salt);
+
+        byte[] privKeyRaw = keyPair.getPrivate().getEncoded();
+        byte[] clavePrivCifrada = symmetricService.encrypt(privKeyRaw, keyDerivada, iv);
+
         if (usuarioRepository.existsByUsername(request.username())) {
             throw new IllegalArgumentException(Constantes.MSG_USERNAME_YA_EN_USO);
         }
@@ -53,7 +68,11 @@ public class UsuarioService {
                 codigoActivacion,
                 expiracionCodigo,
                 false,
-                null
+                null,
+                salt,
+                iv,
+                keyPair.getPublic().getEncoded(),
+                clavePrivCifrada
         );
 
         UsuarioEntity usuarioGuardado = usuarioRepository.save(usuarioMapper.toEntity(nuevoUsuario));
@@ -78,6 +97,12 @@ public class UsuarioService {
 
         UsuarioEntity usuarioActualizado = usuarioRepository.save(usuarioEntity);
         return usuarioMapper.toDomain(usuarioActualizado);
+    }
+
+    public PrivateKey obtenerClavePrivadaDescifrada(UsuarioEntity usuario, String passwordPlana) throws Exception {
+        SecretKey keyDerivada = symmetricService.generateKeyFromPassword(passwordPlana, usuario.getSalt());
+        byte[] privKeyRaw = symmetricService.decrypt(usuario.getClavePrivada(), keyDerivada, usuario.getIv());
+        return asymmetricService.bytesToPrivateKey(privKeyRaw);
     }
 
 }

@@ -1,32 +1,32 @@
 package org.example.emailspring.ui.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.example.emailspring.common.Constantes;
 
-import java.time.LocalDateTime;
 
-@Schema(description = "Respuesta con información de un secreto descifrado")
+@Schema(description = Constantes.SCHEMA_SECRETO_RESPONSE_DESC)
 public record SecretoResponse(
-        @Schema(description = "ID del secreto")
+        @Schema(description = Constantes.SCHEMA_SECRETO_ID_DESC)
         Long id,
 
-        @Schema(description = "Contenido descifrado del secreto")
+        @Schema(description = Constantes.SCHEMA_SECRETO_CONTENIDO_DESC)
         String contenido,
 
-        @Schema(description = "Nombre del autor del secreto")
+        @Schema(description = Constantes.SCHEMA_SECRETO_AUTOR_NAME_DESC)
         String autorName,
 
-        @Schema(description = "Firma del autor")
+        @Schema(description = Constantes.SCHEMA_SECRETO_FIRMA_DESC)
         String firma,
 
-        @Schema(description = "Username del usuario con quien compartir")
+        @Schema(description = Constantes.SCHEMA_SECRETO_USERNAME_DESTINATARIO_DESC)
         String usernameDestinatario,
 
-        @Schema(description = "Indica si el secreto está compartido conmigo")
+        @Schema(description = Constantes.SCHEMA_SECRETO_ES_COMPARTIDO_DESC)
         boolean esCompartido
 ) {
-    public SecretoResponse(String contenido, String autorName, String usernameDestinatario) {
-        this(null, contenido, autorName, null ,usernameDestinatario, false);
-    }
 
+    public SecretoResponse(Long id, String contenidoPlano, String autorVerificado, boolean esCompartido) {
+        this(id, contenidoPlano, autorVerificado, null, null, esCompartido);
+    }
 }
 
