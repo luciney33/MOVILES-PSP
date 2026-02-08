@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface EntrenamientoRepository extends JpaRepository<EntrenamientoEntity, Long> {
-    List<EntrenamientoEntity> getByUserId(Integer userId);
+    List<EntrenamientoEntity> getByUsuarioId(Integer usuarioId);
     List<EntrenamientoEntity> getByNombre(String nombre);
 }
 

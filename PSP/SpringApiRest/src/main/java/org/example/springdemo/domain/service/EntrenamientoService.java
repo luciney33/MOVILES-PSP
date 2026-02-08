@@ -54,7 +54,7 @@ public class EntrenamientoService {
     }
 
     public List<Entrenamiento> getByUserId(int userId) {
-        return entrenamientoRepository.getByUserId(userId)
+        return entrenamientoRepository.getByUsuarioId(userId)
                 .stream()
                 .map(entrenamientoMapper::toDomain)
                 .toList();

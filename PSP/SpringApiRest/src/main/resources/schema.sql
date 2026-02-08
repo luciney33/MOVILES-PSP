@@ -52,5 +52,5 @@ CREATE TABLE secretos_compartidos (
     fecha_compartido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (secreto_id) REFERENCES secretos(id) ON DELETE CASCADE,
     FOREIGN KEY (destinatario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
-    UNIQUE KEY unique_compartido (secreto_id, destinatario_id)
+    CONSTRAINT unique_compartido UNIQUE (secreto_id, destinatario_id)
 );
