@@ -4,8 +4,8 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "lucia_amiga",
-  "password": "lucia_amiga1234"
+  "username": "luciaaaaaaaaaa",
+  "password": "luciaaaaa1231"
 }
 
 <> 2026-02-08T225715.200.json
@@ -53,12 +53,12 @@ Content-Type: application/json
 
 ###
 POST http://localhost:8080/api/secretos
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhYWFhYWFhYWFhIiwiaWF0IjoxNzcwNTg2NTAyLCJleHAiOjE3NzA1OTAxMDJ9.BJG-OnH1zAG90yxDipB0bTS-qgxlMLKJvfOp_mUUaoojVtmzqD-OGXWIF0Ic4tLUYKJ6mODtBPx3MDOP_D9p9g
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhX2FtaWdhIiwiaWF0IjoxNzcwNTkxODIzLCJleHAiOjE3NzA1OTU0MjN9.0gJfwkMD1028kyHJcqHHG_VerL6eeaMJvRo1G7gp8KahnEu_lJRw9G4qavQWZOxHmoMejcQvLPZTaViiG5egRQ
 Content-Type: application/json
 
 {
-  "contenido": "klkkkk",
-  "password": "luciaaaaa1231"
+  "contenido": "secretooo",
+  "password": "lucia_amiga1234"
 }
 
 <> 2026-02-08T223526.201.json
@@ -70,12 +70,12 @@ Content-Type: application/json
 <> 2026-02-08T214148.401.txt
 
 ###
-POST http://localhost:8080/api/secretos/97/ver
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhX2FtaWdhIiwiaWF0IjoxNzcwNTg3ODM1LCJleHAiOjE3NzA1OTE0MzV9.St50sBPx4-eRYQ1UTozPqJVS0nynLDdn87fJd2HTZhry368el1fYXCWTsyUR5K9nBFnfHgsX0TZ2YWVSXUxBqw
+POST http://localhost:8080/api/secretos/1/ver
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhYWFhYWFhYWFhIiwiaWF0IjoxNzcwNTkxOTc4LCJleHAiOjE3NzA1OTU1Nzh9.XJH7iu_uRSN_17PcFFqNNGUXjP2RHjVR1XRZLMAKca3wixiNBvnMvYKKbLiYjaMGQKQhfOuNTT8FDopGzc31Vw
 Content-Type: application/json
 
 {
-  "password": "lucia_amiga1234"
+  "password": "luciaaaaa1231"
 }
 
 <> 2026-02-08T230117.500.json
@@ -88,20 +88,20 @@ Content-Type: application/json
 <> 2026-02-08T215325.403.json
 
 ###
-POST http://localhost:8080/api/secretos/97/compartir
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhYWFhYWFhYWFhIiwiaWF0IjoxNzcwNTg2NTAyLCJleHAiOjE3NzA1OTAxMDJ9.BJG-OnH1zAG90yxDipB0bTS-qgxlMLKJvfOp_mUUaoojVtmzqD-OGXWIF0Ic4tLUYKJ6mODtBPx3MDOP_D9p9g
+POST http://localhost:8080/api/secretos/1/compartir
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhX2FtaWdhIiwiaWF0IjoxNzcwNTkxODIzLCJleHAiOjE3NzA1OTU0MjN9.0gJfwkMD1028kyHJcqHHG_VerL6eeaMJvRo1G7gp8KahnEu_lJRw9G4qavQWZOxHmoMejcQvLPZTaViiG5egRQ
 Content-Type: application/json
 
 {
-  "receptorId": 129,
-  "password": "luciaaaaa1231"
+  "receptorId": 4,
+  "password": "lucia_amiga1234"
 }
 
 <> 2026-02-08T224215.200.txt
 
 ###
-DELETE http://localhost:8080/api/secretos/97/compartir/129
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhYWFhYWFhYWFhIiwiaWF0IjoxNzcwNTg2NTAyLCJleHAiOjE3NzA1OTAxMDJ9.BJG-OnH1zAG90yxDipB0bTS-qgxlMLKJvfOp_mUUaoojVtmzqD-OGXWIF0Ic4tLUYKJ6mODtBPx3MDOP_D9p9g
+DELETE http://localhost:8080/api/secretos/1/compartir/4
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhX2FtaWdhIiwiaWF0IjoxNzcwNTkxODIzLCJleHAiOjE3NzA1OTU0MjN9.0gJfwkMD1028kyHJcqHHG_VerL6eeaMJvRo1G7gp8KahnEu_lJRw9G4qavQWZOxHmoMejcQvLPZTaViiG5egRQ
 
 
 <> 2026-02-08T225928.403.json

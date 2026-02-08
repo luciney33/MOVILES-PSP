@@ -15,10 +15,10 @@ CREATE TABLE usuarios (
     expiracion_codigo TIMESTAMP,
     two_factor_enabled BOOLEAN DEFAULT FALSE,
     two_factor_secret VARCHAR(255),
-    iv varbinary(255) not null,
-    salt varbinary(255) not null,
-    clave_publica BLOB NOT NULL,
-    clave_privada_cifrada BLOB NOT NULL
+    iv varbinary(255),
+    salt varbinary(255),
+    clave_publica BLOB,
+    clave_privada_cifrada BLOB
 );
 
 CREATE TABLE entrenamientos (
@@ -50,8 +50,8 @@ CREATE TABLE entrenamiento_ejercicios (
 CREATE TABLE secretos (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     autor_id BIGINT NOT NULL,
-    iv varbinary(255) not null,
-    salt varbinary(255) not null,
+    iv varbinary(255),
+    salt varbinary(255),
     contenido_cifrado BLOB NOT NULL,
     clave_simetrica_cifrada BLOB NOT NULL,
     firma BLOB NOT NULL,
