@@ -17,6 +17,8 @@ public final class Constantes {
     public static final String HABILITAR_2_FA_PASO_2_CONFIRMAR_CODIGO = "Habilitar 2FA - Paso 2: Confirmar código";
     public static final String VERIFICA_EL_CODIGO_TOTP_GENERADO_POR_LA_APP_AUTENTICADORA_Y_ACTIVA_2_FA_PERMANENTEMENTE = "Verifica el código TOTP generado por la app autenticadora y activa 2FA permanentemente";
     public static final String FA_ACTIVADO_EXITOSAMENTE = "2FA activado exitosamente";
+    public static final String CLAVE_RSA_PUBLICA= "Clave RSA pública";
+    public static final String CLAVE_RSA_PRIVADA_CIFRADA="Clave RSA privada cifrada";
     public static final String SHA_512 = "SHA-512";
     public static final String AES = "AES";
     public static final String ROL = "rol";

@@ -1,9 +1,7 @@
 package org.example.emailspring.data.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.emailspring.common.Constantes;
 
 import java.util.HashSet;
@@ -11,9 +9,12 @@ import java.util.Set;
 
 @Entity
 @Table(name = Constantes.TABLE_ENTRENAMIENTO)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = "ejercicios")
+@ToString(exclude = "ejercicios")
 public class EntrenamientoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,7 @@ public class EntrenamientoEntity {
     @Column
     private String descripcion;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "entrenamiento_ejercicios",
             joinColumns = @JoinColumn(name = "entrenamiento_id"),

@@ -20,7 +20,9 @@ public class UsuarioMapper {
                 entity.getCodigoActivacion(),
                 entity.getExpiracionCodigo(),
                 entity.getTwoFactorEnabled(),
-                entity.getTwoFactorSecret()
+                entity.getTwoFactorSecret(),
+                entity.getPublicKey(),
+                entity.getPrivateKeyEncrypted()
         );
     }
 
@@ -37,7 +39,10 @@ public class UsuarioMapper {
                 u.expiracionCodigo(),
                 u.rol(),
                 u.twoFactorEnabled(),
-                u.twoFactorSecret()
+                u.twoFactorSecret(),
+                u.publicKey(),
+                u.privateKeyEncrypted(),
+                null
         );
     }
 }

@@ -8,6 +8,8 @@ import org.example.emailspring.common.Constantes;
 import org.example.emailspring.domain.model.Rol;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -45,4 +47,13 @@ public class UsuarioEntity {
 
     @Column
     private String twoFactorSecret;
+
+    @Column
+    private byte[] publicKey;
+
+    @Column
+    private byte[] privateKeyEncrypted;
+
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+    private List<SecretoEntity> secretos = new ArrayList<>();
 }

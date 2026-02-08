@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface EntrenamientoRepository extends JpaRepository<EntrenamientoEntity, Long> {
 
-    @Query("SELECT DISTINCT e FROM EntrenamientoEntity e LEFT JOIN FETCH e.ejercicios")
+    @Query("SELECT e FROM EntrenamientoEntity e LEFT JOIN FETCH e.ejercicios")
     List<EntrenamientoEntity> findAllWithEjercicios();
 
     @Query("SELECT e FROM EntrenamientoEntity e LEFT JOIN FETCH e.ejercicios WHERE e.id = :id")
