@@ -29,7 +29,7 @@ Content-Type: application/json
 
 ### DEBE FUNCIONAR - Listar entrenamientos
 GET http://localhost:8080/api/entrenamientos
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6ImFkbWluIiwiaWF0IjoxNzcwNDI4NjkzLCJleHAiOjE3NzA0MzIyOTN9.f8X7OONCDNRF8d-wOnBBCrxHsAKo0e-6nPxlnYeHkbyrU9cVv2fibu_QJ-0CBwPLMZ0H9hkULxEhnjfn6vuYtA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6ImFkbWluIiwiaWF0IjoxNzcwNDkxMTYxLCJleHAiOjE3NzA0OTQ3NjF9.kOAJLV6w9SXnqCv-Xy1c2Cg1xHv3q4aoufBwSUk8JrT4USkRLfbNaX2cvimLzAZ7zELDvaPtg3_tZ5eiq0cn7Q
 
 
 ### ========================================

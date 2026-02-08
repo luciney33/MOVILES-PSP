@@ -29,6 +29,10 @@ public record Usuario(
         @Schema(description = Constantes.INDICA_SI_EL_USUARIO_TIENE_HABILITADA_LA_AUTENTICACION_DE_DOS_FACTORES)
         Boolean twoFactorEnabled,
         @Schema(description = Constantes.SECRETO_TOTP_PARA_AUTENTICACION_DE_DOS_FACTORES, accessMode = Schema.AccessMode.READ_ONLY)
-        String twoFactorSecret
+        String twoFactorSecret,
+        @Schema(description = Constantes.CLAVE_RSA_PUBLICA, accessMode = Schema.AccessMode.READ_ONLY)
+        byte[] publicKey,
+        @Schema(description = Constantes.CLAVE_RSA_PRIVADA_CIFRADA, accessMode = Schema.AccessMode.READ_ONLY)
+        byte[] privateKeyEncrypted
 ) {
     }
