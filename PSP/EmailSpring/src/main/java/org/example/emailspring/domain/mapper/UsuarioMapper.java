@@ -32,17 +32,6 @@ public class UsuarioMapper {
     }
 
 
-    public UsuarioResponseDTO toResponse(Usuario usuario) {
-        return new UsuarioResponseDTO(
-                usuario.id(),
-                usuario.username(),
-                usuario.email(),
-                usuario.nombre(),
-                Base64.getEncoder().encodeToString(usuario.publicKey()),
-                usuario.rol()
-        );
-    }
-
 
     public UsuarioEntity toEntity(Usuario u) {
         if (u == null) return null;

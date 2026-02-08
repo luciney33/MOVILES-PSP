@@ -22,18 +22,6 @@ public class EjercicioMapper {
         );
     }
 
-    public EjercicioEntity toEntity(Ejercicio ejercicio) {
-        if (ejercicio == null) return null;
-        return new EjercicioEntity(
-                ejercicio.id(),
-                ejercicio.nombre(),
-                ejercicio.tipoEntrenamiento(),
-                ejercicio.imagenUrl(),
-                ejercicio.descripcion(),
-                null
-        );
-    }
-
     public List<Ejercicio> toDomainList(Set<EjercicioEntity> entities) {
         if (entities == null) return List.of();
         return entities.stream()

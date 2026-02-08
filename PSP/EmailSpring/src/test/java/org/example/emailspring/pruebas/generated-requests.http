@@ -53,12 +53,12 @@ Content-Type: application/json
 
 ###
 POST http://localhost:8080/api/secretos
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhX2FtaWdhIiwiaWF0IjoxNzcwNTkxODIzLCJleHAiOjE3NzA1OTU0MjN9.0gJfwkMD1028kyHJcqHHG_VerL6eeaMJvRo1G7gp8KahnEu_lJRw9G4qavQWZOxHmoMejcQvLPZTaViiG5egRQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6Imx1Y2lhYWFhYWFhYWFhIiwiaWF0IjoxNzcwNTkyNTE1LCJleHAiOjE3NzA1OTYxMTV9.Zp4YhePp-nZrGX9T5vNQ5xE42BwA5SV7Kj0qya1JWjLYK45Rc4dmc9mMcJLyVJXROEE2nyBjoba-Lg_4SRb6kA
 Content-Type: application/json
 
 {
   "contenido": "secretooo",
-  "password": "lucia_amiga1234"
+  "password": "luciaaaaa1231"
 }
 
 <> 2026-02-08T223526.201.json
