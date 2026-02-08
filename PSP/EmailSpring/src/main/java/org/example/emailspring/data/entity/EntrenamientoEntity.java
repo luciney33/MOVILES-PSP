@@ -13,8 +13,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = Constantes.EJERCICIOS)
-@ToString(exclude = Constantes.EJERCICIOS)
+@EqualsAndHashCode(exclude = "ejercicios") //lo dejo hardcodeado porque sino me da fallo
+@ToString(exclude = "ejercicios")
 public class EntrenamientoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
