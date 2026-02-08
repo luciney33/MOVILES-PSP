@@ -6,7 +6,6 @@ import org.example.springdemo.data.UsuarioRepository;
 import org.example.springdemo.data.entity.SecretoCompartidoEntity;
 import org.example.springdemo.data.entity.SecretoEntity;
 import org.example.springdemo.data.entity.UsuarioEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,17 +19,20 @@ import java.util.List;
 @Service
 public class SecretoService {
     
-    @Autowired
-    private SecretoRepository secretoRepository;
+    private final SecretoRepository secretoRepository;
+    private final SecretoCompartidoRepository secretoCompartidoRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final CryptoService cryptoService;
     
-    @Autowired
-    private SecretoCompartidoRepository secretoCompartidoRepository;
-    
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-    
-    @Autowired
-    private CryptoService cryptoService;
+    public SecretoService(SecretoRepository secretoRepository,
+                         SecretoCompartidoRepository secretoCompartidoRepository,
+                         UsuarioRepository usuarioRepository,
+                         CryptoService cryptoService) {
+        this.secretoRepository = secretoRepository;
+        this.secretoCompartidoRepository = secretoCompartidoRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.cryptoService = cryptoService;
+    }
     
     /**
      * Save a new secret
@@ -147,6 +149,14 @@ public class SecretoService {
         }
         
         return secretos;
+    }
+    
+    /**
+     * Get a specific secret by ID
+     */
+    @Transactional(readOnly = true)
+    public SecretoEntity obtenerSecretoPorId(Long secretoId) {
+        return secretoRepository.findById(secretoId).orElse(null);
     }
     
     /**

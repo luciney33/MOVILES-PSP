@@ -168,23 +168,23 @@ public class CryptoService {
     }
     
     /**
-     * Encrypt AES key with RSA public key
+     * Encrypt AES key with RSA public key using OAEP padding
      */
     public byte[] cifrarClaveAESConRSA(SecretKey aesKey, PublicKey publicKey) 
             throws NoSuchPaddingException, NoSuchAlgorithmException, 
                    InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
+        Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         return cipher.doFinal(aesKey.getEncoded());
     }
     
     /**
-     * Decrypt AES key with RSA private key
+     * Decrypt AES key with RSA private key using OAEP padding
      */
     public SecretKey descifrarClaveAESConRSA(byte[] encryptedAesKey, PrivateKey privateKey) 
             throws NoSuchPaddingException, NoSuchAlgorithmException, 
                    InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
+        Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         byte[] decryptedKeyBytes = cipher.doFinal(encryptedAesKey);
         return new SecretKeySpec(decryptedKeyBytes, AES_ALGORITHM);

@@ -98,11 +98,11 @@ public class SecretoController {
             Long usuarioId = authService.getUsuarioFromSession(session);
             String contenido = secretoService.verSecreto(id, usuarioId, request.password());
             
-            // Get secret metadata
-            SecretoEntity secreto = secretoService.listarSecretos(usuarioId).stream()
-                    .filter(s -> s.getId().equals(id))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Secreto no encontrado"));
+            // Get secret metadata directly
+            SecretoEntity secreto = secretoService.obtenerSecretoPorId(id);
+            if (secreto == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Secreto no encontrado");
+            }
             
             return ResponseEntity.ok(new SecretoContenidoDTO(
                     secreto.getId(),
