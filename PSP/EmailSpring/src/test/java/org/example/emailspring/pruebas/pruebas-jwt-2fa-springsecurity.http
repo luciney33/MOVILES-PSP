@@ -1,0 +1,163 @@
+### DEBE FUNCIONAR - Registro de nuevo usuario
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser111111",
+  "password": "Test1234561111",
+  "email": "testuser1111@example.com",
+  "nombre": "Usuario de Prueba",
+  "rol": "USER"
+}
+
+
+### DEBE FUNCIONAR - Activar cuenta
+GET http://localhost:8080/api/auth/activar?codigo=CODIGO_DEL_EMAIL
+
+
+### ========================================
+### LOGIN SIN 2FA
+### ========================================
+
+### DEBE FUNCIONAR - Login básico (sin 2FA)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### DEBE FUNCIONAR - Listar entrenamientos
+GET http://localhost:8080/api/entrenamientos
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJBRE1JTiIsInN1YiI6ImFkbWluIiwiaWF0IjoxNzcwNDkxMTYxLCJleHAiOjE3NzA0OTQ3NjF9.kOAJLV6w9SXnqCv-Xy1c2Cg1xHv3q4aoufBwSUk8JrT4USkRLfbNaX2cvimLzAZ7zELDvaPtg3_tZ5eiq0cn7Q
+
+
+### ========================================
+### FASE 3: HABILITAR 2FA
+### ========================================
+
+### DEBE FUNCIONAR - Habilitar 2FA
+POST http://localhost:8080/api/auth/2fa/enable
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODI5NTEsImV4cCI6MTc2OTk4NjU1MX0.Le3PvY7BIvUZzvkoMVnuAmrl2A6JhvlLEurM4jNOHIJqFPKbMDtf6_0MCfxQ2SgUwtTzPO99BSDM8Jh8DkqAnA
+
+### DEBE FUNCIONAR - Confirmar 2FA con código de Google Authenticator
+POST http://localhost:8080/api/auth/2fa/confirm
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODI5NTEsImV4cCI6MTc2OTk4NjU1MX0.Le3PvY7BIvUZzvkoMVnuAmrl2A6JhvlLEurM4jNOHIJqFPKbMDtf6_0MCfxQ2SgUwtTzPO99BSDM8Jh8DkqAnA
+Content-Type: application/json
+
+{
+  "code": "865815"
+}
+
+
+### ========================================
+### FASE 4: LOGIN CON 2FA HABILITADO
+### ========================================
+
+### DEBE FUNCIONAR - Login credenciales
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "Test123456"
+}
+
+### DEBE FUNCIONAR - Login verificar código 2FA
+POST http://localhost:8080/api/auth/2fa/verify
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "codigo": "954658"
+}
+
+
+### ========================================
+### FASE 5: GESTIÓN DE TOKENS
+### ========================================
+
+### DEBE FUNCIONAR - Refrescar tokens
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc2OTk4MzA3NiwiZXhwIjoxNzcwNTg3ODc2fQ.H23PuGdlvfQJ4dq_iyhPn27Ad1pT_o8cVQW3ew-bYlK5QVktUc7itU84EFs0EUadReuPMh1V3-bXEjY9t82U6w",
+  "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODMwNzYsImV4cCI6MTc2OTk4NjY3Nn0.C_HIarRxfjh8P6D-TFbJzstY5Hp6g6nSCn5rwtJWRFnXUXp677av3QJubCCky_UUpn006eORtJiRPWzmz-Zm_Q"
+}
+
+### DEBE FUNCIONAR - Logout
+POST http://localhost:8080/api/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODMxNzgsImV4cCI6MTc2OTk4Njc3OH0.69aYPslEj8yKgjQ9bGwYC6BDqaBBXudd-lcTyRrxb7U-T2WOFPox-WucPMvts3yumIuXKOsrryn1xwXvitSAFw
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc2OTk4MzE3OCwiZXhwIjoxNzcwNTg3OTc4fQ.FnGVDSTi7LKEyn4hPjY8vo7OcCNlYbAdXEgGnVt3vthPQcrWgM6uGJM1rADHvVNhDp0sZAeMXs7MGqtycBj2YA"
+}
+
+### DEBE FALLAR  - Usar token revocado
+GET http://localhost:8080/api/entrenamientos
+Authorization: Bearer TOKEN_REVOCADO
+
+
+### ========================================
+### FASE 6: DESHABILITAR 2FA
+### ========================================
+
+### DEBE FUNCIONAR - Deshabilitar 2FA
+POST http://localhost:8080/api/auth/2fa/disable
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2wiOiJVU0VSIiwic3ViIjoidGVzdHVzZXIiLCJpYXQiOjE3Njk5ODMzNDIsImV4cCI6MTc2OTk4Njk0Mn0.yip5UQiypBrsnYNDrHP657RMHgEuy7Sh7iyvi5Jc4jRE_Ss_pZU_FmXilsbP9Aq6n073KGbubWMWl6BR9xLjSA
+
+### DEBE FUNCIONAR - Login sin 2FA
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "Test123456"
+}
+
+
+### ========================================
+### FASE 7: CASOS DE ERROR
+### ========================================
+
+### DEBE FALLAR
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password_incorrecta"
+}
+
+
+### DEBE FALLAR
+POST http://localhost:8080/api/auth/2fa/verify
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "codigo": "000000"
+}
+
+### DEBE FALLAR
+POST http://localhost:8080/api/auth/2fa/verify
+Content-Type: application/json
+
+{
+  "username": "usuarioquenoexiste",
+  "codigo": "123456"
+}
+
+### DEBE FALLAR
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "token.invalido.aqui",
+  "accessToken": "token.invalido.aqui"
+}
+
+

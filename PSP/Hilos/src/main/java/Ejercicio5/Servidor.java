@@ -89,7 +89,7 @@ public class Servidor {
     }
 
     private void mostrarEstadisticas() {
-        System.out.println("---ESTADÍSTICAS DEL SERVIDOR -----");
+        System.out.println("---ESTADÍSTICAS DEL SERVIDOooR -----");
         System.out.println("Descargas totales: " + descargasTotales.get());
         System.out.println("Descargas completadas: " + descargasCompletadas.get());
         System.out.println("Descargas fallidas: " + descargasFallidas.get());

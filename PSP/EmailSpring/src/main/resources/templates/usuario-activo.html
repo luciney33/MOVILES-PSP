@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuenta Activada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        h1 {
+            color: #28a745;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .mensaje-exito {
+            color: #155724;
+            background-color: #d4edda;
+            border: 2px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            font-size: 1.2em;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .mensaje-exito p {
+            margin: 10px 0;
+        }
+
+        .mensaje-exito strong {
+            color: #0d4221;
+            font-size: 1.1em;
+        }
+
+        .info {
+            color: #6c757d;
+            margin-top: 30px;
+            font-size: 1em;
+            line-height: 1.8;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            color: #868e96;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .success-icon {
+                font-size: 60px;
+            }
+
+            .mensaje-exito {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="success-icon">✅</div>
+    <h1>¡Cuenta Activada!</h1>
+
+    <div class="mensaje-exito">
+        <p>¡Hola <strong th:text="${nombreUsuario}">Usuario</strong>!</p>
+        <p>Tu cuenta ha sido activada exitosamente.</p>
+    </div>
+
+    <div class="info">
+        <p>Ya puedes iniciar sesión con tus credenciales y disfrutar de todos los servicios.</p>
+    </div>
+
+    <div class="footer">
+        <p>¡Bienvenido a nuestra plataforma!</p>
+    </div>
+</div>
+</body>
+</html>

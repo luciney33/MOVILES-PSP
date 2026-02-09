@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de Verificación 2FA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #555555;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .codigo {
+            background-color: #f0f0f0;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            color: #007bff;
+            letter-spacing: 5px;
+            margin: 20px 0;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #856404;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+            text-align: center;
+            font-size: 12px;
+            color: #999999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¡Hola <span th:text="${nombreUsuario}">Usuario</span>!</h1>
+
+        <p>Has solicitado iniciar sesión en tu cuenta con autenticación de dos factores activada.</p>
+
+        <p>Tu código de verificación es:</p>
+
+        <div class="codigo" th:text="${codigo}">123456</div>
+
+        <div class="warning">
+            <strong>⚠️ Importante:</strong> Este código expirará en 5 minutos. Si no solicitaste este código, ignora este mensaje.
+        </div>
+
+        <p>Por tu seguridad, nunca compartas este código con nadie.</p>
+
+        <div class="footer">
+            <p>Este es un mensaje automático, por favor no respondas a este correo.</p>
+            <p>&copy; 2025 EmailSpring - Sistema de Autenticación</p>
+        </div>
+    </div>
+</body>
+</html>
+

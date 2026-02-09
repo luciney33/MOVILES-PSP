@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error de Activación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        h1 {
+            color: #dc3545;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .mensaje-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 2px solid #f5c6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            font-size: 1.2em;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .mensaje-error strong {
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .info {
+            color: #6c757d;
+            margin-top: 30px;
+            font-size: 1em;
+            line-height: 1.8;
+        }
+
+        .info h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .info ul {
+            text-align: left;
+            display: inline-block;
+            margin: 20px 0;
+            list-style: none;
+        }
+
+        .info ul li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .info ul li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #dc3545;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            color: #868e96;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .error-icon {
+                font-size: 60px;
+            }
+
+            .mensaje-error {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="error-icon">⚠️</div>
+    <h1>Error de Activación</h1>
+
+    <div class="mensaje-error">
+        <strong th:text="${mensajeError}">Error desconocido</strong>
+    </div>
+
+    <div class="info">
+        <h3>¿Qué puedes hacer?</h3>
+        <ul>
+            <li>Verifica que el código de activación sea correcto</li>
+            <li>Asegúrate de que el código no haya expirado</li>
+            <li>Comprueba que tu cuenta no haya sido activada previamente</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        <p>Si el problema persiste, por favor contacta con el soporte técnico.</p>
+    </div>
+</div>
+</body>
+</html>
+
