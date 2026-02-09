@@ -47,15 +47,4 @@ fun CharacterEntity.toDomain(): DragonBallCharacter {
 }
 
 
-fun DragonBallCharacter.toEntity(): CharacterEntity {
-    return CharacterEntity(
-        id = this.id,
-        name = this.name,
-        ki = this.ki,
-        maxKi = this.ki,
-        race = this.race,
-        gender = "",
-        description = this.description,
-        image = this.image
-    )
-}
+

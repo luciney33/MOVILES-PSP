@@ -1,7 +1,6 @@
 package com.example.navigationcompose.common
 
 object Constantes {
-    // ========== ERRORES ==========
     const val ERROR_DEL_SERVIDOR = "Error del servidor: "
     const val ERROR_DE_CONEXION = "Error de conexión: "
     const val ERROR_DE_RED = "Error de red: "
@@ -16,50 +15,27 @@ object Constantes {
     const val ERROR_NO_ELIMINAR = "No se pudo eliminar"
     const val ERROR_CARGAR_EJERCICIOS = "Error al cargar lista de ejercicios"
     const val ERROR_GENERICO = "Error: "
-    const val EL_PERSONAJE_VINO_VACIO = "El personaje vino vacío"
-    const val ERROR_OBTENER_DETALLE = "Error al obtener detalle: "
     const val ERROR_PAGE_NUMBER = "Page number must be non-negative"
-    const val ERROR_ELIMINAR_PERSONAJE = "Error al eliminar personaje: "
-    const val ERROR_ACTUALIZAR_PERSONAJE = "Error al actualizar personaje: "
-    const val ERROR_AGREGAR_PERSONAJE = "Error al agregar personaje: "
-
-    // ========== MENSAJES DE ÉXITO ==========
-    const val PERSONAJE_ELIMINADO_EXITOSO = "Personaje eliminado exitosamente"
-    const val PERSONAJE_ACTUALIZADO_EXITOSO = "Personaje actualizado exitosamente"
-    const val PERSONAJE_AGREGADO_EXITOSO = "Personaje agregado exitosamente"
-
-    // ========== URLs API ==========
     const val URL_CHARACTERS = "characters"
-    const val URL_CHARACTERS_ID = "characters/{id}"
-    const val URL_PLANETS = "planets"
-    const val URL_PLACEHOLDER_POST = "posts"
-    const val URL_PLACEHOLDER_DELETE = "posts/{id}"
-    const val URL_PLACEHOLDER_UPDATE = "posts/{id}"
 
-    // ========== PARÁMETROS ==========
     const val ID = "id"
     const val PAGE = "page"
 
-    // ========== RUTAS API GYM ==========
     const val API_AUTH_LOGIN = "api/auth/login"
     const val API_AUTH_REGISTER = "api/auth/register"
     const val API_ENTRENAMIENTOS = "api/entrenamientos"
     const val API_ENTRENAMIENTOS_ID = "api/entrenamientos/{id}"
     const val API_EJERCICIOS = "api/ejercicios"
 
-    // ========== NOMBRES DE RETROFIT ==========
-    const val RETROFIT_PLACEHOLDER = "PlaceholderRetrofit"
+    const val RETROFIT_GYMAPI = "GymRetrofit"
     const val RETROFIT_DBAPI = "DragonBallRetrofit"
 
-    // ========== JSON ==========
     const val ITEMS = "items"
 
-    // ========== SHARED PREFERENCES ==========
     const val PREFS_NAME = "prefs_seguras"
     const val PREF_ACCESS_TOKEN = "access_token"
     const val PREF_REFRESH_TOKEN = "refresh_token"
 
-    // ========== TEXTOS UI - LOGIN ==========
     const val TEXT_APP_NAME = "GYM APP"
     const val TEXT_LABEL_USUARIO = "Usuario"
     const val TEXT_LABEL_PASSWORD = "Contraseña"
@@ -67,7 +43,6 @@ object Constantes {
     const val TEXT_NO_ACCOUNT = "¿No tienes cuenta? Regístrate aquí"
     const val TEXT_USUARIO_EJEMPLO = "UsuarioEjemplo"
 
-    // ========== TEXTOS UI - REGISTER ==========
     const val TEXT_TITULO_REGISTRO = "Registro"
     const val TEXT_CREAR_CUENTA = "Crear Cuenta"
     const val TEXT_LABEL_EMAIL = "Email"
@@ -76,7 +51,6 @@ object Constantes {
     const val TEXT_BUTTON_REGISTRARSE = "REGISTRARSE"
     const val TEXT_DESCRIPCION_VOLVER = "Volver"
 
-    // ========== TEXTOS UI - ENTRENAMIENTO ==========
     const val TEXT_NOMBRE_ENTRENAMIENTO = "Nombre Entrenamiento"
     const val TEXT_DESCRIPCION = "Descripción"
     const val TEXT_BUTTON_CREAR = "CREAR"
@@ -85,7 +59,6 @@ object Constantes {
     const val TEXT_NOTAS_PROGRESION = "Notas sobre la progresión de cargas para esta semana."
     const val TEXT_EJERCICIOS_RUTINA = "Ejercicios de esta rutina"
 
-    // ========== TEXTOS UI - LISTA ENTRENAMIENTOS ==========
     const val TEXT_EMPUJE = "Empuje (Pecho/Tríceps)"
     const val TEXT_TRACCION = "Tracción (Espalda/Bíceps)"
     const val TEXT_PIERNA = "Pierna Completa"
@@ -93,15 +66,12 @@ object Constantes {
     const val TEXT_HIPERTROFIA = "Hipertrofia"
     const val TEXT_DIA_PESADO = "Día pesado"
 
-    // ========== URLs SERVIDOR ==========
     const val URL_BASE_EMULATOR = "http://10.0.2.2:8080"
 
-    // ========== TEXTOS UI - REGISTER ADICIONALES ==========
     const val TEXT_YA_TIENE_CUENTA = "¿Ya tienes cuenta? Inicia sesión"
     const val TEXT_OCULTAR_PASSWORD = "Ocultar contraseña"
     const val TEXT_MOSTRAR_PASSWORD = "Mostrar contraseña"
-
-    // ========== TEXTOS UI - DRAGON BALL ==========
+    const val USER = "USER"
     const val TEXT_PERSONAJES_DRAGON_BALL = "Personajes Dragon Ball"
     const val TEXT_RAZA = "Raza: "
     const val TEXT_KI = "Ki: "
@@ -115,4 +85,23 @@ object Constantes {
     const val TEXT_KI_FREEZER = "120.000.000"
     const val URL_EXAMPLE_GOKU_GIF = "https://example.com/goku.gif"
     const val URL_EXAMPLE_FREEZER_GIF = "https://example.com/freezer.gif"
+
+    // ========== TEXTOS UI - HOME ==========
+    const val TEXT_GYM = "Gym"
+    const val TEXT_DRAGON_BALL = "DragonBall"
+    const val TEXT_SALIR = "Salir"
+    const val TEXT_BIENVENIDO = "¡BIENVENIDO!"
+    const val TEXT_NO_SESIONES_RECIENTES = "No hay sesiones recientes"
+    const val TEXT_PERFIL = "Perfil"
+    const val TEXT_CONTENIDO_PANTALLA = "Contenido de la pantalla seleccionada"
+
+    // ========== AUTH ==========
+    const val AUTH_HEADER = "Authorization"
+    const val AUTH_BEARER_PREFIX = "Bearer "
+
+    const val ERROR_PASSWORDS_NO_COINCIDEN = "Las contraseñas no coinciden"
+    const val ERROR_PASSWORD_VACIA = "La contraseña no puede estar vacía"
+    const val ERROR_DESCONOCIDO = "Error desconocido"
+    const val REGISTRO_EXITOSO = "¡Registro completado con éxito!"
+    const val REGISTRO_EXITOSO_MENSAJE = "Registro completado con éxito! Activa tu cuenta desde el email y logueate"
 }

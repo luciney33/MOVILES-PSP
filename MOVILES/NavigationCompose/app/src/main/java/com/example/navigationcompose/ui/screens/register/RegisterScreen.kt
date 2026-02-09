@@ -48,6 +48,13 @@ fun RegisterScreen(
                         duration = SnackbarDuration.Long
                     )
                 }
+                is UiEvent.RegisterSuccess -> {
+                    snackbarHostState.showSnackbar(
+                        message = Constantes.REGISTRO_EXITOSO_MENSAJE,
+                        duration = SnackbarDuration.Short
+                    )
+                    onRegisterSuccess()
+                }
                 else -> Unit
             }
         }

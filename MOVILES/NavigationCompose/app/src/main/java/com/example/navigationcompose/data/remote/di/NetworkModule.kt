@@ -1,6 +1,7 @@
 package com.example.navigationcompose.data.remote.di
 
 import com.example.navigationcompose.BuildConfig
+import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.data.remote.api.DragonBallApiService
 import com.example.navigationcompose.data.remote.api.GymApiService
 import com.example.navigationcompose.data.remote.interceptor.AuthInterceptor
@@ -42,7 +43,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @Named("GymRetrofit")
+    @Named(Constantes.RETROFIT_GYMAPI)
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
@@ -53,13 +54,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGymApiService(@Named("GymRetrofit") retrofit: Retrofit): GymApiService {
+    fun provideGymApiService(@Named(Constantes.RETROFIT_GYMAPI) retrofit: Retrofit): GymApiService {
         return retrofit.create(GymApiService::class.java)
     }
 
     @Provides
     @Singleton
-    @Named("DragonBallRetrofit")
+    @Named(Constantes.RETROFIT_DBAPI)
     fun provideDragonBallRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL_DRAGONBALL)
@@ -70,7 +71,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideDragonBallApiService(@Named("DragonBallRetrofit") retrofit: Retrofit): DragonBallApiService {
+    fun provideDragonBallApiService(@Named(Constantes.RETROFIT_DBAPI) retrofit: Retrofit): DragonBallApiService {
         return retrofit.create(DragonBallApiService::class.java)
     }
 

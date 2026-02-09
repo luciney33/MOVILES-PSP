@@ -1,5 +1,6 @@
 package com.example.navigationcompose.data.remote.entity
 
+import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.domain.model.Ejercicio
 import com.example.navigationcompose.domain.model.Entrenamiento
 import com.example.navigationcompose.domain.model.Usuario
@@ -28,13 +29,14 @@ data class EntrenamientoEntity(
     val ejercicios: List<EjercicioEntity>? = emptyList()
 )
 
+
 data class UsuarioEntity(
     val id: Long,
     val username: String,
     val email: String,
     val nombre: String,
     val password: String,
-    val rol: String = "USER",
+    val rol: String = Constantes.USER,
     val activo: Boolean = true,
     val publicKey: String? = null
 )

@@ -1,4 +1,4 @@
-package com.example.navigationcompose
+package com.example.navigationcompose.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NavigationComposeTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.Companion.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     AppNavigation()
@@ -29,4 +29,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-

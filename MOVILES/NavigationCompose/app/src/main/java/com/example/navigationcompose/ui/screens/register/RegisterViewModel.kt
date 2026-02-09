@@ -2,6 +2,7 @@ package com.example.navigationcompose.ui.screens.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.common.NetworkResult
 import com.example.navigationcompose.data.remote.entity.UsuarioEntity
 import com.example.navigationcompose.domain.usecase.RegisterUseCase
@@ -46,11 +47,11 @@ class RegisterViewModel @Inject constructor(
             RegisterEvent.Register -> {
                 val currentState = _state.value
                 if (currentState.password != currentState.confirmPassword) {
-                    _state.update { it.copy(error = "Las contraseñas no coinciden") }
+                    _state.update { it.copy(error = Constantes.ERROR_PASSWORDS_NO_COINCIDEN) }
                     return
                 }
                 if (currentState.password.isBlank()) {
-                    _state.update { it.copy(error = "La contraseña no puede estar vacía") }
+                    _state.update { it.copy(error = Constantes.ERROR_PASSWORD_VACIA) }
                     return
                 }
                 register()
@@ -69,7 +70,7 @@ class RegisterViewModel @Inject constructor(
                 email = currentState.email,
                 nombre = currentState.nombre,
                 password = currentState.password,
-                rol = "USER",
+                rol = Constantes.USER,
                 activo = true
             )
 
@@ -81,11 +82,10 @@ class RegisterViewModel @Inject constructor(
                 is NetworkResult.Error -> {
                     _state.update { it.copy(
                         isLoading = false,
-                        error = result.message ?: "Error desconocido"
+                        error = result.message ?: Constantes.ERROR_DESCONOCIDO
                     ) }
                 }
             }
         }
     }
 }
-

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.ui.navigation.Screen
 import com.example.navigationcompose.ui.screens.dragonBall.DragonBallListScreen
 import com.example.navigationcompose.ui.screens.gym.detalleEntrenamiento.DetalleEntrenamientoScreen
@@ -48,19 +49,19 @@ fun HomeScreen(onLogout: () -> Unit) {
                     selected = true,
                     onClick = { navController.navigate(Screen.ListaEntrenamiento) },
                     icon = { Icon(Icons.Default.List, null) },
-                    label = { Text("Gym") }
+                    label = { Text(Constantes.TEXT_GYM) }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate(Screen.ApiExterna) },
                     icon = { Icon(imageVector = Icons.Default.Public, contentDescription = null) },
-                    label = { Text("DragonBall") }
+                    label = { Text(Constantes.TEXT_DRAGON_BALL) }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { onLogout() },
                     icon = { Icon(Icons.Default.ExitToApp, null) },
-                    label = { Text("Salir") }
+                    label = { Text(Constantes.TEXT_SALIR) }
                 )
             }
         }
@@ -90,7 +91,7 @@ fun HomeCheckPreview() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "¡BIENVENIDO!",
+            text = Constantes.TEXT_BIENVENIDO,
             style = MaterialTheme.typography.headlineLarge,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold
@@ -103,7 +104,7 @@ fun HomeCheckPreview() {
             elevation = CardDefaults.cardElevation(4.dp)
         ) {
             Text(
-                "No hay sesiones recientes",
+                Constantes.TEXT_NO_SESIONES_RECIENTES,
                 modifier = Modifier.padding(16.dp),
                 textAlign = TextAlign.Center
             )
@@ -122,25 +123,25 @@ fun HomeBottomBarPreview() {
                         selected = true,
                         onClick = {},
                         icon = { Icon(Icons.Default.List, contentDescription = null) },
-                        label = { Text("Gym") }
+                        label = { Text(Constantes.TEXT_GYM) }
                     )
                     NavigationBarItem(
                         selected = false,
                         onClick = {},
                         icon = { Icon(Icons.Default.Public, contentDescription = null) },
-                        label = { Text("DragonBall") }
+                        label = { Text(Constantes.TEXT_DRAGON_BALL) }
                     )
                     NavigationBarItem(
                         selected = false,
                         onClick = {},
                         icon = { Icon(Icons.Default.Person, contentDescription = null) },
-                        label = { Text("Perfil") }
+                        label = { Text(Constantes.TEXT_PERFIL) }
                     )
                 }
             }
         ) { padding ->
             Box(Modifier.padding(padding).fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Contenido de la pantalla seleccionada")
+                Text(Constantes.TEXT_CONTENIDO_PANTALLA)
             }
         }
     }
