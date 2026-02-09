@@ -1,96 +1,34 @@
 package com.example.navigationcompose.data
 
+import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.common.NetworkResult
-import com.example.navigationcompose.data.local.TokenManager
-import com.example.navigationcompose.domain.model.Ejercicio
-import com.example.navigationcompose.domain.model.Entrenamiento
-import com.example.navigationcompose.domain.model.Usuario
-import com.example.navigationcompose.data.remote.api.GymApiService
-import com.example.navigationcompose.data.remote.entity.LoginRequest
-import com.example.navigationcompose.data.remote.entity.LoginResponse
-import com.example.navigationcompose.data.remote.entity.*
+import com.example.navigationcompose.data.remote.api.DragonBallApiService
+import com.example.navigationcompose.data.remote.entity.toDomain
+import com.example.navigationcompose.domain.model.DragonBallCharacter
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GymRepository @Inject constructor(
-    private val apiService: GymApiService,
-    private val tokenManager: TokenManager
+class DragonBallRepository @Inject constructor(
+    private val apiService: DragonBallApiService,
 ) {
 
-
-    suspend fun login(request: LoginRequest): NetworkResult<LoginResponse> {
+    suspend fun getCharacters(page: Int = 1): NetworkResult<List<DragonBallCharacter>> {
         return try {
-            val response = apiService.login(request)
-            if (response.isSuccessful && response.body() != null) {
-                val loginResponse = response.body()!!
-                tokenManager.saveToken(loginResponse.accessToken)
-                NetworkResult.Success(loginResponse)
-            } else {
-                NetworkResult.Error("Credenciales incorrectas")
-            }
-        } catch (e: Exception) {
-            NetworkResult.Error("Error de red: ${e.message}")
-        }
-    }
+            val response = apiService.getCharacters(page)
 
-    suspend fun register(usuario: UsuarioEntity): NetworkResult<Usuario> {
-        return try {
-            val response = apiService.register(usuario)
-            if (response.isSuccessful && response.body() != null) {
-                NetworkResult.Success(response.body()!!.toDomain())
-            } else {
-                NetworkResult.Error("Error en el registro")
-            }
-        } catch (e: Exception) {
-            NetworkResult.Error(e.message ?: "Fallo de conexión")
-        }
-    }
-
-    fun logout() {
-        tokenManager.deleteToken()
-    }
-
-
-    suspend fun getEntrenamientos(): NetworkResult<List<Entrenamiento>> {
-        return try {
-            val response = apiService.getEntrenamientos()
             if (response.isSuccessful) {
-                val list = response.body()?.map { it.toDomain() } ?: emptyList()
-                NetworkResult.Success(list)
+                val dragonBallResponse = response.body()
+                val domainList =
+                    dragonBallResponse?.characterEntities?.map { it.toDomain() } ?: emptyList()
+                NetworkResult.Success(domainList)
+
             } else {
-                NetworkResult.Error("Error al obtener entrenamientos: ${response.code()}")
+                NetworkResult.Error("${Constantes.ERROR_DEL_SERVIDOR}${response.code()} ${response.message()}")
             }
+
         } catch (e: Exception) {
-            NetworkResult.Error("Error de conexión: ${e.message}")
+            NetworkResult.Error("${Constantes.ERROR_DE_CONEXION}${e.message}")
         }
     }
-
-    suspend fun getEntrenamientoById(id: Long): NetworkResult<Entrenamiento> {
-        return try {
-            val response = apiService.getEntrenamientoById(id)
-            if (response.isSuccessful && response.body() != null) {
-                NetworkResult.Success(response.body()!!.toDomain())
-            } else {
-                NetworkResult.Error("Entrenamiento no encontrado")
-            }
-        } catch (e: Exception) {
-            NetworkResult.Error(e.message ?: "Error")
-        }
-    }
-
-    suspend fun getEjercicios(): NetworkResult<List<Ejercicio>> {
-        return try {
-            val response = apiService.getEjercicios()
-            if (response.isSuccessful) {
-                val list = response.body()?.map { it.toDomain() } ?: emptyList()
-                NetworkResult.Success(list)
-            } else {
-                NetworkResult.Error("Error al cargar ejercicios")
-            }
-        } catch (e: Exception) {
-            NetworkResult.Error(e.message ?: "Error")
-        }
-    }
-
 }

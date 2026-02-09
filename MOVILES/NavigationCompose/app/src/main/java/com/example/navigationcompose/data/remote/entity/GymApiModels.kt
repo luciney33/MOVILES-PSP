@@ -33,9 +33,10 @@ data class UsuarioEntity(
     val username: String,
     val email: String,
     val nombre: String,
-    val rol: String,
-    val activo: Boolean,
-    val publicKey: String?
+    val password: String,
+    val rol: String = "USER",
+    val activo: Boolean = true,
+    val publicKey: String? = null
 )
 
 fun EjercicioEntity.toDomain() = Ejercicio(

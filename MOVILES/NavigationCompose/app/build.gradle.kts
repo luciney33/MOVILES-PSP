@@ -24,8 +24,8 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://dragonball-api.com/api/\"")
-            buildConfigField("String", "BASE_URL_PLACEHOLDER", "\"https://jsonplaceholder.typicode.com/\"")
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/\"")
+            buildConfigField("String", "BASE_URL_DRAGONBALL", "\"https://dragonball-api.com/api/\"")
         }
         release {
             isMinifyEnabled = false
@@ -33,8 +33,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://dragonball-api.com/api/\"")
-            buildConfigField("String", "BASE_URL_PLACEHOLDER", "\"https://jsonplaceholder.typicode.com/\"")
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8080/\"")
+            buildConfigField("String", "BASE_URL_DRAGONBALL", "\"https://dragonball-api.com/api/\"")
 
         }
     }
@@ -90,6 +90,7 @@ dependencies {
 
     // Coil for image loading
     implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     testImplementation(libs.junit)

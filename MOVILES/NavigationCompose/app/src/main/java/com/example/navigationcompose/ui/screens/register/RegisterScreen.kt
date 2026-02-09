@@ -21,7 +21,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.ui.common.UiEvent
 import com.example.navigationcompose.ui.theme.NavigationComposeTheme
 
@@ -61,10 +62,10 @@ fun RegisterScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Registro") },
+                title = { Text(Constantes.TEXT_TITULO_REGISTRO) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = Constantes.TEXT_DESCRIPCION_VOLVER)
                     }
                 }
             )
@@ -108,95 +109,6 @@ fun RegisterScreenPreview() {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun RegisterScreenFilledPreview() {
-    NavigationComposeTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            RegisterScreenContent(
-                state = RegisterState(
-                    username = "usuario123",
-                    email = "user@example.com",
-                    nombre = "Juan Pérez",
-                    password = "password123",
-                    confirmPassword = "password123"
-                ),
-                paddingValues = PaddingValues(0.dp),
-                onUsernameChange = {},
-                onEmailChange = {},
-                onNombreChange = {},
-                onPasswordChange = {},
-                onConfirmPasswordChange = {},
-                onRegisterClick = {},
-                onNavigateBack = {}
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun RegisterScreenLoadingPreview() {
-    NavigationComposeTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            RegisterScreenContent(
-                state = RegisterState(
-                    username = "usuario123",
-                    email = "user@example.com",
-                    nombre = "Juan Pérez",
-                    password = "password123",
-                    confirmPassword = "password123",
-                    isLoading = true
-                ),
-                paddingValues = PaddingValues(0.dp),
-                onUsernameChange = {},
-                onEmailChange = {},
-                onNombreChange = {},
-                onPasswordChange = {},
-                onConfirmPasswordChange = {},
-                onRegisterClick = {},
-                onNavigateBack = {}
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun RegisterScreenErrorPreview() {
-    NavigationComposeTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            RegisterScreenContent(
-                state = RegisterState(
-                    username = "usuario123",
-                    email = "user@example.com",
-                    nombre = "Juan Pérez",
-                    password = "pass",
-                    confirmPassword = "password",
-                    error = "Las contraseñas no coinciden"
-                ),
-                paddingValues = PaddingValues(0.dp),
-                onUsernameChange = {},
-                onEmailChange = {},
-                onNombreChange = {},
-                onPasswordChange = {},
-                onConfirmPasswordChange = {},
-                onRegisterClick = {},
-                onNavigateBack = {}
-            )
-        }
-    }
-}
-
 @Composable
 private fun RegisterScreenContent(
     state: RegisterState,
@@ -222,7 +134,7 @@ private fun RegisterScreenContent(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Crear Cuenta",
+            text = Constantes.TEXT_CREAR_CUENTA,
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 24.dp)
         )
@@ -230,7 +142,7 @@ private fun RegisterScreenContent(
         OutlinedTextField(
             value = state.username,
             onValueChange = onUsernameChange,
-            label = { Text("Usuario") },
+            label = { Text(Constantes.TEXT_LABEL_USUARIO) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -248,7 +160,7 @@ private fun RegisterScreenContent(
         OutlinedTextField(
             value = state.email,
             onValueChange = onEmailChange,
-            label = { Text("Email") },
+            label = { Text(Constantes.TEXT_LABEL_EMAIL) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -266,7 +178,7 @@ private fun RegisterScreenContent(
         OutlinedTextField(
             value = state.nombre,
             onValueChange = onNombreChange,
-            label = { Text("Nombre completo") },
+            label = { Text(Constantes.TEXT_LABEL_NOMBRE_COMPLETO) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -286,7 +198,7 @@ private fun RegisterScreenContent(
         OutlinedTextField(
             value = state.password,
             onValueChange = onPasswordChange,
-            label = { Text("Contraseña") },
+            label = { Text(Constantes.TEXT_LABEL_PASSWORD) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             visualTransformation = if (passwordVisible)
@@ -308,9 +220,9 @@ private fun RegisterScreenContent(
                         else
                             Icons.Default.VisibilityOff,
                         contentDescription = if (passwordVisible)
-                            "Ocultar contraseña"
+                            Constantes.TEXT_OCULTAR_PASSWORD
                         else
-                            "Mostrar contraseña"
+                            Constantes.TEXT_MOSTRAR_PASSWORD
                     )
                 }
             },
@@ -324,7 +236,7 @@ private fun RegisterScreenContent(
         OutlinedTextField(
             value = state.confirmPassword,
             onValueChange = onConfirmPasswordChange,
-            label = { Text("Confirmar contraseña") },
+            label = { Text(Constantes.TEXT_LABEL_CONFIRMAR_PASSWORD) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             visualTransformation = if (confirmPasswordVisible)
@@ -349,9 +261,9 @@ private fun RegisterScreenContent(
                         else
                             Icons.Default.VisibilityOff,
                         contentDescription = if (confirmPasswordVisible)
-                            "Ocultar contraseña"
+                            Constantes.TEXT_OCULTAR_PASSWORD
                         else
-                            "Mostrar contraseña"
+                            Constantes.TEXT_MOSTRAR_PASSWORD
                     )
                 }
             },
@@ -387,7 +299,7 @@ private fun RegisterScreenContent(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
-                Text("Registrarse")
+                Text(Constantes.TEXT_BUTTON_REGISTRARSE)
             }
         }
 
@@ -397,7 +309,7 @@ private fun RegisterScreenContent(
             onClick = onNavigateBack,
             enabled = !state.isLoading
         ) {
-            Text("¿Ya tienes cuenta? Inicia sesión")
+            Text(Constantes.TEXT_YA_TIENE_CUENTA)
         }
     }
 }

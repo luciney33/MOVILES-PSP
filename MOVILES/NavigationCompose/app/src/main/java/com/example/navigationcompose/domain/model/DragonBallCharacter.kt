@@ -6,20 +6,8 @@ data class DragonBallCharacter(
     val ki: String,
     val race: String,
     val description: String,
-    val imageUrl: String,
-    val planet: Planet?,
-    val transformations: List<Transformation>
+    val image: String
 )
 
-data class Planet(
-    val id: Int,
-    val name: String,
-    val imageUrl: String
-)
 
-data class Transformation(
-    val id: Int,
-    val name: String,
-    val imageUrl: String,
-    val ki: String
-)
+

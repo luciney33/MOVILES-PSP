@@ -1,5 +1,7 @@
 package com.example.navigationcompose.data.remote.di
 
+import com.example.navigationcompose.BuildConfig
+import com.example.navigationcompose.data.remote.api.DragonBallApiService
 import com.example.navigationcompose.data.remote.api.GymApiService
 import com.example.navigationcompose.data.remote.interceptor.AuthInterceptor
 import dagger.Module
@@ -29,11 +31,11 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor // Inyectamos el que acabamos de crear
+        authInterceptor: AuthInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(authInterceptor) // <--- ESTO activa la seguridad en Android
             .connectTimeout(30, TimeUnit.SECONDS)
             .build()
     }
@@ -43,7 +45,7 @@ object NetworkModule {
     @Named("GymRetrofit")
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://10.0.2.2") // Tu API de Spring
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -55,16 +57,21 @@ object NetworkModule {
         return retrofit.create(GymApiService::class.java)
     }
 
-    // --- SECCIÓN API EXTERNA (Para la 3ª pestaña del BottomBar) ---
     @Provides
     @Singleton
-    @Named("ExternalRetrofit")
-    fun provideExternalRetrofit(): Retrofit {
+    @Named("DragonBallRetrofit")
+    fun provideDragonBallRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://dragonball-api.com") // API Externa de ejemplo
+            .baseUrl(BuildConfig.BASE_URL_DRAGONBALL)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
+    @Provides
+    @Singleton
+    fun provideDragonBallApiService(@Named("DragonBallRetrofit") retrofit: Retrofit): DragonBallApiService {
+        return retrofit.create(DragonBallApiService::class.java)
+    }
 
 }

@@ -46,8 +46,10 @@ public class AuthController {
 
         Usuario usuario = loginResult.usuario();
         JwtTokenPair tokens = authService.generateTokens(usuario);
-        String pubKeyBase64 = Base64.getEncoder().encodeToString(usuario.publicKey());
 
+        String pubKeyBase64 = (usuario.publicKey() != null)
+                ? Base64.getEncoder().encodeToString(usuario.publicKey())
+                : "";
 
         UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
                 usuario.id(),
@@ -56,7 +58,7 @@ public class AuthController {
                 usuario.nombre(),
                 pubKeyBase64,
                 usuario.rol()
-                );
+        );
 
         return ResponseEntity.ok(new LoginResponse(
                 tokens.accessToken(),

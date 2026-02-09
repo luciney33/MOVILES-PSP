@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.navigationcompose.ui.screens.HomeScreen
 import com.example.navigationcompose.ui.screens.login.LoginScreen
 import com.example.navigationcompose.ui.screens.register.RegisterScreen
 
@@ -42,8 +43,13 @@ fun AppNavigation(
         }
 
         composable<Screen.Home> {
-            // Aquí irá tu pantalla principal después del login
-            // HomeScreen()
+            HomeScreen(
+                onLogout = {
+                    navController.navigate(Screen.Login) {
+                        popUpTo(Screen.Home) { inclusive = true }
+                    }
+                }
+            )
         }
     }
 }

@@ -26,7 +26,6 @@ class RegisterViewModel @Inject constructor(
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
-
     fun onEvent(event: RegisterEvent) {
         when (event) {
             is RegisterEvent.UsernameChanged -> {
@@ -45,6 +44,15 @@ class RegisterViewModel @Inject constructor(
                 _state.update { it.copy(confirmPassword = event.confirmPassword, error = null) }
             }
             RegisterEvent.Register -> {
+                val currentState = _state.value
+                if (currentState.password != currentState.confirmPassword) {
+                    _state.update { it.copy(error = "Las contraseñas no coinciden") }
+                    return
+                }
+                if (currentState.password.isBlank()) {
+                    _state.update { it.copy(error = "La contraseña no puede estar vacía") }
+                    return
+                }
                 register()
             }
         }
@@ -52,59 +60,29 @@ class RegisterViewModel @Inject constructor(
 
     private fun register() {
         viewModelScope.launch {
-            // Validaciones
-            if (_state.value.password != _state.value.confirmPassword) {
-                _state.update { it.copy(error = "Las contraseñas no coinciden") }
-                _uiEvent.send(UiEvent.ShowError("Las contraseñas no coinciden"))
-                return@launch
-            }
+            _state.update { it.copy(isLoading = true) }
 
-            if (_state.value.password.length < 6) {
-                _state.update { it.copy(error = "La contraseña debe tener al menos 6 caracteres") }
-                _uiEvent.send(UiEvent.ShowError("La contraseña debe tener al menos 6 caracteres"))
-                return@launch
-            }
-
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(_state.value.email).matches()) {
-                _state.update { it.copy(error = "Email inválido") }
-                _uiEvent.send(UiEvent.ShowError("Email inválido"))
-                return@launch
-            }
-
-            _state.update { it.copy(isLoading = true, error = null) }
-
-            // Crear UsuarioEntity para el registro
-            val usuario = UsuarioEntity(
-                id = 0, // El servidor generará el ID
-                username = _state.value.username,
-                email = _state.value.email,
-                nombre = _state.value.nombre,
+            val currentState = _state.value
+            val usuarioEntity = UsuarioEntity(
+                id = 0,
+                username = currentState.username,
+                email = currentState.email,
+                nombre = currentState.nombre,
+                password = currentState.password,
                 rol = "USER",
-                activo = true,
-                publicKey = null
+                activo = true
             )
 
-            val result = registerUseCase(usuario)
-
-            when (result) {
+            when (val result = registerUseCase(usuarioEntity)) {
                 is NetworkResult.Success -> {
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            isRegisterSuccessful = true,
-                            error = null
-                        )
-                    }
-                    _uiEvent.send(UiEvent.ShowSnackbar("Registro exitoso. Por favor, inicia sesión"))
+                    _state.update { it.copy(isLoading = false) }
+                    _uiEvent.send(UiEvent.RegisterSuccess)
                 }
                 is NetworkResult.Error -> {
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            error = result.message
-                        )
-                    }
-                    _uiEvent.send(UiEvent.ShowError(result.message))
+                    _state.update { it.copy(
+                        isLoading = false,
+                        error = result.message ?: "Error desconocido"
+                    ) }
                 }
             }
         }

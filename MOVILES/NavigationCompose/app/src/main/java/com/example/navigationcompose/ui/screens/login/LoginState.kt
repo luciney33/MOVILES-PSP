@@ -7,4 +7,3 @@ data class LoginState(
     val error: String? = null,
     val isLoginSuccessful: Boolean = false
 )
-

@@ -2,42 +2,26 @@ package com.example.navigationcompose.data.local
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.navigationcompose.common.Constantes
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class TokenManager @Inject constructor(@ApplicationContext context: Context) {
-    // Usamos SharedPreferences para guardar el token
     private val prefs: SharedPreferences =
-        context.getSharedPreferences("prefs_seguras", Context.MODE_PRIVATE)
-
-    fun saveToken(token: String) {
-        prefs.edit().putString("auth_token", token).apply()
-    }
-
-    fun getToken(): String? {
-        return prefs.getString("auth_token", null)
-    }
-
-    fun deleteToken() {
-        prefs.edit().remove("auth_token").apply()
-    }
+        context.getSharedPreferences(Constantes.PREFS_NAME, Context.MODE_PRIVATE)
 
     fun saveAccessToken(token: String) {
-        prefs.edit().putString("access_token", token).apply()
+        prefs.edit().putString(Constantes.PREF_ACCESS_TOKEN, token).apply()
     }
 
     fun getAccessToken(): String? {
-        return prefs.getString("access_token", null)
+        return prefs.getString(Constantes.PREF_ACCESS_TOKEN, null)
     }
 
     fun saveRefreshToken(token: String) {
-        prefs.edit().putString("refresh_token", token).apply()
-    }
-
-    fun getRefreshToken(): String? {
-        return prefs.getString("refresh_token", null)
+        prefs.edit().putString(Constantes.PREF_REFRESH_TOKEN, token).apply()
     }
 
     fun clearTokens() {

@@ -31,10 +31,10 @@ class LoginViewModel @Inject constructor(
     fun onEvent(event: LoginEvent) {
         when (event) {
             is LoginEvent.UsernameChanged -> {
-                _state.update { it.copy(username = event.username, error = null) }
+                _state.update { it.copy(username = event.v, error = null) }
             }
             is LoginEvent.PasswordChanged -> {
-                _state.update { it.copy(password = event.password, error = null) }
+                _state.update { it.copy(password = event.v, error = null) }
             }
             LoginEvent.Login -> {
                 login()
@@ -53,7 +53,6 @@ class LoginViewModel @Inject constructor(
 
             when (result) {
                 is NetworkResult.Success -> {
-                    // Guardar tokens
                     tokenManager.saveAccessToken(result.data.accessToken)
                     tokenManager.saveRefreshToken(result.data.refreshToken)
 
@@ -64,7 +63,7 @@ class LoginViewModel @Inject constructor(
                             error = null
                         )
                     }
-                    _uiEvent.send(UiEvent.ShowSnackbar("Login exitoso"))
+                    _uiEvent.send(UiEvent.LoginSuccess)
                 }
                 is NetworkResult.Error -> {
                     _state.update {
