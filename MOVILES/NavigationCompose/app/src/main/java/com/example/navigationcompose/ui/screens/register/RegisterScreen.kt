@@ -34,7 +34,7 @@ fun RegisterScreen(
     viewModel: RegisterViewModel = hiltViewModel(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()//collectaastate MAL es viejo
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
