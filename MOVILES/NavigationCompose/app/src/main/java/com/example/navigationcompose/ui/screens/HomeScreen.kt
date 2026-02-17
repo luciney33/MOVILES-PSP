@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material3.Card
@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.ui.navigation.Screen
 import com.example.navigationcompose.ui.screens.dragonBall.DragonBallListScreen
@@ -48,7 +49,7 @@ fun HomeScreen(onLogout: () -> Unit) {
                 NavigationBarItem(
                     selected = true,
                     onClick = { navController.navigate(Screen.ListaEntrenamiento) },
-                    icon = { Icon(Icons.Default.List, null) },
+                    icon = { Icon(Icons.AutoMirrored.Filled.List, null) },
                     label = { Text(Constantes.TEXT_GYM) }
                 )
                 NavigationBarItem(
@@ -60,7 +61,7 @@ fun HomeScreen(onLogout: () -> Unit) {
                 NavigationBarItem(
                     selected = false,
                     onClick = { onLogout() },
-                    icon = { Icon(Icons.Default.ExitToApp, null) },
+                    icon = { Icon(Icons.AutoMirrored.Filled.ExitToApp, null) },
                     label = { Text(Constantes.TEXT_SALIR) }
                 )
             }
@@ -76,10 +77,12 @@ fun HomeScreen(onLogout: () -> Unit) {
                     navController.navigate(Screen.DetalleEntrenamiento(id))
                 })
             }
-            composable<Screen.DetalleEntrenamiento> {
+            composable<Screen.DetalleEntrenamiento> { backStackEntry ->
+                val route = backStackEntry.toRoute<Screen.DetalleEntrenamiento>()
                 DetalleEntrenamientoScreen(
-
-                    onBack = { navController.popBackStack() })
+                    id = route.id,
+                    onBack = { navController.popBackStack() }
+                )
             }
             composable<Screen.ApiExterna> { DragonBallListScreen() }
         }
@@ -124,7 +127,7 @@ fun HomeBottomBarPreview() {
                     NavigationBarItem(
                         selected = true,
                         onClick = {},
-                        icon = { Icon(Icons.Default.List, contentDescription = null) },
+                        icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) },
                         label = { Text(Constantes.TEXT_GYM) }
                     )
                     NavigationBarItem(

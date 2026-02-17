@@ -1,13 +1,10 @@
 package com.example.navigationcompose.ui.screens.gym.detalleEntrenamiento
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.example.navigationcompose.common.NetworkResult
 import com.example.navigationcompose.data.GymRepository
 import com.example.navigationcompose.data.remote.entity.EntrenamientoEntity
-import com.example.navigationcompose.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
