@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.domain.model.DragonBallCharacter
@@ -39,7 +40,7 @@ import com.example.navigationcompose.domain.model.DragonBallCharacter
 fun DragonBallListScreen(
     viewModel: ListaViewModel = hiltViewModel()
 ) {
-    val state by viewModel.uiState.collectAsState()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     Box(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         if (state.isLoading) {

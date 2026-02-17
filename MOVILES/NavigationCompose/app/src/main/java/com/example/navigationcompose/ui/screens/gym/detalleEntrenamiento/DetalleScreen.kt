@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.decode.GifDecoder
@@ -40,8 +42,15 @@ import com.example.navigationcompose.domain.model.Ejercicio
 import com.example.navigationcompose.ui.theme.NavigationComposeTheme
 
 @Composable
-fun DetalleEntrenamientoScreen(viewModel: DetalleViewModel = hiltViewModel(), onBack: () -> Unit) {
-    val state by viewModel.state.collectAsState()
+fun DetalleEntrenamientoScreen(
+    viewModel: DetalleViewModel = hiltViewModel(),
+    onBack: () -> Unit,
+    id: Long
+) {
+    LaunchedEffect(id) {
+        viewModel.cargarDetalle(id)
+    }
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     DetalleEntrenamientoContent(
         state = state,

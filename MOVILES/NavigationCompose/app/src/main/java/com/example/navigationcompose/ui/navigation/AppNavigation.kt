@@ -1,56 +1,63 @@
 package com.example.navigationcompose.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import com.example.navigationcompose.ui.screens.HomeScreen
+import com.example.navigationcompose.ui.screens.gym.listadoEntrenamiento.ListaEntrenamientoScreen
 import com.example.navigationcompose.ui.screens.login.LoginScreen
 import com.example.navigationcompose.ui.screens.register.RegisterScreen
 
 @Composable
 fun AppNavigation(
-    navController: NavHostController = rememberNavController(),
     startDestination: Screen = Screen.Login
 ) {
-    NavHost(
-        navController = navController,
-        startDestination = startDestination
-    ) {
-        composable<Screen.Login> {
-            LoginScreen(
-                onLoginSuccess = {
-                    navController.navigate(Screen.Home) {
-                        popUpTo(Screen.Login) { inclusive = true }
+    val backStack = rememberNavBackStack(startDestination)
+    NavDisplay(
+        backStack = backStack,
+        onBack = { backStack.removeLastOrNull() },
+        entryProvider = entryProvider {
+            entry<Screen.Login> {
+                LoginScreen(
+                    onLoginSuccess = {
+                        backStack.clear()
+                        backStack.add(Screen.Home)
+                    },
+                    onNavigateToRegister = {
+                        backStack.add(Screen.Register)
                     }
-                },
-                onNavigateToRegister = {
-                    navController.navigate(Screen.Register)
-                }
-            )
-        }
-
-        composable<Screen.Register> {
-            RegisterScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
-                },
-                onRegisterSuccess = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
-        composable<Screen.Home> {
-            HomeScreen(
-                onLogout = {
-                    navController.navigate(Screen.Login) {
-                        popUpTo(Screen.Home) { inclusive = true }
+                )
+            }
+            entry<Screen.ListaEntrenamiento> {
+                ListaEntrenamientoScreen(
+                    onNavigateToDetail = { id ->
+                        backStack.add(Screen.DetalleEntrenamiento(id))
                     }
-                }
-            )
+                )
+            }
+
+            entry<Screen.Register> {
+                RegisterScreen(
+                    onNavigateBack = {
+                        backStack.removeLastOrNull()
+                    },
+                    onRegisterSuccess = {
+                        backStack.removeLastOrNull()
+                    }
+                )
+            }
+
+            entry<Screen.Home> {
+                HomeScreen(
+                    onLogout = {
+                        backStack.clear()
+                        backStack.add(Screen.Login)
+                    }
+                )
+            }
+
         }
-    }
+    )
 }
 

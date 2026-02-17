@@ -18,17 +18,11 @@ import javax.inject.Inject
 @HiltViewModel
 class DetalleViewModel @Inject constructor(
     private val repo: GymRepository,
-    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val id: Long = savedStateHandle.toRoute<Screen.DetalleEntrenamiento>().id
-    private val _state = MutableStateFlow(DetalleState(id = id))
+    private val _state = MutableStateFlow(DetalleState(id = 0L))
     val state = _state.asStateFlow()
 
-    init {
-        if (id != 0L) cargarDetalle()
-    }
-
-    private fun cargarDetalle() {
+    fun cargarDetalle(id: Long) {
         viewModelScope.launch {
             val res = repo.getEntrenamientoById(id)
             if (res is NetworkResult.Success) {

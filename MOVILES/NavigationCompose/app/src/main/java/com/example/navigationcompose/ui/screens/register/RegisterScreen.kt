@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.ui.common.UiEvent
 import com.example.navigationcompose.ui.theme.NavigationComposeTheme
@@ -34,7 +35,7 @@ fun RegisterScreen(
     viewModel: RegisterViewModel = hiltViewModel(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
-    val state by viewModel.state.collectAsState()//collectaastate MAL es viejo
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->

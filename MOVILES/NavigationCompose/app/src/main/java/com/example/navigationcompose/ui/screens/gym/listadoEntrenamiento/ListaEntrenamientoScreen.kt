@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.domain.model.Entrenamiento
 import com.example.navigationcompose.ui.theme.NavigationComposeTheme
@@ -40,7 +41,7 @@ fun ListaEntrenamientoScreen(
     onNavigateToDetail: (Long) -> Unit,
     viewModel: ListaViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     ListaEntrenamientoContent(
         state = state,

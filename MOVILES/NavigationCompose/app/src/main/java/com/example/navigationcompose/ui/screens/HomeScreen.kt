@@ -77,7 +77,9 @@ fun HomeScreen(onLogout: () -> Unit) {
                 })
             }
             composable<Screen.DetalleEntrenamiento> {
-                DetalleEntrenamientoScreen(onBack = { navController.popBackStack() })
+                DetalleEntrenamientoScreen(
+
+                    onBack = { navController.popBackStack() })
             }
             composable<Screen.ApiExterna> { DragonBallListScreen() }
         }
