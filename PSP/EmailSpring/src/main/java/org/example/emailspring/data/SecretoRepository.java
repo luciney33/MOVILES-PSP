@@ -4,10 +4,7 @@ import org.example.emailspring.data.entity.SecretoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface SecretoRepository extends JpaRepository<SecretoEntity, Long> {
-    List<SecretoEntity> findByAutorId(Long autorId);
 }
 
