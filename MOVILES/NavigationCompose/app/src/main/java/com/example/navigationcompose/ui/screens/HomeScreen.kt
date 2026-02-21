@@ -21,6 +21,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.navigationcompose.common.Constantes
@@ -42,19 +44,32 @@ import com.example.navigationcompose.ui.theme.NavigationComposeTheme
 @Composable
 fun HomeScreen(onLogout: () -> Unit) {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
-                    selected = true,
-                    onClick = { navController.navigate(Screen.ListaEntrenamiento) },
+                    selected = currentRoute?.contains("ListaEntrenamiento") == true ||
+                              currentRoute?.contains("DetalleEntrenamiento") == true,
+                    onClick = {
+                        navController.navigate(Screen.ListaEntrenamiento) {
+                            popUpTo(Screen.ListaEntrenamiento) { inclusive = false }
+                            launchSingleTop = true
+                        }
+                    },
                     icon = { Icon(Icons.AutoMirrored.Filled.List, null) },
                     label = { Text(Constantes.TEXT_GYM) }
                 )
                 NavigationBarItem(
-                    selected = false,
-                    onClick = { navController.navigate(Screen.ApiExterna) },
+                    selected = currentRoute?.contains("ApiExterna") == true,
+                    onClick = {
+                        navController.navigate(Screen.ApiExterna) {
+                            popUpTo(Screen.ListaEntrenamiento) { inclusive = false }
+                            launchSingleTop = true
+                        }
+                    },
                     icon = { Icon(imageVector = Icons.Default.Public, contentDescription = null) },
                     label = { Text(Constantes.TEXT_DRAGON_BALL) }
                 )

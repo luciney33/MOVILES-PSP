@@ -7,5 +7,7 @@ data class DetalleState(
     val nombre: String = "",
     val descripcion: String = "",
     val isLoading: Boolean = false,
-    val ejercicios: List<Ejercicio> = emptyList()
+    val ejercicios: List<Ejercicio> = emptyList(),
+    val error: String? = null,
+    val saveSuccess: Boolean = false
 )

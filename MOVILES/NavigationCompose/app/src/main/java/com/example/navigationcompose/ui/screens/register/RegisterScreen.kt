@@ -83,11 +83,11 @@ fun RegisterScreen(
         RegisterScreenContent(
             state = state,
             paddingValues = paddingValues,
-            onUsernameChange = { viewModel.onEvent(RegisterEvent.UsernameChanged(it)) },
-            onEmailChange = { viewModel.onEvent(RegisterEvent.EmailChanged(it)) },
-            onNombreChange = { viewModel.onEvent(RegisterEvent.NombreChanged(it)) },
-            onPasswordChange = { viewModel.onEvent(RegisterEvent.PasswordChanged(it)) },
-            onConfirmPasswordChange = { viewModel.onEvent(RegisterEvent.ConfirmPasswordChanged(it)) },
+            onUsernameChange = { viewModel.onEvent(RegisterEvent.UserChanged(username = it)) },
+            onEmailChange = { viewModel.onEvent(RegisterEvent.UserChanged(email = it)) },
+            onNombreChange = { viewModel.onEvent(RegisterEvent.UserChanged(nombre = it)) },
+            onPasswordChange = { viewModel.onEvent(RegisterEvent.UserChanged(password = it)) },
+            onConfirmPasswordChange = { viewModel.onEvent(RegisterEvent.UserChanged(confirmPassword = it)) },
             onRegisterClick = { viewModel.onEvent(RegisterEvent.Register) },
             onNavigateBack = onNavigateBack
         )

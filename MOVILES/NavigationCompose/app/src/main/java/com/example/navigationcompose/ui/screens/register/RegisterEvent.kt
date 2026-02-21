@@ -1,11 +1,13 @@
 package com.example.navigationcompose.ui.screens.register
 
 sealed interface RegisterEvent {
-    data class UsernameChanged(val username: String) : RegisterEvent
-    data class EmailChanged(val email: String) : RegisterEvent
-    data class NombreChanged(val nombre: String) : RegisterEvent
-    data class PasswordChanged(val password: String) : RegisterEvent
-    data class ConfirmPasswordChanged(val confirmPassword: String) : RegisterEvent
+    data class UserChanged(
+        val username: String? = null,
+        val email: String? = null,
+        val nombre: String? = null,
+        val password: String? = null,
+        val confirmPassword: String? = null
+    ) : RegisterEvent
     data object Register : RegisterEvent
 }
 

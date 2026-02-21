@@ -1,10 +1,14 @@
 package com.example.navigationcompose.ui.screens.gym.detalleEntrenamiento
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.example.navigationcompose.common.NetworkResult
-import com.example.navigationcompose.data.GymRepository
 import com.example.navigationcompose.data.remote.entity.EntrenamientoEntity
+import com.example.navigationcompose.domain.usecase.gym.GetEntrenamientoByIdUseCase
+import com.example.navigationcompose.domain.usecase.gym.SaveEntrenamientoUseCase
+import com.example.navigationcompose.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,20 +18,37 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetalleViewModel @Inject constructor(
-    private val repo: GymRepository,
+    private val getEntrenamientoByIdUseCase: GetEntrenamientoByIdUseCase,
+    private val saveEntrenamientoUseCase: SaveEntrenamientoUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val _state = MutableStateFlow(DetalleState(id = 0L))
+    private val id: Long = savedStateHandle.toRoute<Screen.DetalleEntrenamiento>().id
+    private val _state = MutableStateFlow(DetalleState(id = id))
     val state = _state.asStateFlow()
 
-    fun cargarDetalle(id: Long) {
+    init {
+        if (id != 0L) cargarDetalle()
+    }
+
+    fun cargarDetalle() {
         viewModelScope.launch {
-            val res = repo.getEntrenamientoById(id)
-            if (res is NetworkResult.Success) {
-                _state.update { it.copy(
-                    nombre = res.data.nombre,
-                    descripcion = res.data.descripcion,
-                    ejercicios = res.data.ejercicios
-                ) }
+            _state.update { it.copy(isLoading = true, error = null) }
+            when (val res = getEntrenamientoByIdUseCase(id)) {
+                is NetworkResult.Success -> {
+                    _state.update { it.copy(
+                        nombre = res.data.nombre,
+                        descripcion = res.data.descripcion,
+                        ejercicios = res.data.ejercicios,
+                        isLoading = false,
+                        error = null
+                    ) }
+                }
+                is NetworkResult.Error -> {
+                    _state.update { it.copy(
+                        isLoading = false,
+                        error = res.message ?: "Error al cargar el entrenamiento"
+                    ) }
+                }
             }
         }
     }
@@ -37,13 +58,31 @@ class DetalleViewModel @Inject constructor(
 
     fun guardar() {
         viewModelScope.launch {
+            if (_state.value.nombre.isBlank()) {
+                _state.update { it.copy(error = "El nombre no puede estar vacío") }
+                return@launch
+            }
+
+            _state.update { it.copy(isLoading = true, error = null) }
             val entity = EntrenamientoEntity(
                 _state.value.id,
                 1,
                 _state.value.nombre,
                 _state.value.descripcion
             )
-            repo.saveEntrenamiento(entity)
+
+            when (val result = saveEntrenamientoUseCase(entity)) {
+                is NetworkResult.Success -> {
+                    _state.update { it.copy(isLoading = false, saveSuccess = true, error = null) }
+                }
+                is NetworkResult.Error -> {
+                    _state.update { it.copy(
+                        isLoading = false,
+                        error = result.message ?: "Error al guardar el entrenamiento"
+                    ) }
+                }
+            }
         }
     }
 }
+

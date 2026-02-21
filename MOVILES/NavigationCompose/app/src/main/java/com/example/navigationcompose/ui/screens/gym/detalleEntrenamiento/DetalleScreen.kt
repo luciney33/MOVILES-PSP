@@ -1,6 +1,7 @@
 package com.example.navigationcompose.ui.screens.gym.detalleEntrenamiento
 
 import android.os.Build.VERSION.SDK_INT
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -25,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -46,16 +49,19 @@ fun DetalleEntrenamientoScreen(
     onBack: () -> Unit,
     id: Long
 ) {
-    LaunchedEffect(id) {
-        viewModel.cargarDetalle(id)
-    }
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(state.saveSuccess) {
+        if (state.saveSuccess) {
+            onBack()
+        }
+    }
 
     DetalleEntrenamientoContent(
         state = state,
         onNombreChange = viewModel::onNombreChange,
         onDescChange = viewModel::onDescChange,
-        onSave = { viewModel.guardar(); onBack() }
+        onSave = viewModel::guardar
     )
 }
 
@@ -73,45 +79,73 @@ fun DetalleEntrenamientoContent(
             else add(GifDecoder.Factory())
         }
         .build()
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Card(
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(Modifier.padding(16.dp)) {
-                OutlinedTextField(
-                    value = state.nombre,
-                    onValueChange = onNombreChange,
-                    label = { Text(Constantes.TEXT_NOMBRE_ENTRENAMIENTO) },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(Modifier.height(16.dp))
-                OutlinedTextField(
-                    value = state.descripcion,
-                    onValueChange = onDescChange,
-                    label = { Text(Constantes.TEXT_DESCRIPCION) },
-                    modifier = Modifier.fillMaxWidth(),
-                    minLines = 3
-                )
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().padding(16.dp)) {
+            state.error?.let { error ->
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.Red.copy(alpha = 0.1f))
+                ) {
+                    Text(
+                        text = error,
+                        color = Color.Red,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
+
+            Card(
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    OutlinedTextField(
+                        value = state.nombre,
+                        onValueChange = onNombreChange,
+                        label = { Text(Constantes.TEXT_NOMBRE_ENTRENAMIENTO) },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = !state.isLoading
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    OutlinedTextField(
+                        value = state.descripcion,
+                        onValueChange = onDescChange,
+                        label = { Text(Constantes.TEXT_DESCRIPCION) },
+                        modifier = Modifier.fillMaxWidth(),
+                        minLines = 3,
+                        enabled = !state.isLoading
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+            Text(Constantes.TEXT_EJERCICIOS_RUTINA, style = MaterialTheme.typography.titleMedium)
+            Spacer(Modifier.height(8.dp))
+            LazyColumn(Modifier.weight(1f)) {
+                items(state.ejercicios) { ejercicio ->
+                    EjercicioItem(ejercicio, imageLoader)
+                }
+            }
+
+            Button(
+                onClick = onSave,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                shape = RoundedCornerShape(8.dp),
+                enabled = !state.isLoading
+            ) {
+                Text(if (state.id == 0L) Constantes.TEXT_BUTTON_CREAR else Constantes.TEXT_BUTTON_ACTUALIZAR)
             }
         }
 
-        Spacer(Modifier.height(16.dp))
-        Text(Constantes.TEXT_EJERCICIOS_RUTINA, style = MaterialTheme.typography.titleMedium)
-        Spacer(Modifier.height(8.dp))
-        LazyColumn(Modifier.weight(1f)) {
-            items(state.ejercicios) { ejercicio ->
-                EjercicioItem(ejercicio, imageLoader)
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
-        }
-
-        Button(
-            onClick = onSave,
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-            shape = RoundedCornerShape(8.dp)
-        ) {
-            Text(if (state.id == 0L) Constantes.TEXT_BUTTON_CREAR else Constantes.TEXT_BUTTON_ACTUALIZAR)
         }
     }
 }

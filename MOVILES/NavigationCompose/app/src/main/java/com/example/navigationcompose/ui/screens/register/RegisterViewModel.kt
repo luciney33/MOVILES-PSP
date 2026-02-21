@@ -27,22 +27,20 @@ class RegisterViewModel @Inject constructor(
 
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+
     fun onEvent(event: RegisterEvent) {
         when (event) {
-            is RegisterEvent.UsernameChanged -> {
-                _state.update { it.copy(username = event.username, error = null) }
-            }
-            is RegisterEvent.EmailChanged -> {
-                _state.update { it.copy(email = event.email, error = null) }
-            }
-            is RegisterEvent.NombreChanged -> {
-                _state.update { it.copy(nombre = event.nombre, error = null) }
-            }
-            is RegisterEvent.PasswordChanged -> {
-                _state.update { it.copy(password = event.password, error = null) }
-            }
-            is RegisterEvent.ConfirmPasswordChanged -> {
-                _state.update { it.copy(confirmPassword = event.confirmPassword, error = null) }
+            is RegisterEvent.UserChanged -> {
+                _state.update { currentState ->
+                    currentState.copy(
+                        username = event.username ?: currentState.username,
+                        email = event.email ?: currentState.email,
+                        nombre = event.nombre ?: currentState.nombre,
+                        password = event.password ?: currentState.password,
+                        confirmPassword = event.confirmPassword ?: currentState.confirmPassword,
+                        error = null
+                    )
+                }
             }
             RegisterEvent.Register -> {
                 val currentState = _state.value

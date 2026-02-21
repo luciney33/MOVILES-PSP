@@ -4,5 +4,7 @@ import com.example.navigationcompose.domain.model.Entrenamiento
 
 data class ListaState(
     val entrenamientos: List<Entrenamiento> = emptyList(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val error: String? = null
 )
+
