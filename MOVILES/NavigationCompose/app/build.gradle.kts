@@ -94,7 +94,8 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
 
-    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    // Security Crypto
+    implementation(libs.securityCrypto)
 
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
