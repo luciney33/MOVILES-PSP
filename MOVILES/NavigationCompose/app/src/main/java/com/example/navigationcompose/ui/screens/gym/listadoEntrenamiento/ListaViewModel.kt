@@ -2,6 +2,7 @@ package com.example.navigationcompose.ui.screens.gym.listadoEntrenamiento
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.common.NetworkResult
 import com.example.navigationcompose.domain.usecase.gym.DeleteEntrenamientoUseCase
 import com.example.navigationcompose.domain.usecase.gym.GetEntrenamientosUseCase
@@ -45,7 +46,7 @@ class ListaViewModel @Inject constructor(
                     cargar()
                 }
                 is NetworkResult.Error -> {
-                    _state.update { it.copy(isLoading = false, error = "Error al eliminar el entrenamiento") }
+                    _state.update { it.copy(isLoading = false, error = Constantes.ERROR_ELIMINAR_ENTRENAMIENTO) }
                 }
             }
         }

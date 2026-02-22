@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.common.NetworkResult
 import com.example.navigationcompose.data.remote.entity.EntrenamientoEntity
 import com.example.navigationcompose.data.remote.entity.toEntity
@@ -47,7 +48,7 @@ class DetalleViewModel @Inject constructor(
                 is NetworkResult.Error -> {
                     _state.update { it.copy(
                         isLoading = false,
-                        error = res.message ?: "Error al cargar el entrenamiento"
+                        error = res.message ?: Constantes.ERROR_CARGAR_ENTRENAMIENTO
                     ) }
                 }
             }
@@ -60,7 +61,7 @@ class DetalleViewModel @Inject constructor(
     fun guardar() {
         viewModelScope.launch {
             if (_state.value.nombre.isBlank()) {
-                _state.update { it.copy(error = "El nombre no puede estar vacío") }
+                _state.update { it.copy(error = Constantes.ERROR_NOMBRE_VACIO) }
                 return@launch
             }
 
@@ -80,7 +81,7 @@ class DetalleViewModel @Inject constructor(
                 is NetworkResult.Error -> {
                     _state.update { it.copy(
                         isLoading = false,
-                        error = result.message ?: "Error al guardar el entrenamiento"
+                        error = result.message ?: Constantes.ERROR_GUARDAR_ENTRENAMIENTO
                     ) }
                 }
             }

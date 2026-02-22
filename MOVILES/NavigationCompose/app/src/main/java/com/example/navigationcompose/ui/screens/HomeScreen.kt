@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material3.Card
@@ -39,6 +40,11 @@ import com.example.navigationcompose.ui.navigation.Screen
 import com.example.navigationcompose.ui.screens.dragonBall.DragonBallListScreen
 import com.example.navigationcompose.ui.screens.gym.detalleEntrenamiento.DetalleEntrenamientoScreen
 import com.example.navigationcompose.ui.screens.gym.listadoEntrenamiento.ListaEntrenamientoScreen
+import com.example.navigationcompose.ui.screens.secretos.SecretosMainScreen
+import com.example.navigationcompose.ui.screens.secretos.lista.ListaSecretosScreen
+import com.example.navigationcompose.ui.screens.secretos.ver.VerSecretoScreen
+import com.example.navigationcompose.ui.screens.secretos.compartir.CompartirSecretoScreen
+import com.example.navigationcompose.ui.screens.secretos.crear.CrearSecretoScreen
 import com.example.navigationcompose.ui.theme.NavigationComposeTheme
 
 @Composable
@@ -72,6 +78,16 @@ fun HomeScreen(onLogout: () -> Unit) {
                     label = { Text(Constantes.TEXT_DRAGON_BALL) }
                 )
                 NavigationBarItem(
+                    selected = currentRoute?.contains("Secreto") == true,
+                    onClick = {
+                        navController.navigate(Screen.SecretosMain) {
+                            launchSingleTop = true
+                        }
+                    },
+                    icon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) },
+                    label = { Text(Constantes.TEXT_SECRETOS) }
+                )
+                NavigationBarItem(
                     selected = false,
                     onClick = { onLogout() },
                     icon = { Icon(Icons.AutoMirrored.Filled.ExitToApp, null) },
@@ -102,6 +118,51 @@ fun HomeScreen(onLogout: () -> Unit) {
                 )
             }
             composable<Screen.ApiExterna> { DragonBallListScreen() }
+
+            composable<Screen.SecretosMain> {
+                SecretosMainScreen(
+                    onListaSecretos = {
+                        navController.navigate(Screen.ListaSecretos)
+                    },
+                    onCrearSecreto = {
+                        navController.navigate(Screen.CrearSecreto)
+                    }
+                )
+            }
+
+            composable<Screen.ListaSecretos> {
+                ListaSecretosScreen(
+                    onBack = { navController.popBackStack() },
+                    onVerSecreto = { id ->
+                        navController.navigate(Screen.VerSecreto(id))
+                    },
+                    onCompartirSecreto = { id ->
+                        navController.navigate(Screen.CompartirSecreto(id))
+                    }
+                )
+            }
+
+            composable<Screen.CrearSecreto> {
+                CrearSecretoScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable<Screen.VerSecreto> { backStackEntry ->
+                val route = backStackEntry.toRoute<Screen.VerSecreto>()
+                VerSecretoScreen(
+                    secretoId = route.id,
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable<Screen.CompartirSecreto> { backStackEntry ->
+                val route = backStackEntry.toRoute<Screen.CompartirSecreto>()
+                CompartirSecretoScreen(
+                    secretoId = route.secretoId,
+                    onBack = { navController.popBackStack() }
+                )
+            }
         }
     }
 }

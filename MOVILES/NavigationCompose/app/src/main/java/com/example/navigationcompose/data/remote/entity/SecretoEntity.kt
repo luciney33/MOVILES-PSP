@@ -3,80 +3,84 @@ package com.example.navigationcompose.data.remote.entity
 import com.example.navigationcompose.common.Constantes
 import com.google.gson.annotations.SerializedName
 
-/**
- * DTOs para el sistema de secretos cifrados end-to-end
- */
-
-// ==================== REQUEST ====================
-
-/**
- * Request para crear un secreto cifrado.
- *
- * Todos los campos en Base64 excepto receptorId.
- */
 data class CrearSecretoRequest(
-    @SerializedName("receptorId")
-    val receptorId: Long,
 
     @SerializedName("contenidoCifrado")
-    val contenidoCifrado: String, // Base64 del contenido cifrado con AES-GCM
+    val contenidoCifrado: String,
 
     @SerializedName("claveAESCifrada")
-    val claveAESCifrada: String, // Base64 de la clave AES cifrada con RSA del receptor
+    val claveAESCifrada: String,
 
     @SerializedName("firma")
-    val firma: String, // Base64 de la firma digital del autor
+    val firma: String,
 
     @SerializedName("iv")
-    val iv: String // Base64 del IV usado para AES-GCM
+    val iv: String
 )
 
-/**
- * Request para compartir un secreto con otro usuario.
- */
 data class CompartirSecretoRequest(
     @SerializedName("receptorId")
     val receptorId: Long,
 
     @SerializedName("claveAESCifradaDestinatario")
-    val claveAESCifradaDestinatario: String // Base64 de la clave AES re-cifrada con RSA del nuevo destinatario
+    val claveAESCifradaDestinatario: String
 )
 
-// ==================== RESPONSE ====================
-
-/**
- * Representa un secreto cifrado en el servidor.
- * El servidor NUNCA tiene acceso al contenido descifrado.
- */
-data class SecretoResponse(
+data class SecretoSummaryDto(
     @SerializedName("id")
     val id: Long,
 
-    @SerializedName("autor")
-    val autor: UsuarioSecretoDto,
+    @SerializedName("autorId")
+    val autorId: Long,
 
-    @SerializedName("contenidoCifrado")
-    val contenidoCifrado: String, // Base64
+    @SerializedName("autorUsername")
+    val autorUsername: String,
 
-    @SerializedName("claveAESCifrada")
-    val claveAESCifrada: String, // Base64 - cifrada con RSA del usuario actual
+    @SerializedName("autorNombre")
+    val autorNombre: String,
 
-    @SerializedName("firma")
-    val firma: String, // Base64 - firma del autor
+    @SerializedName("esAutor")
+    val esAutor: Boolean,
 
-    @SerializedName("iv")
-    val iv: String, // Base64
-
-    @SerializedName("fechaCreacion")
-    val fechaCreacion: String,
-
-    @SerializedName("compartidos")
-    val compartidos: List<UsuarioSecretoDto> = emptyList()
+    @SerializedName("cantidadCompartidos")
+    val cantidadCompartidos: Int
 )
 
-/**
- * DTO simplificado de usuario para secretos.
- */
+data class SecretoCifradoResponse(
+    @SerializedName("id")
+    val id: Long,
+
+    @SerializedName("autorId")
+    val autorId: Long,
+
+    @SerializedName("autorUsername")
+    val autorUsername: String,
+
+    @SerializedName("autorNombre")
+    val autorNombre: String,
+
+    @SerializedName("contenidoCifrado")
+    val contenidoCifrado: String,
+
+    @SerializedName("claveAESCifrada")
+    val claveAESCifrada: String,
+
+    @SerializedName("firma")
+    val firma: String,
+
+    @SerializedName("iv")
+    val iv: String,
+
+    @SerializedName("publicKeyAutor")
+    val autorClavePublica: String,
+
+    @SerializedName("esCompartido")
+    val esCompartido: Boolean,
+
+    @SerializedName("compartidoCon")
+    val compartidoCon: List<UsuarioSecretoDto> = emptyList()
+)
+
 data class UsuarioSecretoDto(
     @SerializedName("id")
     val id: Long,
@@ -88,35 +92,18 @@ data class UsuarioSecretoDto(
     val nombre: String,
 
     @SerializedName("publicKey")
-    val publicKey: String, // Base64
+    val publicKey: String,
 
     @SerializedName("certificado")
-    val certificado: String // Base64 - firma del servidor sobre la publicKey
+    val certificado: String
 )
 
-/**
- * Lista de secretos accesibles por el usuario.
- */
-data class ListaSecretosResponse(
-    @SerializedName("secretos")
-    val secretos: List<SecretoResponse>
-)
 
-/**
- * Response al obtener la clave pública del servidor.
- * Necesaria para verificar certificados de usuarios.
- */
 data class ClavePublicaServidorResponse(
     @SerializedName("publicKey")
-    val publicKey: String // Base64 - clave pública RSA del servidor
+    val publicKey: String
 )
 
-// ==================== MAPPERS/CONVERSIONES ====================
-
-/**
- * Convierte UsuarioEntity (de GymApiModels) a UsuarioSecretoDto.
- * Reutiliza el modelo existente evitando duplicación de código.
- */
 fun UsuarioEntity.toUsuarioSecretoDto() = UsuarioSecretoDto(
     id = id,
     username = username,
@@ -125,17 +112,13 @@ fun UsuarioEntity.toUsuarioSecretoDto() = UsuarioSecretoDto(
     certificado = certificado ?: ""
 )
 
-/**
- * Convierte UsuarioSecretoDto a UsuarioEntity.
- * Útil cuando se recibe información de secretos y se quiere usar el modelo unificado.
- */
 fun UsuarioSecretoDto.toUsuarioEntity() = UsuarioEntity(
     id = id,
     username = username,
-    email = "", // No disponible en UsuarioSecretoDto
+    email = "",
     nombre = nombre,
-    password = "", // No disponible en UsuarioSecretoDto (nunca se envía)
-    rol = Constantes.USER, // Asumimos USER por defecto
+    password = "",
+    rol = Constantes.USER,
     activo = true,
     publicKey = publicKey,
     certificado = certificado

@@ -13,10 +13,9 @@ class AuthInterceptor @Inject constructor(
         val request = chain.request()
         val path = request.url.encodedPath
 
-        // No agregar token a endpoints públicos
         if (path.contains(Constantes.API_AUTH_LOGIN) ||
-            path.contains("/api/auth/register") ||
-            path.contains("/api/auth/activar")) {
+            path.contains(Constantes.API_AUTH_REGISTER) ||
+            path.contains(Constantes.API_AUTH_ACTIVAR)) {
             return chain.proceed(request)
         }
 

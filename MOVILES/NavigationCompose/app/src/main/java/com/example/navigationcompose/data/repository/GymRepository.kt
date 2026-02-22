@@ -7,6 +7,7 @@ import com.example.navigationcompose.data.remote.api.GymApiService
 import com.example.navigationcompose.data.remote.entity.EntrenamientoEntity
 import com.example.navigationcompose.data.remote.entity.LoginRequest
 import com.example.navigationcompose.data.remote.entity.LoginResponse
+import com.example.navigationcompose.data.remote.entity.UpdatePublicKeyRequest
 import com.example.navigationcompose.data.remote.entity.UsuarioEntity
 import com.example.navigationcompose.data.remote.entity.toDomain
 import com.example.navigationcompose.domain.model.Ejercicio
@@ -123,6 +124,20 @@ class GymRepository @Inject constructor(
             }
         } catch (e: Exception) {
             NetworkResult.Error("${Constantes.ERROR_GENERICO}${e.message}")
+        }
+    }
+
+    suspend fun updatePublicKey(publicKeyBase64: String): NetworkResult<String> {
+        return try {
+            val request = UpdatePublicKeyRequest(publicKeyBase64)
+            val response = apiService.updatePublicKey(request)
+            if (response.isSuccessful && response.body() != null) {
+                NetworkResult.Success(response.body()!!)
+            } else {
+                NetworkResult.Error("Error al actualizar clave pública: ${response.code()}")
+            }
+        } catch (e: Exception) {
+            NetworkResult.Error("Error de red al actualizar clave pública: ${e.message}")
         }
     }
 

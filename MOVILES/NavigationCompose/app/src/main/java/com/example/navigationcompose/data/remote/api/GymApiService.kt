@@ -5,6 +5,7 @@ import com.example.navigationcompose.data.remote.entity.EjercicioEntity
 import com.example.navigationcompose.data.remote.entity.EntrenamientoEntity
 import com.example.navigationcompose.data.remote.entity.LoginRequest
 import com.example.navigationcompose.data.remote.entity.LoginResponse
+import com.example.navigationcompose.data.remote.entity.UpdatePublicKeyRequest
 import com.example.navigationcompose.data.remote.entity.UsuarioEntity
 import retrofit2.Response
 import retrofit2.http.Body
@@ -38,5 +39,8 @@ interface GymApiService {
 
     @GET(Constantes.API_EJERCICIOS)
     suspend fun getEjercicios(): Response<List<EjercicioEntity>>
+
+    @PUT(Constantes.API_USUARIOS_PUBLIC_KEY)
+    suspend fun updatePublicKey(@Body request: UpdatePublicKeyRequest): Response<String>
 }
 

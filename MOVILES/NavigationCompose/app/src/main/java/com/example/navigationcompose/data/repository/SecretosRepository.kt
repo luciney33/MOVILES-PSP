@@ -13,38 +13,20 @@ import java.security.PublicKey
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Repositorio para gestionar secretos cifrados end-to-end.
- *
- * Responsabilidades:
- * - Cifrar contenido antes de enviarlo al servidor
- * - Descifrar contenido recibido del servidor
- * - Firmar datos con clave privada
- * - Verificar firmas de otros usuarios
- * - Gestionar compartición de secretos (re-cifrado de claves)
- */
 @Singleton
 class SecretosRepository @Inject constructor(
     private val apiService: SecretosApiService,
     private val cryptoManager: CryptoManager
 ) {
 
-    // Cache de clave pública del servidor (para verificar certificados)
     private var publicKeyServidor: PublicKey? = null
 
-    // ==================== LISTAR USUARIOS ====================
-
-    /**
-     * Obtiene la lista de usuarios con los que se pueden compartir secretos.
-     * Incluye verificación de certificados.
-     */
     suspend fun getUsuarios(): NetworkResult<List<Usuario>> = withContext(Dispatchers.IO) {
         try {
             val response = apiService.getUsuarios()
             if (response.isSuccessful && response.body() != null) {
                 val usuarios = response.body()!!.map { it.toDomainUsuario() }
 
-                // Verificar certificados de todos los usuarios
                 val usuariosVerificados = usuarios.map { usuario ->
                     val certificadoValido = verificarCertificado(
                         usuario.publicKey ?: byteArrayOf(),
@@ -62,9 +44,6 @@ class SecretosRepository @Inject constructor(
         }
     }
 
-    /**
-     * Obtiene un usuario específico por ID.
-     */
     suspend fun getUsuarioById(usuarioId: Long): NetworkResult<Usuario> = withContext(Dispatchers.IO) {
         try {
             val response = apiService.getUsuarioById(usuarioId)
@@ -83,77 +62,56 @@ class SecretosRepository @Inject constructor(
         }
     }
 
-    // ==================== CREAR SECRETO ====================
-
-    /**
-     * Crea un secreto cifrado end-to-end.
-     *
-     * Proceso:
-     * 1. Generar clave AES aleatoria
-     * 2. Cifrar contenido con AES-GCM
-     * 3. Obtener clave privada del usuario (con password)
-     * 4. Firmar contenido cifrado
-     * 5. Obtener clave pública del receptor
-     * 6. Cifrar clave AES con clave pública del receptor
-     * 7. Enviar todo al servidor
-     */
     suspend fun crearSecreto(
         contenidoPlano: String,
-        receptorId: Long,
         passwordUsuario: String
     ): NetworkResult<Secreto> = withContext(Dispatchers.IO) {
         try {
-            // 1. Generar clave AES y IV
             val aesKey = cryptoManager.generateAESKey()
             val iv = cryptoManager.generateIV()
 
-            // 2. Cifrar contenido
             val contenidoBytes = contenidoPlano.toByteArray(Charsets.UTF_8)
             val contenidoCifrado = cryptoManager.encryptAES_GCM(contenidoBytes, aesKey, iv)
 
-            // 3. Cargar clave privada del autor
             val privateKey = try {
                 cryptoManager.loadAndDecryptPrivateKey(passwordUsuario)
             } catch (_: Exception) {
                 return@withContext NetworkResult.Error(Constantes.ERROR_PASSWORD_INCORRECTA)
             }
 
-            // 4. Firmar contenido cifrado
             val firma = cryptoManager.signData(contenidoCifrado, privateKey)
 
-            // 5. Obtener clave pública del receptor
-            val receptorResponse = apiService.getUsuarioById(receptorId)
-            if (!receptorResponse.isSuccessful || receptorResponse.body() == null) {
-                return@withContext NetworkResult.Error(Constantes.ERROR_RECEPTOR_NO_ENCONTRADO)
-            }
+            val publicKeyUsuario = cryptoManager.getPublicKey()
 
-            val receptor = receptorResponse.body()!!
-            val publicKeyReceptorBytes = Base64.decode(receptor.publicKey, Base64.DEFAULT)
-            val publicKeyReceptor = cryptoManager.bytesToPublicKey(publicKeyReceptorBytes)
-
-            // 6. Verificar certificado del receptor
-            val certificadoReceptorBytes = Base64.decode(receptor.certificado, Base64.DEFAULT)
-            if (!verificarCertificado(publicKeyReceptorBytes, certificadoReceptorBytes)) {
-                return@withContext NetworkResult.Error(Constantes.ERROR_CERTIFICADO_INVALIDO)
-            }
-
-            // 7. Cifrar clave AES con clave pública del receptor
             val aesKeyBytes = aesKey.encoded
-            val claveAESCifrada = cryptoManager.encryptRSA(aesKeyBytes, publicKeyReceptor)
+            val claveAESCifrada = cryptoManager.encryptRSA(aesKeyBytes, publicKeyUsuario)
 
-            // 8. Preparar request
             val request = CrearSecretoRequest(
-                receptorId = receptorId,
                 contenidoCifrado = Base64.encodeToString(contenidoCifrado, Base64.NO_WRAP),
                 claveAESCifrada = Base64.encodeToString(claveAESCifrada, Base64.NO_WRAP),
                 firma = Base64.encodeToString(firma, Base64.NO_WRAP),
                 iv = Base64.encodeToString(iv, Base64.NO_WRAP)
             )
 
-            // 9. Enviar al servidor
             val response = apiService.crearSecreto(request)
             if (response.isSuccessful && response.body() != null) {
-                NetworkResult.Success(response.body()!!.toDomain())
+                val secretoId = response.body()!!
+                val secreto = Secreto(
+                    id = secretoId,
+                    autor = Usuario(
+                        id = 0,
+                        username = "",
+                        email = "",
+                        nombre = "",
+                        rol = Constantes.USER
+                    ),
+                    contenidoDescifrado = null,
+                    fechaCreacion = "",
+                    compartidoCon = emptyList(),
+                    esAutor = true,
+                    firmaValida = null
+                )
+                NetworkResult.Success(secreto)
             } else {
                 NetworkResult.Error("${Constantes.ERROR_CREAR_SECRETO}${response.code()}")
             }
@@ -162,16 +120,27 @@ class SecretosRepository @Inject constructor(
         }
     }
 
-    // ==================== LISTAR SECRETOS ====================
-
-    /**
-     * Obtiene todos los secretos accesibles por el usuario.
-     */
     suspend fun getSecretos(): NetworkResult<List<Secreto>> = withContext(Dispatchers.IO) {
         try {
-            val response = apiService.getSecretos()
+            val response = apiService.listarSecretos()
             if (response.isSuccessful && response.body() != null) {
-                val secretos = response.body()!!.map { it.toDomain() }
+                val secretos = response.body()!!.map { dto ->
+                    Secreto(
+                        id = dto.id,
+                        autor = Usuario(
+                            id = dto.autorId,
+                            username = dto.autorUsername,
+                            email = "",
+                            nombre = dto.autorNombre,
+                            rol = Constantes.USER
+                        ),
+                        contenidoDescifrado = null,
+                        fechaCreacion = "",
+                        compartidoCon = emptyList(),
+                        esAutor = dto.esAutor,
+                        firmaValida = null
+                    )
+                }
                 NetworkResult.Success(secretos)
             } else {
                 NetworkResult.Error("${Constantes.ERROR_OBTENER_SECRETOS}${response.code()}")
@@ -181,24 +150,11 @@ class SecretosRepository @Inject constructor(
         }
     }
 
-    // ==================== VER SECRETO (DESCIFRAR) ====================
-
-    /**
-     * Descifra y verifica un secreto.
-     *
-     * Proceso:
-     * 1. Obtener secreto del servidor
-     * 2. Cargar clave privada del usuario
-     * 3. Descifrar clave AES
-     * 4. Descifrar contenido
-     * 5. Verificar firma del autor
-     */
     suspend fun descifrarSecreto(
         secretoId: Long,
         passwordUsuario: String
     ): NetworkResult<SecretoDescifrado> = withContext(Dispatchers.IO) {
         try {
-            // 1. Obtener secreto
             val response = apiService.getSecretoById(secretoId)
             if (!response.isSuccessful || response.body() == null) {
                 return@withContext NetworkResult.Error(Constantes.ERROR_SECRETO_NO_ENCONTRADO)
@@ -206,39 +162,120 @@ class SecretosRepository @Inject constructor(
 
             val secretoEntity = response.body()!!
 
-            // 2. Cargar clave privada del usuario
+            // 1. Obtener datos del autor (clave pública + certificado)
+            val autorResponse = apiService.getUsuarioById(secretoEntity.autorId)
+            if (!autorResponse.isSuccessful || autorResponse.body() == null) {
+                return@withContext NetworkResult.Error(Constantes.ERROR_USUARIO_NO_ENCONTRADO)
+            }
+            val autorDto = autorResponse.body()!!
+
+            // 2. Decodificar y verificar que existen datos
+            val publicKeyAutorBytes = try {
+                if (autorDto.publicKey.isNullOrBlank()) {
+                    return@withContext NetworkResult.Error("El autor no tiene clave pública configurada")
+                }
+                Base64.decode(autorDto.publicKey, Base64.DEFAULT)
+            } catch (e: Exception) {
+                return@withContext NetworkResult.Error("Error decodificando clave pública del autor: ${e.message}")
+            }
+
+            val certificadoAutorBytes = try {
+                if (autorDto.certificado.isNullOrBlank()) {
+                    android.util.Log.w("SecretosRepo", "⚠️ Certificado del autor está vacío")
+                    byteArrayOf()
+                } else {
+                    Base64.decode(autorDto.certificado, Base64.DEFAULT)
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("SecretosRepo", "❌ Error decodificando certificado: ${e.message}")
+                byteArrayOf()
+            }
+
+            val publicKeyAutor = try {
+                cryptoManager.bytesToPublicKey(publicKeyAutorBytes)
+            } catch (e: Exception) {
+                android.util.Log.e("SecretosRepo", "❌ Error convirtiendo clave pública: ${e.message}")
+                return@withContext NetworkResult.Error("Clave pública del autor inválida")
+            }
+
+            android.util.Log.d("SecretosRepo", "📝 Verificando certificado del autor '${autorDto.username}'")
+            android.util.Log.d("SecretosRepo", "   - Longitud clave pública: ${publicKeyAutorBytes.size} bytes")
+            android.util.Log.d("SecretosRepo", "   - Longitud certificado: ${certificadoAutorBytes.size} bytes")
+
+            // 3. Verificar certificado del autor con el servidor CA (solo si existe)
+            val certificadoValido = if (certificadoAutorBytes.isNotEmpty()) {
+                val resultado = verificarCertificado(publicKeyAutorBytes, certificadoAutorBytes)
+                android.util.Log.d("SecretosRepo", "   - Resultado verificación: $resultado")
+                resultado
+            } else {
+                android.util.Log.w("SecretosRepo", "   - Sin certificado para verificar")
+                false
+            }
+
+            if (!certificadoValido) {
+                android.util.Log.e("SecretosRepo", "❌ Certificado del autor no válido")
+                return@withContext NetworkResult.Error("Certificado del autor no válido")
+            }
+
+            // 4. Verificar firma del contenido del secreto
+            val contenidoCifradoBytes = Base64.decode(secretoEntity.contenidoCifrado, Base64.DEFAULT)
+            val firmaBytes = Base64.decode(secretoEntity.firma, Base64.DEFAULT)
+            val firmaValida = try {
+                cryptoManager.verifySignature(contenidoCifradoBytes, firmaBytes, publicKeyAutor)
+            } catch (_: Exception) {
+                false
+            }
+
+            if (!firmaValida) {
+                return@withContext NetworkResult.Error("La firma del secreto no es válida")
+            }
+
+            // 5. Descifrar clave privada del usuario con su contraseña
             val privateKey = try {
                 cryptoManager.loadAndDecryptPrivateKey(passwordUsuario)
             } catch (_: Exception) {
                 return@withContext NetworkResult.Error(Constantes.ERROR_PASSWORD_INCORRECTA)
             }
 
-            // 3. Descifrar clave AES
+            // 6. Descifrar clave AES del secreto usando la clave privada del usuario
             val claveAESCifradaBytes = Base64.decode(secretoEntity.claveAESCifrada, Base64.DEFAULT)
-            val aesKeyBytes = cryptoManager.decryptRSA(claveAESCifradaBytes, privateKey)
+            val aesKeyBytes = try {
+                cryptoManager.decryptRSA(claveAESCifradaBytes, privateKey)
+            } catch (_: Exception) {
+                return@withContext NetworkResult.Error("Error descifrando clave AES")
+            }
             val aesKey = cryptoManager.bytesToAESKey(aesKeyBytes)
 
-            // 4. Descifrar contenido
+            // 7. Descifrar contenido del secreto usando la clave AES
             val ivBytes = Base64.decode(secretoEntity.iv, Base64.DEFAULT)
-            val contenidoCifradoBytes = Base64.decode(secretoEntity.contenidoCifrado, Base64.DEFAULT)
-            val contenidoBytes = cryptoManager.decryptAES_GCM(contenidoCifradoBytes, aesKey, ivBytes)
+            val contenidoBytes = try {
+                cryptoManager.decryptAES_GCM(contenidoCifradoBytes, aesKey, ivBytes)
+            } catch (_: Exception) {
+                return@withContext NetworkResult.Error("Error descifrando contenido")
+            }
             val contenidoPlano = String(contenidoBytes, Charsets.UTF_8)
 
-            // 5. Verificar firma del autor
-            val publicKeyAutorBytes = Base64.decode(secretoEntity.autor.publicKey, Base64.DEFAULT)
-            val publicKeyAutor = cryptoManager.bytesToPublicKey(publicKeyAutorBytes)
-            val firmaBytes = Base64.decode(secretoEntity.firma, Base64.DEFAULT)
-            val firmaValida = cryptoManager.verifySignature(contenidoCifradoBytes, firmaBytes, publicKeyAutor)
+            val autor = Usuario(
+                id = secretoEntity.autorId,
+                username = secretoEntity.autorUsername,
+                email = "",
+                nombre = secretoEntity.autorNombre,
+                rol = Constantes.USER,
+                publicKey = publicKeyAutorBytes,
+                certificado = certificadoAutorBytes,
+                certificadoVerificado = certificadoValido
+            )
 
-            // 6. Verificar certificado del autor
-            val certificadoAutorBytes = Base64.decode(secretoEntity.autor.certificado, Base64.DEFAULT)
-            val certificadoValido = verificarCertificado(publicKeyAutorBytes, certificadoAutorBytes)
+            val secreto = Secreto(
+                id = secretoEntity.id,
+                autor = autor,
+                contenidoDescifrado = null,
+                fechaCreacion = "",
+                compartidoCon = emptyList(),
+                esAutor = !secretoEntity.esCompartido,
+                firmaValida = firmaValida
+            )
 
-            if (!certificadoValido) {
-                return@withContext NetworkResult.Error(Constantes.ERROR_CERTIFICADO_AUTOR_INVALIDO)
-            }
-
-            val secreto = secretoEntity.toDomain()
             val secretoDescifrado = SecretoDescifrado(
                 secreto = secreto,
                 contenidoPlano = contenidoPlano,
@@ -251,19 +288,12 @@ class SecretosRepository @Inject constructor(
         }
     }
 
-    // ==================== COMPARTIR SECRETO ====================
-
-    /**
-     * Comparte un secreto con otro usuario.
-     * Re-cifra la clave AES con la clave pública del destinatario.
-     */
     suspend fun compartirSecreto(
         secretoId: Long,
         receptorId: Long,
         passwordUsuario: String
     ): NetworkResult<Unit> = withContext(Dispatchers.IO) {
         try {
-            // 1. Obtener el secreto para obtener la clave AES
             val secretoResponse = apiService.getSecretoById(secretoId)
             if (!secretoResponse.isSuccessful || secretoResponse.body() == null) {
                 return@withContext NetworkResult.Error(Constantes.ERROR_SECRETO_NO_ENCONTRADO)
@@ -271,18 +301,15 @@ class SecretosRepository @Inject constructor(
 
             val secreto = secretoResponse.body()!!
 
-            // 2. Cargar clave privada del usuario actual
             val privateKey = try {
                 cryptoManager.loadAndDecryptPrivateKey(passwordUsuario)
             } catch (_: Exception) {
                 return@withContext NetworkResult.Error(Constantes.ERROR_PASSWORD_INCORRECTA)
             }
 
-            // 3. Descifrar clave AES con nuestra clave privada
             val claveAESCifradaBytes = Base64.decode(secreto.claveAESCifrada, Base64.DEFAULT)
             val aesKeyBytes = cryptoManager.decryptRSA(claveAESCifradaBytes, privateKey)
 
-            // 4. Obtener clave pública del nuevo destinatario
             val receptorResponse = apiService.getUsuarioById(receptorId)
             if (!receptorResponse.isSuccessful || receptorResponse.body() == null) {
                 return@withContext NetworkResult.Error(Constantes.ERROR_RECEPTOR_NO_ENCONTRADO)
@@ -292,16 +319,13 @@ class SecretosRepository @Inject constructor(
             val publicKeyReceptorBytes = Base64.decode(receptor.publicKey, Base64.DEFAULT)
             val publicKeyReceptor = cryptoManager.bytesToPublicKey(publicKeyReceptorBytes)
 
-            // 5. Verificar certificado del receptor
             val certificadoBytes = Base64.decode(receptor.certificado, Base64.DEFAULT)
             if (!verificarCertificado(publicKeyReceptorBytes, certificadoBytes)) {
                 return@withContext NetworkResult.Error(Constantes.ERROR_CERTIFICADO_INVALIDO)
             }
 
-            // 6. RE-CIFRAR clave AES con clave pública del nuevo destinatario
             val claveAESReCifrada = cryptoManager.encryptRSA(aesKeyBytes, publicKeyReceptor)
 
-            // 7. Enviar al servidor
             val request = CompartirSecretoRequest(
                 receptorId = receptorId,
                 claveAESCifradaDestinatario = Base64.encodeToString(claveAESReCifrada, Base64.NO_WRAP)
@@ -318,11 +342,6 @@ class SecretosRepository @Inject constructor(
         }
     }
 
-    // ==================== REVOCAR ACCESO ====================
-
-    /**
-     * Revoca el acceso de un usuario a un secreto.
-     */
     suspend fun revocarAcceso(secretoId: Long, usuarioId: Long): NetworkResult<Unit> = withContext(Dispatchers.IO) {
         try {
             val response = apiService.revocarAcceso(secretoId, usuarioId)
@@ -336,11 +355,6 @@ class SecretosRepository @Inject constructor(
         }
     }
 
-    // ==================== ELIMINAR SECRETO ====================
-
-    /**
-     * Elimina un secreto permanentemente.
-     */
     suspend fun eliminarSecreto(secretoId: Long): NetworkResult<Unit> = withContext(Dispatchers.IO) {
         try {
             val response = apiService.eliminarSecreto(secretoId)
@@ -354,62 +368,48 @@ class SecretosRepository @Inject constructor(
         }
     }
 
-    // ==================== VERIFICACIÓN DE CERTIFICADOS ====================
-
-    /**
-     * Verifica que un certificado (firma del servidor) sea válido para una clave pública.
-     *
-     * Proceso:
-     * 1. Obtener clave pública del servidor (si no está en cache)
-     * 2. Verificar firma del servidor sobre la clave pública del usuario
-     */
     private suspend fun verificarCertificado(publicKeyBytes: ByteArray, certificadoBytes: ByteArray): Boolean {
         return try {
-            // Obtener clave pública del servidor si no está en cache
+            if (publicKeyBytes.isEmpty() || certificadoBytes.isEmpty()) {
+                android.util.Log.w("SecretosRepo", "Certificado o clave pública vacíos")
+                return false
+            }
+
             if (publicKeyServidor == null) {
                 val response = apiService.getPublicKeyServidor()
                 if (response.isSuccessful && response.body() != null) {
                     val publicKeyServidorBytes = Base64.decode(response.body()!!.publicKey, Base64.DEFAULT)
                     publicKeyServidor = cryptoManager.bytesToPublicKey(publicKeyServidorBytes)
+                    android.util.Log.d("SecretosRepo", "✅ Clave pública del servidor CA cargada correctamente")
                 } else {
+                    android.util.Log.e("SecretosRepo", "❌ Error obteniendo clave pública del servidor: ${response.code()}")
                     return false
                 }
             }
 
-            // Verificar firma del servidor
-            cryptoManager.verifySignature(publicKeyBytes, certificadoBytes, publicKeyServidor!!)
-        } catch (_: Exception) {
+            val esValido = cryptoManager.verifySignature(publicKeyBytes, certificadoBytes, publicKeyServidor!!)
+
+            if (esValido) {
+                android.util.Log.d("SecretosRepo", "✅ Certificado verificado correctamente")
+            } else {
+                android.util.Log.w("SecretosRepo", "⚠️ Certificado NO válido")
+            }
+
+            esValido
+        } catch (e: Exception) {
+            android.util.Log.e("SecretosRepo", "❌ Error verificando certificado: ${e.message}", e)
             false
         }
     }
 
-    // ==================== CONVERSIONES ====================
-
-    /**
-     * Convierte UsuarioSecretoDto a Usuario del dominio.
-     */
     private fun UsuarioSecretoDto.toDomainUsuario() = Usuario(
         id = id,
         username = username,
-        email = "", // No disponible en UsuarioSecretoDto
+        email = "",
         nombre = nombre,
         rol = Constantes.USER,
         publicKey = Base64.decode(publicKey, Base64.DEFAULT),
         certificado = Base64.decode(certificado, Base64.DEFAULT),
         certificadoVerificado = false
     )
-
-    /**
-     * Convierte SecretoResponse a Secreto del dominio.
-     */
-    private fun SecretoResponse.toDomain() = Secreto(
-        id = id,
-        autor = autor.toDomainUsuario(),
-        contenidoDescifrado = null,
-        fechaCreacion = fechaCreacion,
-        compartidoCon = compartidos.map { it.toDomainUsuario() },
-        esAutor = false, // Se debe determinar comparando con usuario actual
-        firmaValida = null
-    )
 }
-

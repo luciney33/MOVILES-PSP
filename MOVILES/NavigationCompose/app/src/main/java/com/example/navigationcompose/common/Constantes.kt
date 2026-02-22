@@ -146,6 +146,7 @@ object Constantes {
     const val API_SECRETOS_REVOCAR = "/api/secretos/{secretoId}/compartir/{usuarioId}"
     const val API_USUARIOS = "/api/usuarios"
     const val API_USUARIOS_ID = "/api/usuarios/{id}"
+    const val API_USUARIOS_PUBLIC_KEY = "/api/usuarios/public-key"
     const val API_CRYPTO_PUBLIC_KEY = "/api/crypto/public-key"
     const val API_AUTH_ACTIVAR = "/api/auth/activar"
 
@@ -165,6 +166,19 @@ object Constantes {
     const val ERROR_USUARIO_NO_ENCONTRADO = "Usuario no encontrado"
     const val ERROR_RED_GENERICO = "Error de red: "
     const val ERROR_GENERICO_MENSAJE = "Error: "
+    const val ERROR_OBTENER_CLAVE_PUBLICA = "Error al obtener clave pública: "
+    const val ERROR_ELIMINAR_ENTRENAMIENTO = "Error al eliminar el entrenamiento"
+    const val ERROR_CARGAR_ENTRENAMIENTO = "Error al cargar el entrenamiento"
+    const val ERROR_GUARDAR_ENTRENAMIENTO = "Error al guardar el entrenamiento"
+    const val ERROR_NOMBRE_VACIO = "El nombre no puede estar vacío"
+    const val ERROR_ENDPOINT_NO_IMPLEMENTADO = "Endpoint no implementado en el servidor:"
+
+    // ==================== ERRORES CRIPTOGRAFÍA ====================
+
+    const val ERROR_NO_CLAVE_PRIVADA = "No hay clave privada guardada"
+    const val ERROR_NO_SALT = "No hay salt guardado"
+    const val ERROR_NO_IV = "No hay IV guardado"
+    const val ERROR_NO_CLAVE_PUBLICA = "No hay clave pública guardada"
 
     // Mensajes de Secretos
     const val MSG_NO_SESION_ACTIVA = "No hay sesión activa. Vuelve a iniciar sesión."
@@ -180,6 +194,34 @@ object Constantes {
     const val TEXT_MENU_EXPLORAR = "Usa el menú para explorar:"
     const val TEXT_GYM_DESCRIPCION = "Gestiona tus entrenamientos"
     const val TEXT_DRAGON_BALL_DESCRIPCION = "Explora personajes"
+
+    const val TEXT_SECRETOS = "Secretos"
+    const val TEXT_MIS_SECRETOS = "Mis Secretos"
+    const val TEXT_CREAR_SECRETO = "Crear Secreto"
+    const val TEXT_CANCELAR = "Cancelar"
+    const val TEXT_GUARDAR = "Guardar"
+    const val TEXT_COMPARTIR = "Compartir"
+    const val TEXT_COMPARTIR_CON = "Compartir con..."
+    const val TEXT_SELECCIONAR_USUARIO = "Seleccionar Usuario"
+    const val TEXT_CONTENIDO_SECRETO = "Contenido del secreto"
+    const val TEXT_VER_SECRETO = "Ver Secreto"
+    const val TEXT_ELIMINAR = "Eliminar"
+    const val TEXT_REVOCAR_ACCESO = "Revocar Acceso"
+    const val TEXT_COMPARTIDO_CON = "Compartido con:"
+    const val TEXT_AUTOR = "Autor:"
+    const val TEXT_FECHA_CREACION = "Fecha:"
+    const val TEXT_FIRMA_VALIDA = "Firma válida ✓"
+    const val TEXT_FIRMA_INVALIDA = "Firma inválida ✗"
+    const val TEXT_INGRESE_PASSWORD = "Ingrese su contraseña para descifrar"
+    const val TEXT_DESCIFRAR = "Descifrar"
+    const val TEXT_NO_SECRETOS = "No hay secretos"
+    const val TEXT_CREAR_PRIMER_SECRETO = "Crea tu primer secreto cifrado"
+    const val TEXT_CONTENIDO_CIFRADO = "Contenido cifrado"
+    const val TEXT_INGRESE_CONTENIDO = "Ingrese el contenido del secreto"
+    const val TEXT_SECRETO_CREADO_EXITO = "Secreto creado exitosamente"
+    const val TEXT_SECRETO_COMPARTIDO_EXITO = "Secreto compartido exitosamente"
+    const val TEXT_SECRETO_ELIMINADO_EXITO = "Secreto eliminado exitosamente"
+    const val TEXT_ACCESO_REVOCADO_EXITO = "Acceso revocado exitosamente"
 
     // ==================== LÍMITES RSA ====================
 

@@ -19,5 +19,15 @@ sealed interface Screen : NavKey{
     @Serializable
     data object ApiExterna : Screen
 
+    @Serializable
+    data object SecretosMain : Screen
+    @Serializable
+    data object ListaSecretos : Screen
+    @Serializable
+    data object CrearSecreto : Screen
+    @Serializable
+    data class VerSecreto(val id: Long) : Screen
+    @Serializable
+    data class CompartirSecreto(val secretoId: Long) : Screen
 
 }
