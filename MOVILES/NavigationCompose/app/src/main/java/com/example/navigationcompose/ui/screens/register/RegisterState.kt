@@ -7,6 +7,7 @@ data class RegisterState(
     val password: String = "",
     val confirmPassword: String = "",
     val isLoading: Boolean = false,
+    val loadingMessage: String? = null, // Mensaje informativo durante el proceso
     val error: String? = null,
     val isRegisterSuccessful: Boolean = false
 )

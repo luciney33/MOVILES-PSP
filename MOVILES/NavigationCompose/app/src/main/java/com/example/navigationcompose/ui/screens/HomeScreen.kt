@@ -55,7 +55,6 @@ fun HomeScreen(onLogout: () -> Unit) {
                               currentRoute?.contains("DetalleEntrenamiento") == true,
                     onClick = {
                         navController.navigate(Screen.ListaEntrenamiento) {
-                            popUpTo(Screen.ListaEntrenamiento) { inclusive = false }
                             launchSingleTop = true
                         }
                     },
@@ -66,7 +65,6 @@ fun HomeScreen(onLogout: () -> Unit) {
                     selected = currentRoute?.contains("ApiExterna") == true,
                     onClick = {
                         navController.navigate(Screen.ApiExterna) {
-                            popUpTo(Screen.ListaEntrenamiento) { inclusive = false }
                             launchSingleTop = true
                         }
                     },
@@ -84,9 +82,13 @@ fun HomeScreen(onLogout: () -> Unit) {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.ListaEntrenamiento,
+            startDestination = Screen.Home,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable<Screen.Home> {
+                WelcomeContent()
+            }
+
             composable<Screen.ListaEntrenamiento> {
                 ListaEntrenamientoScreen(onNavigateToDetail = { id ->
                     navController.navigate(Screen.DetalleEntrenamiento(id))
@@ -100,6 +102,77 @@ fun HomeScreen(onLogout: () -> Unit) {
                 )
             }
             composable<Screen.ApiExterna> { DragonBallListScreen() }
+        }
+    }
+}
+
+@Composable
+fun WelcomeContent(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(40.dp))
+
+        Text(
+            text = Constantes.TEXT_BIENVENIDO,
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(4.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = Constantes.TEXT_BIENVENIDO_FITNESS,
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = Constantes.TEXT_NO_SESIONES_RECIENTES,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(2.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = Constantes.TEXT_MENU_EXPLORAR,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "💪 ${Constantes.TEXT_GYM}: ${Constantes.TEXT_GYM_DESCRIPCION}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "🐉 ${Constantes.TEXT_DRAGON_BALL}: ${Constantes.TEXT_DRAGON_BALL_DESCRIPCION}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }

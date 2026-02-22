@@ -1,15 +1,17 @@
-package com.example.navigationcompose.data
+package com.example.navigationcompose.data.repository
 
 import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.common.NetworkResult
 import com.example.navigationcompose.data.local.TokenManager
+import com.example.navigationcompose.data.remote.api.GymApiService
+import com.example.navigationcompose.data.remote.entity.EntrenamientoEntity
+import com.example.navigationcompose.data.remote.entity.LoginRequest
+import com.example.navigationcompose.data.remote.entity.LoginResponse
+import com.example.navigationcompose.data.remote.entity.UsuarioEntity
+import com.example.navigationcompose.data.remote.entity.toDomain
 import com.example.navigationcompose.domain.model.Ejercicio
 import com.example.navigationcompose.domain.model.Entrenamiento
 import com.example.navigationcompose.domain.model.Usuario
-import com.example.navigationcompose.data.remote.api.GymApiService
-import com.example.navigationcompose.data.remote.entity.LoginRequest
-import com.example.navigationcompose.data.remote.entity.LoginResponse
-import com.example.navigationcompose.data.remote.entity.*
 import javax.inject.Inject
 import javax.inject.Singleton
 

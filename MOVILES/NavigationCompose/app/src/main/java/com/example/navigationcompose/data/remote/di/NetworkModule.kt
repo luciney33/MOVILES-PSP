@@ -58,6 +58,7 @@ object NetworkModule {
         return retrofit.create(GymApiService::class.java)
     }
 
+
     @Provides
     @Singleton
     @Named(Constantes.RETROFIT_DBAPI)

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.common.NetworkResult
-import com.example.navigationcompose.data.remote.entity.UsuarioEntity
 import com.example.navigationcompose.domain.usecase.RegisterUseCase
 import com.example.navigationcompose.ui.common.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,6 +47,10 @@ class RegisterViewModel @Inject constructor(
                     _state.update { it.copy(error = Constantes.ERROR_PASSWORDS_NO_COINCIDEN) }
                     return
                 }
+                if (currentState.password.length < 8) {
+                    _state.update { it.copy(error = Constantes.ERROR_PASSWORD_MINIMA) }
+                    return
+                }
                 if (currentState.password.isBlank()) {
                     _state.update { it.copy(error = Constantes.ERROR_PASSWORD_VACIA) }
                     return
@@ -59,27 +62,37 @@ class RegisterViewModel @Inject constructor(
 
     private fun register() {
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
+            _state.update { it.copy(
+                isLoading = true,
+                loadingMessage = Constantes.MSG_GENERANDO_CLAVES
+            ) }
 
             val currentState = _state.value
-            val usuarioEntity = UsuarioEntity(
-                id = 0,
+
+            // ========== LLAMAR AL USE CASE ==========
+            // El RegisterUseCase se encarga de:
+            // 1. Generar claves RSA
+            // 2. Cifrar clave privada
+            // 3. Guardar claves en DataStore
+            // 4. Registrar usuario con clave pública
+            // 5. Guardar certificado del servidor
+            when (val result = registerUseCase(
                 username = currentState.username,
                 email = currentState.email,
                 nombre = currentState.nombre,
-                password = currentState.password,
-                rol = Constantes.USER,
-                activo = true
-            )
-
-            when (val result = registerUseCase(usuarioEntity)) {
+                password = currentState.password
+            )) {
                 is NetworkResult.Success -> {
-                    _state.update { it.copy(isLoading = false) }
+                    _state.update { it.copy(
+                        isLoading = false,
+                        loadingMessage = null
+                    ) }
                     _uiEvent.send(UiEvent.RegisterSuccess)
                 }
                 is NetworkResult.Error -> {
                     _state.update { it.copy(
                         isLoading = false,
+                        loadingMessage = null,
                         error = result.message ?: Constantes.ERROR_DESCONOCIDO
                     ) }
                 }

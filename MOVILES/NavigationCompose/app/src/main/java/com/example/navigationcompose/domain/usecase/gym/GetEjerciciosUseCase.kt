@@ -1,7 +1,7 @@
 package com.example.navigationcompose.domain.usecase.gym
 
 import com.example.navigationcompose.common.NetworkResult
-import com.example.navigationcompose.data.GymRepository
+import com.example.navigationcompose.data.repository.GymRepository
 import com.example.navigationcompose.domain.model.Ejercicio
 import javax.inject.Inject
 

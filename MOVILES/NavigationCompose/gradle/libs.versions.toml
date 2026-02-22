@@ -24,6 +24,7 @@ room = "2.8.4"
 nav3 = "1.0.0"
 lifecycleViewmodelNav3 = "1.0.0"
 securityCrypto = "1.1.0-alpha06"
+datastore = "1.1.1"
 
 [libraries]
 androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "materialIconsExtended" }
@@ -74,6 +75,9 @@ coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coil" }
 
 # Security Crypto
 securityCrypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
+
+# DataStore
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -38,7 +38,8 @@ data class UsuarioEntity(
     val password: String,
     val rol: String = Constantes.USER,
     val activo: Boolean = true,
-    val publicKey: String? = null
+    val publicKey: String? = null,
+    val certificado: String? = null
 )
 
 fun EjercicioEntity.toDomain() = Ejercicio(
@@ -49,6 +50,14 @@ fun EjercicioEntity.toDomain() = Ejercicio(
     descripcion = descripcion
 )
 
+fun Ejercicio.toEntity() = EjercicioEntity(
+    id = id,
+    nombre = nombre,
+    tipoEntrenamiento = tipo,
+    imagenUrl = imageUrl,
+    descripcion = descripcion
+)
+
 fun EntrenamientoEntity.toDomain() = Entrenamiento(
     id = id,
     nombre = nombre,
@@ -56,10 +65,21 @@ fun EntrenamientoEntity.toDomain() = Entrenamiento(
     ejercicios = ejercicios?.map { it.toDomain() } ?: emptyList()
 )
 
+fun Entrenamiento.toEntity(usuarioId: Long) = EntrenamientoEntity(
+    id = id,
+    usuarioId = usuarioId,
+    nombre = nombre,
+    descripcion = descripcion,
+    ejercicios = ejercicios.map { it.toEntity() }
+)
+
 fun UsuarioEntity.toDomain() = Usuario(
     id = id,
     username = username,
     email = email,
     nombre = nombre,
-    rol = rol
+    rol = rol,
+    publicKey = publicKey?.let { android.util.Base64.decode(it, android.util.Base64.DEFAULT) },
+    certificado = certificado?.let { android.util.Base64.decode(it, android.util.Base64.DEFAULT) },
+    certificadoVerificado = false
 )

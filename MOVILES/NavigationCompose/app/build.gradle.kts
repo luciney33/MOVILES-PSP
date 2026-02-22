@@ -97,6 +97,9 @@ dependencies {
     // Security Crypto
     implementation(libs.securityCrypto)
 
+    // DataStore para almacenamiento seguro
+    implementation(libs.datastore.preferences)
+
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     testImplementation(libs.junit)

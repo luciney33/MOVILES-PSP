@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.navigationcompose.common.NetworkResult
 import com.example.navigationcompose.data.remote.entity.EntrenamientoEntity
+import com.example.navigationcompose.data.remote.entity.toEntity
 import com.example.navigationcompose.domain.usecase.gym.GetEntrenamientoByIdUseCase
 import com.example.navigationcompose.domain.usecase.gym.SaveEntrenamientoUseCase
 import com.example.navigationcompose.ui.navigation.Screen
@@ -65,10 +66,11 @@ class DetalleViewModel @Inject constructor(
 
             _state.update { it.copy(isLoading = true, error = null) }
             val entity = EntrenamientoEntity(
-                _state.value.id,
-                1,
-                _state.value.nombre,
-                _state.value.descripcion
+                id = _state.value.id,
+                usuarioId = 1,
+                nombre = _state.value.nombre,
+                descripcion = _state.value.descripcion,
+                ejercicios = _state.value.ejercicios.map { it.toEntity() } // ✅ Convertir a Entity
             )
 
             when (val result = saveEntrenamientoUseCase(entity)) {

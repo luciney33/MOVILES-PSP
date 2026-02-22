@@ -11,7 +11,12 @@ class AuthInterceptor @Inject constructor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        if (request.url.encodedPath.contains(Constantes.API_AUTH_LOGIN)) {
+        val path = request.url.encodedPath
+
+        // No agregar token a endpoints públicos
+        if (path.contains(Constantes.API_AUTH_LOGIN) ||
+            path.contains("/api/auth/register") ||
+            path.contains("/api/auth/activar")) {
             return chain.proceed(request)
         }
 

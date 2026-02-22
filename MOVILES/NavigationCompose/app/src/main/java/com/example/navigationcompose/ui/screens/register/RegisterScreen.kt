@@ -287,6 +287,27 @@ private fun RegisterScreenContent(
             )
         }
 
+        // Mensaje de progreso durante generación de claves
+        if (state.isLoading && state.loadingMessage != null) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                    strokeWidth = 2.dp
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = state.loadingMessage,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(

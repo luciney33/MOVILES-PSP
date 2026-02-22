@@ -1,4 +1,4 @@
-package com.example.navigationcompose.data
+package com.example.navigationcompose.data.repository
 
 import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.common.NetworkResult
