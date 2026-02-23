@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.common.NetworkResult
 import com.example.navigationcompose.data.security.SessionManager
 import com.example.navigationcompose.domain.model.Usuario
@@ -77,7 +76,7 @@ class CompartirSecretoViewModel @Inject constructor(
                 return@launch
             }
 
-            android.util.Log.d("CompartirSecreto", "✅ Password obtenida de sesión, compartiendo secreto...")
+            android.util.Log.d("CompartirSecreto", "Password obtenida de sesión, compartiendo secreto...")
 
             var hasError = false
             var errorMessage = ""
@@ -89,7 +88,6 @@ class CompartirSecretoViewModel @Inject constructor(
                     passwordUsuario = passwordUsuario
                 )) {
                     is NetworkResult.Success<Unit> -> {
-                        // Continuar con el siguiente usuario
                     }
                     is NetworkResult.Error<Unit> -> {
                         hasError = true

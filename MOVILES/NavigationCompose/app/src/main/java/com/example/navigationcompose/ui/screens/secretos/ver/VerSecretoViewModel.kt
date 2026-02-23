@@ -39,12 +39,12 @@ class VerSecretoViewModel @Inject constructor(
         val password = sessionManager.getPassword()
 
         if (password == null) {
-            Log.e("VerSecretoViewModel", "❌ Password es NULL en sesión")
+            Log.e("VerSecretoViewModel", "Password es NULL en sesión")
             _state.update {
                 it.copy(
                     isLoading = false,
                     error = """
-                        ⚠️ Sesión expirada
+                        Sesión expirada
                         
                         Por favor, cierra sesión y vuelve a hacer login.
                         
@@ -55,17 +55,17 @@ class VerSecretoViewModel @Inject constructor(
             return
         }
 
-        Log.d("VerSecretoViewModel", "✅ Password obtenida de sesión, descifrando secreto...")
+        Log.d("VerSecretoViewModel", "Password obtenida de sesión, descifrando secreto...")
 
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
-            when (val result = descifrarSecretoUseCase(secretoId, password)) {
+            when (val result = descifrarSecretoUseCase(secretoId, password, _state.value.autorId)) {
                 is NetworkResult.Success -> {
-                    Log.d("VerSecretoViewModel", "✅ Secreto descifrado correctamente")
+                    Log.d("VerSecretoViewModel", " Secreto descifrado correctamente")
                     _state.update { it.copy(secretoDescifrado = result.data, isLoading = false, error = null) }
                 }
                 is NetworkResult.Error -> {
-                    Log.e("VerSecretoViewModel", "❌ Error al descifrar: ${result.message}")
+                    Log.e("VerSecretoViewModel", "Error al descifrar: ${result.message}")
                     _state.update { it.copy(isLoading = false, error = result.message) }
                 }
             }
@@ -100,4 +100,3 @@ class VerSecretoViewModel @Inject constructor(
         }
     }
 }
-

@@ -231,20 +231,6 @@ private fun PantallaContenido(
         Card {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    Constantes.TEXT_FECHA_CREACION,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    secretoDescifrado.secreto.fechaCreacion,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
-        }
-
-        Card {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
                     Constantes.TEXT_CONTENIDO_SECRETO,
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary
@@ -312,7 +298,6 @@ fun VerSecretoScreenContenidoPreview() {
                     id = 1,
                     autor = Usuario(1, "usuario1", "juan@email.com", "Juan Pérez", "USER"),
                     contenidoDescifrado = null,
-                    fechaCreacion = "2024-01-15 10:30",
                     compartidoCon = listOf(
                         Usuario(2, "usuario2", "maria@email.com", "María García", "USER"),
                         Usuario(3, "usuario3", "carlos@email.com", "Carlos López", "USER")
@@ -338,7 +323,6 @@ fun VerSecretoScreenFirmaInvalidaPreview() {
                     id = 1,
                     autor = Usuario(1, "usuario1", "juan@email.com", "Juan Pérez", "USER"),
                     contenidoDescifrado = null,
-                    fechaCreacion = "2024-01-15 10:30",
                     compartidoCon = emptyList(),
                     esAutor = false,
                     firmaValida = false

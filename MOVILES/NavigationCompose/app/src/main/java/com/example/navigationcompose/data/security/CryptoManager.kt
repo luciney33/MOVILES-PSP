@@ -9,7 +9,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.navigationcompose.common.Constantes
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import java.security.*
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
@@ -31,9 +30,9 @@ class CryptoManager @Inject constructor(
 ) {
 
     companion object {
-        private val KEY_ENCRYPTED_PRIVATE_KEY = byteArrayPreferencesKey(Constantes.KEY_ENCRYPTED_PRIVATE_KEY)
-        private val KEY_SALT = byteArrayPreferencesKey(Constantes.KEY_SALT)
-        private val KEY_IV_PRIVATE_KEY = byteArrayPreferencesKey(Constantes.KEY_IV_PRIVATE_KEY)
+        private fun KEY_ENCRYPTED_PRIVATE_KEY(username: String) = byteArrayPreferencesKey("${Constantes.KEY_ENCRYPTED_PRIVATE_KEY}_$username")
+        private fun KEY_SALT(username: String) = byteArrayPreferencesKey("${Constantes.KEY_SALT}_$username")
+        private fun KEY_IV_PRIVATE_KEY(username: String) = byteArrayPreferencesKey("${Constantes.KEY_IV_PRIVATE_KEY}_$username")
         private val KEY_PUBLIC_KEY = byteArrayPreferencesKey(Constantes.KEY_PUBLIC_KEY)
         private val KEY_CERTIFICADO = stringPreferencesKey(Constantes.KEY_CERTIFICADO)
     }
@@ -142,15 +141,16 @@ class CryptoManager @Inject constructor(
     }
 
     suspend fun saveEncryptedKeys(
+        username: String,
         encryptedPrivateKey: ByteArray,
         salt: ByteArray,
         ivPrivateKey: ByteArray,
         publicKey: ByteArray
     ) {
         this@CryptoManager.context.cryptoDataStore.edit { preferences ->
-            preferences[KEY_ENCRYPTED_PRIVATE_KEY] = encryptedPrivateKey
-            preferences[KEY_SALT] = salt
-            preferences[KEY_IV_PRIVATE_KEY] = ivPrivateKey
+            preferences[KEY_ENCRYPTED_PRIVATE_KEY(username)] = encryptedPrivateKey
+            preferences[KEY_SALT(username)] = salt
+            preferences[KEY_IV_PRIVATE_KEY(username)] = ivPrivateKey
             preferences[KEY_PUBLIC_KEY] = publicKey
         }
     }
@@ -167,14 +167,14 @@ class CryptoManager @Inject constructor(
         }
     }
 
-    suspend fun loadAndDecryptPrivateKey(password: String): PrivateKey {
+    suspend fun loadAndDecryptPrivateKey(password: String, username: String): PrivateKey {
         val preferences = this@CryptoManager.context.cryptoDataStore.data.first()
 
-        val encryptedPrivateKey = preferences[KEY_ENCRYPTED_PRIVATE_KEY]
+        val encryptedPrivateKey = preferences[KEY_ENCRYPTED_PRIVATE_KEY(username)]
             ?: throw IllegalStateException(Constantes.ERROR_NO_CLAVE_PRIVADA)
-        val salt = preferences[KEY_SALT]
+        val salt = preferences[KEY_SALT(username)]
             ?: throw IllegalStateException(Constantes.ERROR_NO_SALT)
-        val iv = preferences[KEY_IV_PRIVATE_KEY]
+        val iv = preferences[KEY_IV_PRIVATE_KEY(username)]
             ?: throw IllegalStateException(Constantes.ERROR_NO_IV)
 
         val derivedKey = deriveKeyFromPassword(password, salt)
@@ -195,32 +195,19 @@ class CryptoManager @Inject constructor(
         val publicKey = getPublicKey()
         return Base64.encodeToString(publicKey.encoded, Base64.NO_WRAP)
     }
-
-    suspend fun getCertificado(): String? {
-        return this@CryptoManager.context.cryptoDataStore.data.map { preferences ->
-            preferences[KEY_CERTIFICADO]
-        }.first()
-    }
-
-    suspend fun hasStoredKeys(): Boolean {
+    suspend fun hasStoredKeys(username: String): Boolean {
         val preferences = this@CryptoManager.context.cryptoDataStore.data.first()
-        return preferences[KEY_ENCRYPTED_PRIVATE_KEY] != null &&
+        return preferences[KEY_ENCRYPTED_PRIVATE_KEY(username)] != null &&
                preferences[KEY_PUBLIC_KEY] != null
     }
 
-    suspend fun clearAllKeys() {
+    suspend fun clearAllKeys(username: String) {
         this@CryptoManager.context.cryptoDataStore.edit { preferences ->
-            preferences.clear()
+            preferences.remove(KEY_ENCRYPTED_PRIVATE_KEY(username))
+            preferences.remove(KEY_SALT(username))
+            preferences.remove(KEY_IV_PRIVATE_KEY(username))
+            preferences.remove(KEY_PUBLIC_KEY)
+            preferences.remove(KEY_CERTIFICADO)
         }
     }
-
-    fun bytesToHex(bytes: ByteArray): String {
-        return bytes.joinToString("") { "%02x".format(it) }
-    }
-
-    fun sha256(data: ByteArray): ByteArray {
-        val digest = MessageDigest.getInstance(Constantes.SHA256_ALGORITHM)
-        return digest.digest(data)
-    }
 }
-

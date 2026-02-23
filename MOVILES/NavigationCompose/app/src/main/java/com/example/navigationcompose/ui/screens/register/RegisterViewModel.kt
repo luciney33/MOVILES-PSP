@@ -68,14 +68,6 @@ class RegisterViewModel @Inject constructor(
             ) }
 
             val currentState = _state.value
-
-            // ========== LLAMAR AL USE CASE ==========
-            // El RegisterUseCase se encarga de:
-            // 1. Generar claves RSA
-            // 2. Cifrar clave privada
-            // 3. Guardar claves en DataStore
-            // 4. Registrar usuario con clave pública
-            // 5. Guardar certificado del servidor
             when (val result = registerUseCase(
                 username = currentState.username,
                 email = currentState.email,

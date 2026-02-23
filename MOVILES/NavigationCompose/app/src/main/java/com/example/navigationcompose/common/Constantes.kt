@@ -227,4 +227,37 @@ object Constantes {
 
     const val RSA_4096_MAX_BYTES = 446
     const val ERROR_DATOS_GRANDES_RSA = "Datos demasiado grandes para RSA-4096. Máximo: 446 bytes. Usa AES para cifrar contenido y RSA solo para la clave AES."
+
+    // Reemplazo de valores hardcodeados por Constantes
+    const val ERROR_AUTOR_NO_CLAVE_PUBLICA = "El autor no tiene clave pública configurada"
+    const val ERROR_DECODIFICANDO_CLAVE_PUBLICA = "Error decodificando clave pública del autor: "
+    const val ERROR_DECODIFICANDO_CERTIFICADO = "Error decodificando certificado: "
+    const val ERROR_CLAVE_PUBLICA_INVALIDA = "Clave pública del autor inválida"
+    const val ERROR_ACTUALIZAR_CLAVE_PUBLICA = "Error al actualizar clave pública: "
+    const val ERROR_RED_ACTUALIZAR_CLAVE_PUBLICA = "Error de red al actualizar clave pública: "
+
+    // SecretosRepository
+    const val LOG_TAG_SECRETOS_REPO = "SecretosRepo"
+    const val ERROR_NO_USER_SESSION_CREATE_SECRET = "No hay usuario en sesión al crear secreto"
+    const val ERROR_USER_NOT_AUTHENTICATED = "Usuario no autenticado en esta sesión"
+    const val ERROR_DECRYPT_PRIVATE_KEY_LOCAL = "No se pudo descifrar la clave privada local: "
+    const val ERROR_PASSWORD_INCORRECTA_GENERA_CLAVES = " - Tienes tu par de claves local? Genera o importa tu par de claves en el cliente."
+    const val WARN_EMPTY_CERTIFICATE = "Certificado del autor está vacío"
+    const val INFO_VERIFYING_CERTIFICATE = "Verificando certificado del autor '"
+    const val INFO_PUBLIC_KEY_LENGTH = " Longitud clave pública: "
+    const val INFO_CERTIFICATE_LENGTH = "Longitud certificado: "
+    const val INFO_VERIFICATION_RESULT = "Resultado verificación: "
+    const val WARN_NO_CERTIFICATE_TO_VERIFY = "Sin certificado para verificar"
+    const val ERROR_INVALID_AUTHOR_CERTIFICATE = "Certificado del autor no válido"
+    const val ERROR_INVALID_SIGNATURE = "La firma del secreto no es válida"
+    const val ERROR_NO_USER_SESSION_DECRYPT_SECRET = "No hay usuario en sesión al descifrar secreto"
+    const val ERROR_LOAD_DECRYPT_PRIVATE_KEY_LOCAL = "No se pudo cargar/descifrar la clave privada local: "
+    const val ERROR_PASSWORD_INCORRECTA_TIENES_CLAVES = " - ¿Tienes tu par de claves local? Genera o importa tu par de claves en el cliente."
+    const val ERROR_DECRYPTING_AES_KEY = "Error descifrando clave AES"
+    const val ERROR_DECRYPTING_CONTENT = "Error descifrando contenido"
+
+    const val ERROR_NO_USER_SESSION_SHARE_SECRET = "No hay usuario en sesión al compartir secreto"
+    const val WARN_NO_CERTIFICATE_ON_SERVER_SHARE = "Receptor no tiene certificado en el servidor — se procederá a compartir solo con la publicKey"
+    const val ERROR_INVALID_RECIPIENT_CERTIFICATE_ABORT_SHARE = "Certificado del receptor inválido, abortando compartir"
+
 }

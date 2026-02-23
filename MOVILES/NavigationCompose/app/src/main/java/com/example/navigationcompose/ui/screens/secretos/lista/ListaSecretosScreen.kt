@@ -51,7 +51,6 @@ fun ListaSecretosScreenPreview() {
                     id = 1,
                     autor = Usuario(1, "usuario1", "juan@email.com", "Juan Pérez", "USER"),
                     contenidoDescifrado = null,
-                    fechaCreacion = "2024-01-15 10:30",
                     compartidoCon = listOf(
                         Usuario(2, "usuario2", "maria@email.com", "María García", "USER")
                     ),
@@ -62,7 +61,6 @@ fun ListaSecretosScreenPreview() {
                     id = 2,
                     autor = Usuario(2, "usuario2", "maria@email.com", "María García", "USER"),
                     contenidoDescifrado = null,
-                    fechaCreacion = "2024-01-16 14:20",
                     compartidoCon = emptyList(),
                     esAutor = false,
                     firmaValida = null
@@ -205,11 +203,6 @@ private fun ListaSecretosScreenContent(
                                                     "Secreto #${secreto.id}",
                                                     style = MaterialTheme.typography.titleMedium,
                                                     fontWeight = FontWeight.Bold
-                                                )
-                                                Text(
-                                                    secreto.fechaCreacion,
-                                                    style = MaterialTheme.typography.bodySmall,
-                                                    color = MaterialTheme.colorScheme.outline
                                                 )
                                             }
                                         }

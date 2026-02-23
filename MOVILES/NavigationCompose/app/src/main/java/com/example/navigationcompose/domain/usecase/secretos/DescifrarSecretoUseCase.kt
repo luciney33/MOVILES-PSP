@@ -10,12 +10,13 @@ class DescifrarSecretoUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         secretoId: Long,
-        passwordUsuario: String
+        passwordUsuario: String,
+        autorId: Long? = null
     ): NetworkResult<SecretoDescifrado> {
         return secretosRepository.descifrarSecreto(
             secretoId = secretoId,
-            passwordUsuario = passwordUsuario
+            passwordUsuario = passwordUsuario,
+            autorId = autorId
         )
     }
 }
-

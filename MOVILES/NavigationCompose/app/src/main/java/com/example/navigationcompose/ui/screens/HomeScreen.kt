@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -40,6 +41,7 @@ import com.example.navigationcompose.ui.navigation.Screen
 import com.example.navigationcompose.ui.screens.dragonBall.DragonBallListScreen
 import com.example.navigationcompose.ui.screens.gym.detalleEntrenamiento.DetalleEntrenamientoScreen
 import com.example.navigationcompose.ui.screens.gym.listadoEntrenamiento.ListaEntrenamientoScreen
+import com.example.navigationcompose.ui.screens.login.LogoutViewModel
 import com.example.navigationcompose.ui.screens.secretos.SecretosMainScreen
 import com.example.navigationcompose.ui.screens.secretos.lista.ListaSecretosScreen
 import com.example.navigationcompose.ui.screens.secretos.ver.VerSecretoScreen
@@ -48,7 +50,7 @@ import com.example.navigationcompose.ui.screens.secretos.crear.CrearSecretoScree
 import com.example.navigationcompose.ui.theme.NavigationComposeTheme
 
 @Composable
-fun HomeScreen(onLogout: () -> Unit) {
+fun HomeScreen(onLogout: () -> Unit, logoutViewModel: LogoutViewModel = hiltViewModel()) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -89,7 +91,11 @@ fun HomeScreen(onLogout: () -> Unit) {
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = { onLogout() },
+                    onClick = { 
+                        logoutViewModel.logout {
+                            onLogout()
+                        }
+                     },
                     icon = { Icon(Icons.AutoMirrored.Filled.ExitToApp, null) },
                     label = { Text(Constantes.TEXT_SALIR) }
                 )
@@ -126,6 +132,11 @@ fun HomeScreen(onLogout: () -> Unit) {
                     },
                     onCrearSecreto = {
                         navController.navigate(Screen.CrearSecreto)
+                    },
+                    onLogout = {
+                        logoutViewModel.logout {
+                            onLogout()
+                        }
                     }
                 )
             }
@@ -199,13 +210,6 @@ fun WelcomeContent(modifier: Modifier = Modifier) {
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = Constantes.TEXT_NO_SESIONES_RECIENTES,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
         }
 
@@ -240,30 +244,7 @@ fun WelcomeContent(modifier: Modifier = Modifier) {
 @Preview(showBackground = true, device = Devices.PIXEL_4, showSystemUi = true)
 @Composable
 fun HomeCheckPreview() {
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = Constantes.TEXT_BIENVENIDO,
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            elevation = CardDefaults.cardElevation(4.dp)
-        ) {
-            Text(
-                Constantes.TEXT_NO_SESIONES_RECIENTES,
-                modifier = Modifier.padding(16.dp),
-                textAlign = TextAlign.Center
-            )
-        }
-    }
+    HomeScreen(onLogout = {})
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_4, showSystemUi = true)

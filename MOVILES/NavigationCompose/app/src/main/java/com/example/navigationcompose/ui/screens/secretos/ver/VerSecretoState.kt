@@ -6,6 +6,6 @@ data class VerSecretoState(
     val secretoDescifrado: SecretoDescifrado? = null,
     val isLoading: Boolean = false,
     val error: String? = null,
-    val deleteSuccess: Boolean = false
+    val deleteSuccess: Boolean = false,
+    val autorId: Long? = null
 )
-

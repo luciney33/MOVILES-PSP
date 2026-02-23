@@ -189,7 +189,6 @@ private fun CompartirSecretoScreenContent(
                     }
                 }
 
-                // Botones de acción
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

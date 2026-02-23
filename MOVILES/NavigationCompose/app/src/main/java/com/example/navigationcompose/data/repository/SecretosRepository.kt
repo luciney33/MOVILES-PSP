@@ -1,11 +1,13 @@
 package com.example.navigationcompose.data.repository
 
 import android.util.Base64
+import android.util.Log
 import com.example.navigationcompose.common.Constantes
 import com.example.navigationcompose.common.NetworkResult
 import com.example.navigationcompose.data.remote.api.SecretosApiService
 import com.example.navigationcompose.data.remote.entity.*
 import com.example.navigationcompose.data.security.CryptoManager
+import com.example.navigationcompose.data.security.SessionManager
 import com.example.navigationcompose.domain.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,7 +18,8 @@ import javax.inject.Singleton
 @Singleton
 class SecretosRepository @Inject constructor(
     private val apiService: SecretosApiService,
-    private val cryptoManager: CryptoManager
+    private val cryptoManager: CryptoManager,
+    private val sessionManager: SessionManager
 ) {
 
     private var publicKeyServidor: PublicKey? = null
@@ -73,10 +76,17 @@ class SecretosRepository @Inject constructor(
             val contenidoBytes = contenidoPlano.toByteArray(Charsets.UTF_8)
             val contenidoCifrado = cryptoManager.encryptAES_GCM(contenidoBytes, aesKey, iv)
 
+            val currentUser = sessionManager.getCurrentUser()
+            val username = currentUser?.username ?: run {
+                Log.w(Constantes.LOG_TAG_SECRETOS_REPO, Constantes.ERROR_NO_USER_SESSION_CREATE_SECRET)
+                return@withContext NetworkResult.Error(Constantes.ERROR_USER_NOT_AUTHENTICATED)
+            }
+
             val privateKey = try {
-                cryptoManager.loadAndDecryptPrivateKey(passwordUsuario)
-            } catch (_: Exception) {
-                return@withContext NetworkResult.Error(Constantes.ERROR_PASSWORD_INCORRECTA)
+                cryptoManager.loadAndDecryptPrivateKey(passwordUsuario, username)
+            } catch (e: Exception) {
+                Log.w(Constantes.LOG_TAG_SECRETOS_REPO, "${Constantes.ERROR_DECRYPT_PRIVATE_KEY_LOCAL}${e.message}")
+                return@withContext NetworkResult.Error("${Constantes.ERROR_PASSWORD_INCORRECTA}${Constantes.ERROR_PASSWORD_INCORRECTA_GENERA_CLAVES}")
             }
 
             val firma = cryptoManager.signData(contenidoCifrado, privateKey)
@@ -106,7 +116,6 @@ class SecretosRepository @Inject constructor(
                         rol = Constantes.USER
                     ),
                     contenidoDescifrado = null,
-                    fechaCreacion = "",
                     compartidoCon = emptyList(),
                     esAutor = true,
                     firmaValida = null
@@ -135,7 +144,6 @@ class SecretosRepository @Inject constructor(
                             rol = Constantes.USER
                         ),
                         contenidoDescifrado = null,
-                        fechaCreacion = "",
                         compartidoCon = emptyList(),
                         esAutor = dto.esAutor,
                         firmaValida = null
@@ -152,7 +160,8 @@ class SecretosRepository @Inject constructor(
 
     suspend fun descifrarSecreto(
         secretoId: Long,
-        passwordUsuario: String
+        passwordUsuario: String,
+        autorId: Long? = null
     ): NetworkResult<SecretoDescifrado> = withContext(Dispatchers.IO) {
         try {
             val response = apiService.getSecretoById(secretoId)
@@ -161,63 +170,57 @@ class SecretosRepository @Inject constructor(
             }
 
             val secretoEntity = response.body()!!
-
-            // 1. Obtener datos del autor (clave pública + certificado)
             val autorResponse = apiService.getUsuarioById(secretoEntity.autorId)
             if (!autorResponse.isSuccessful || autorResponse.body() == null) {
                 return@withContext NetworkResult.Error(Constantes.ERROR_USUARIO_NO_ENCONTRADO)
             }
             val autorDto = autorResponse.body()!!
-
-            // 2. Decodificar y verificar que existen datos
             val publicKeyAutorBytes = try {
                 if (autorDto.publicKey.isNullOrBlank()) {
-                    return@withContext NetworkResult.Error("El autor no tiene clave pública configurada")
+                    return@withContext NetworkResult.Error(Constantes.ERROR_AUTOR_NO_CLAVE_PUBLICA)
                 }
                 Base64.decode(autorDto.publicKey, Base64.DEFAULT)
             } catch (e: Exception) {
-                return@withContext NetworkResult.Error("Error decodificando clave pública del autor: ${e.message}")
+                return@withContext NetworkResult.Error("${Constantes.ERROR_DECODIFICANDO_CLAVE_PUBLICA}${e.message}")
             }
 
             val certificadoAutorBytes = try {
                 if (autorDto.certificado.isNullOrBlank()) {
-                    android.util.Log.w("SecretosRepo", "⚠️ Certificado del autor está vacío")
+                    Log.w(Constantes.LOG_TAG_SECRETOS_REPO, Constantes.WARN_EMPTY_CERTIFICATE)
                     byteArrayOf()
                 } else {
                     Base64.decode(autorDto.certificado, Base64.DEFAULT)
                 }
             } catch (e: Exception) {
-                android.util.Log.e("SecretosRepo", "❌ Error decodificando certificado: ${e.message}")
+                Log.e(Constantes.LOG_TAG_SECRETOS_REPO, "${Constantes.ERROR_DECODIFICANDO_CERTIFICADO}${e.message}")
                 byteArrayOf()
             }
 
             val publicKeyAutor = try {
                 cryptoManager.bytesToPublicKey(publicKeyAutorBytes)
             } catch (e: Exception) {
-                android.util.Log.e("SecretosRepo", "❌ Error convirtiendo clave pública: ${e.message}")
-                return@withContext NetworkResult.Error("Clave pública del autor inválida")
+                Log.e(Constantes.LOG_TAG_SECRETOS_REPO, Constantes.ERROR_CLAVE_PUBLICA_INVALIDA)
+                return@withContext NetworkResult.Error(Constantes.ERROR_CLAVE_PUBLICA_INVALIDA)
             }
 
-            android.util.Log.d("SecretosRepo", "📝 Verificando certificado del autor '${autorDto.username}'")
-            android.util.Log.d("SecretosRepo", "   - Longitud clave pública: ${publicKeyAutorBytes.size} bytes")
-            android.util.Log.d("SecretosRepo", "   - Longitud certificado: ${certificadoAutorBytes.size} bytes")
+            Log.d(Constantes.LOG_TAG_SECRETOS_REPO, "${Constantes.INFO_VERIFYING_CERTIFICATE}${autorDto.username}'")
+            Log.d(Constantes.LOG_TAG_SECRETOS_REPO, "${Constantes.INFO_PUBLIC_KEY_LENGTH}${publicKeyAutorBytes.size} bytes")
+            Log.d(Constantes.LOG_TAG_SECRETOS_REPO, "${Constantes.INFO_CERTIFICATE_LENGTH}${certificadoAutorBytes.size} bytes")
 
-            // 3. Verificar certificado del autor con el servidor CA (solo si existe)
             val certificadoValido = if (certificadoAutorBytes.isNotEmpty()) {
                 val resultado = verificarCertificado(publicKeyAutorBytes, certificadoAutorBytes)
-                android.util.Log.d("SecretosRepo", "   - Resultado verificación: $resultado")
+                Log.d(Constantes.LOG_TAG_SECRETOS_REPO, "${Constantes.INFO_VERIFICATION_RESULT}$resultado")
                 resultado
             } else {
-                android.util.Log.w("SecretosRepo", "   - Sin certificado para verificar")
+                Log.w(Constantes.LOG_TAG_SECRETOS_REPO, Constantes.WARN_NO_CERTIFICATE_TO_VERIFY)
                 false
             }
 
             if (!certificadoValido) {
-                android.util.Log.e("SecretosRepo", "❌ Certificado del autor no válido")
-                return@withContext NetworkResult.Error("Certificado del autor no válido")
+                Log.e(Constantes.LOG_TAG_SECRETOS_REPO, Constantes.ERROR_INVALID_AUTHOR_CERTIFICATE)
+                return@withContext NetworkResult.Error(Constantes.ERROR_INVALID_AUTHOR_CERTIFICATE)
             }
 
-            // 4. Verificar firma del contenido del secreto
             val contenidoCifradoBytes = Base64.decode(secretoEntity.contenidoCifrado, Base64.DEFAULT)
             val firmaBytes = Base64.decode(secretoEntity.firma, Base64.DEFAULT)
             val firmaValida = try {
@@ -227,31 +230,35 @@ class SecretosRepository @Inject constructor(
             }
 
             if (!firmaValida) {
-                return@withContext NetworkResult.Error("La firma del secreto no es válida")
+                return@withContext NetworkResult.Error(Constantes.ERROR_INVALID_SIGNATURE)
             }
 
-            // 5. Descifrar clave privada del usuario con su contraseña
+            val currentUser = sessionManager.getCurrentUser()
+            val username = currentUser?.username ?: run {
+                Log.w(Constantes.LOG_TAG_SECRETOS_REPO, Constantes.ERROR_NO_USER_SESSION_DECRYPT_SECRET)
+                return@withContext NetworkResult.Error(Constantes.ERROR_USER_NOT_AUTHENTICATED)
+            }
+
             val privateKey = try {
-                cryptoManager.loadAndDecryptPrivateKey(passwordUsuario)
-            } catch (_: Exception) {
-                return@withContext NetworkResult.Error(Constantes.ERROR_PASSWORD_INCORRECTA)
+                cryptoManager.loadAndDecryptPrivateKey(passwordUsuario, username)
+            } catch (e: Exception) {
+                Log.w(Constantes.LOG_TAG_SECRETOS_REPO, "${Constantes.ERROR_LOAD_DECRYPT_PRIVATE_KEY_LOCAL}${e.message}")
+                return@withContext NetworkResult.Error("${Constantes.ERROR_PASSWORD_INCORRECTA}${Constantes.ERROR_PASSWORD_INCORRECTA_TIENES_CLAVES}")
             }
 
-            // 6. Descifrar clave AES del secreto usando la clave privada del usuario
             val claveAESCifradaBytes = Base64.decode(secretoEntity.claveAESCifrada, Base64.DEFAULT)
             val aesKeyBytes = try {
                 cryptoManager.decryptRSA(claveAESCifradaBytes, privateKey)
             } catch (_: Exception) {
-                return@withContext NetworkResult.Error("Error descifrando clave AES")
+                return@withContext NetworkResult.Error(Constantes.ERROR_DECRYPTING_AES_KEY)
             }
             val aesKey = cryptoManager.bytesToAESKey(aesKeyBytes)
 
-            // 7. Descifrar contenido del secreto usando la clave AES
             val ivBytes = Base64.decode(secretoEntity.iv, Base64.DEFAULT)
             val contenidoBytes = try {
                 cryptoManager.decryptAES_GCM(contenidoCifradoBytes, aesKey, ivBytes)
             } catch (_: Exception) {
-                return@withContext NetworkResult.Error("Error descifrando contenido")
+                return@withContext NetworkResult.Error(Constantes.ERROR_DECRYPTING_CONTENT)
             }
             val contenidoPlano = String(contenidoBytes, Charsets.UTF_8)
 
@@ -270,7 +277,6 @@ class SecretosRepository @Inject constructor(
                 id = secretoEntity.id,
                 autor = autor,
                 contenidoDescifrado = null,
-                fechaCreacion = "",
                 compartidoCon = emptyList(),
                 esAutor = !secretoEntity.esCompartido,
                 firmaValida = firmaValida
@@ -301,10 +307,17 @@ class SecretosRepository @Inject constructor(
 
             val secreto = secretoResponse.body()!!
 
+            val currentUser = sessionManager.getCurrentUser()
+            val username = currentUser?.username ?: run {
+                Log.w(Constantes.LOG_TAG_SECRETOS_REPO, Constantes.ERROR_NO_USER_SESSION_SHARE_SECRET)
+                return@withContext NetworkResult.Error(Constantes.ERROR_USER_NOT_AUTHENTICATED)
+            }
+
             val privateKey = try {
-                cryptoManager.loadAndDecryptPrivateKey(passwordUsuario)
-            } catch (_: Exception) {
-                return@withContext NetworkResult.Error(Constantes.ERROR_PASSWORD_INCORRECTA)
+                cryptoManager.loadAndDecryptPrivateKey(passwordUsuario, username)
+            } catch (e: Exception) {
+                Log.w(Constantes.LOG_TAG_SECRETOS_REPO, "${Constantes.ERROR_LOAD_DECRYPT_PRIVATE_KEY_LOCAL}${e.message}")
+                return@withContext NetworkResult.Error("${Constantes.ERROR_PASSWORD_INCORRECTA}${Constantes.ERROR_PASSWORD_INCORRECTA_TIENES_CLAVES}")
             }
 
             val claveAESCifradaBytes = Base64.decode(secreto.claveAESCifrada, Base64.DEFAULT)
@@ -316,12 +329,22 @@ class SecretosRepository @Inject constructor(
             }
 
             val receptor = receptorResponse.body()!!
-            val publicKeyReceptorBytes = Base64.decode(receptor.publicKey, Base64.DEFAULT)
+            val publicKeyReceptorBytes = try {
+                Base64.decode(receptor.publicKey, Base64.DEFAULT)
+            } catch (e: Exception) {
+                return@withContext NetworkResult.Error(Constantes.ERROR_RECEPTOR_NO_ENCONTRADO)
+            }
             val publicKeyReceptor = cryptoManager.bytesToPublicKey(publicKeyReceptorBytes)
 
-            val certificadoBytes = Base64.decode(receptor.certificado, Base64.DEFAULT)
-            if (!verificarCertificado(publicKeyReceptorBytes, certificadoBytes)) {
-                return@withContext NetworkResult.Error(Constantes.ERROR_CERTIFICADO_INVALIDO)
+            if (receptor.certificado.isNullOrBlank()) {
+                Log.w(Constantes.LOG_TAG_SECRETOS_REPO, Constantes.WARN_NO_CERTIFICATE_ON_SERVER_SHARE)
+            } else {
+                val certificadoBytes = Base64.decode(receptor.certificado, Base64.DEFAULT)
+                val certOk = verificarCertificado(publicKeyReceptorBytes, certificadoBytes)
+                if (!certOk) {
+                    Log.e(Constantes.LOG_TAG_SECRETOS_REPO, Constantes.ERROR_INVALID_RECIPIENT_CERTIFICATE_ABORT_SHARE)
+                    return@withContext NetworkResult.Error(Constantes.ERROR_CERTIFICADO_INVALIDO)
+                }
             }
 
             val claveAESReCifrada = cryptoManager.encryptRSA(aesKeyBytes, publicKeyReceptor)
@@ -371,7 +394,7 @@ class SecretosRepository @Inject constructor(
     private suspend fun verificarCertificado(publicKeyBytes: ByteArray, certificadoBytes: ByteArray): Boolean {
         return try {
             if (publicKeyBytes.isEmpty() || certificadoBytes.isEmpty()) {
-                android.util.Log.w("SecretosRepo", "Certificado o clave pública vacíos")
+                Log.w(Constantes.LOG_TAG_SECRETOS_REPO, "Certificado o clave pública vacíos")
                 return false
             }
 
@@ -380,24 +403,47 @@ class SecretosRepository @Inject constructor(
                 if (response.isSuccessful && response.body() != null) {
                     val publicKeyServidorBytes = Base64.decode(response.body()!!.publicKey, Base64.DEFAULT)
                     publicKeyServidor = cryptoManager.bytesToPublicKey(publicKeyServidorBytes)
-                    android.util.Log.d("SecretosRepo", "✅ Clave pública del servidor CA cargada correctamente")
+                    Log.d(Constantes.LOG_TAG_SECRETOS_REPO, "Clave pública del servidor CA cargada correctamente")
                 } else {
-                    android.util.Log.e("SecretosRepo", "❌ Error obteniendo clave pública del servidor: ${response.code()}")
+                    Log.e(Constantes.LOG_TAG_SECRETOS_REPO, "Error obteniendo clave pública del servidor: ${response.code()}")
                     return false
                 }
             }
 
-            val esValido = cryptoManager.verifySignature(publicKeyBytes, certificadoBytes, publicKeyServidor!!)
+            var esValido = try {
+                cryptoManager.verifySignature(publicKeyBytes, certificadoBytes, publicKeyServidor!!)
+            } catch (e: Exception) {
+                Log.e(Constantes.LOG_TAG_SECRETOS_REPO, "Error verificando firma con CA actual: ${e.message}")
+                false
+            }
+
+            if (!esValido) {
+                Log.w(Constantes.LOG_TAG_SECRETOS_REPO, "Verificación fallida, reintentando recarga de la clave CA...")
+                val response = apiService.getPublicKeyServidor()
+                if (response.isSuccessful && response.body() != null) {
+                    try {
+                        val publicKeyServidorBytes = Base64.decode(response.body()!!.publicKey, Base64.DEFAULT)
+                        publicKeyServidor = cryptoManager.bytesToPublicKey(publicKeyServidorBytes)
+                        esValido = cryptoManager.verifySignature(publicKeyBytes, certificadoBytes, publicKeyServidor!!)
+                        Log.d(Constantes.LOG_TAG_SECRETOS_REPO, "Reintento verificación resultado: $esValido")
+                    } catch (e: Exception) {
+                        Log.e(Constantes.LOG_TAG_SECRETOS_REPO, "Reintento falló: ${e.message}")
+                        esValido = false
+                    }
+                } else {
+                    Log.e(Constantes.LOG_TAG_SECRETOS_REPO, "No se pudo recargar la clave CA para reintento: ${response.code()}")
+                }
+            }
 
             if (esValido) {
-                android.util.Log.d("SecretosRepo", "✅ Certificado verificado correctamente")
+                Log.d(Constantes.LOG_TAG_SECRETOS_REPO, "Certificado verificado correctamente")
             } else {
-                android.util.Log.w("SecretosRepo", "⚠️ Certificado NO válido")
+                Log.w(Constantes.LOG_TAG_SECRETOS_REPO, "Certificado NO válido")
             }
 
             esValido
         } catch (e: Exception) {
-            android.util.Log.e("SecretosRepo", "❌ Error verificando certificado: ${e.message}", e)
+            Log.e(Constantes.LOG_TAG_SECRETOS_REPO, "Error verificando certificado: ${e.message}", e)
             false
         }
     }

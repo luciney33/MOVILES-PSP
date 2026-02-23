@@ -39,6 +39,7 @@ class RegisterUseCase @Inject constructor(
 
             val publicKeyBytes = publicKey.encoded
             cryptoManager.saveEncryptedKeys(
+                username = username,
                 encryptedPrivateKey = encryptedPrivateKey,
                 salt = salt,
                 ivPrivateKey = iv,
@@ -66,18 +67,17 @@ class RegisterUseCase @Inject constructor(
                         val certificadoBase64 = Base64.encodeToString(certificadoBytes, Base64.NO_WRAP)
                         cryptoManager.saveCertificado(certificadoBase64)
                     }
-                    // Guardar contraseña en sesión (memoria RAM, NO se persiste)
                     sessionManager.savePasswordInSession(password)
                     NetworkResult.Success(usuario)
                 }
                 is NetworkResult.Error -> {
-                    cryptoManager.clearAllKeys()
+                    cryptoManager.clearAllKeys(username)
                     result
                 }
             }
         } catch (e: Exception) {
             try {
-                cryptoManager.clearAllKeys()
+                cryptoManager.clearAllKeys(username)
             } catch (_: Exception) {
             }
             NetworkResult.Error("${Constantes.ERROR_GENERAR_CLAVES}${e.message}")

@@ -18,7 +18,8 @@ import com.example.navigationcompose.common.Constantes
 @Composable
 fun SecretosMainScreen(
     onListaSecretos: () -> Unit,
-    onCrearSecreto: () -> Unit
+    onCrearSecreto: () -> Unit,
+    onLogout: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -117,8 +118,8 @@ fun SecretosMainScreenPreview() {
     MaterialTheme {
         SecretosMainScreen(
             onListaSecretos = {},
-            onCrearSecreto = {}
+            onCrearSecreto = {},
+            onLogout = {}
         )
     }
 }
-

@@ -104,22 +104,3 @@ data class ClavePublicaServidorResponse(
     val publicKey: String
 )
 
-fun UsuarioEntity.toUsuarioSecretoDto() = UsuarioSecretoDto(
-    id = id,
-    username = username,
-    nombre = nombre,
-    publicKey = publicKey ?: "",
-    certificado = certificado ?: ""
-)
-
-fun UsuarioSecretoDto.toUsuarioEntity() = UsuarioEntity(
-    id = id,
-    username = username,
-    email = "",
-    nombre = nombre,
-    password = "",
-    rol = Constantes.USER,
-    activo = true,
-    publicKey = publicKey,
-    certificado = certificado
-)

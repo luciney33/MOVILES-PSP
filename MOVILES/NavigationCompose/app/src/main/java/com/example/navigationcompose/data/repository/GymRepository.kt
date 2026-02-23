@@ -134,10 +134,10 @@ class GymRepository @Inject constructor(
             if (response.isSuccessful && response.body() != null) {
                 NetworkResult.Success(response.body()!!)
             } else {
-                NetworkResult.Error("Error al actualizar clave pública: ${response.code()}")
+                NetworkResult.Error("${Constantes.ERROR_ACTUALIZAR_CLAVE_PUBLICA}${response.code()}")
             }
         } catch (e: Exception) {
-            NetworkResult.Error("Error de red al actualizar clave pública: ${e.message}")
+            NetworkResult.Error("${Constantes.ERROR_RED_ACTUALIZAR_CLAVE_PUBLICA}${e.message}")
         }
     }
 
